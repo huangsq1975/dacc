@@ -451,6 +451,7 @@ const Prism = ({
 
 export default function HomeEN() {
   const [scrolled, setScrolled] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [useCasesDropdownOpen, setUseCasesDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
@@ -458,6 +459,7 @@ export default function HomeEN() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+      setShowBackToTop(window.scrollY > 300);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -870,7 +872,7 @@ export default function HomeEN() {
                 <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded flex items-center justify-center flex-shrink-0 mt-1 transform hover:rotate-90 transition-transform duration-500">
                   <i className="ri-play-fill text-white rotate-90 text-sm md:text-base"></i>
                 </div>
-                <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#1e6b8a]">What We Enable</h3>
+                <h3 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a]">What We Enable</h3>
               </div>
 
               <div className="space-y-3 md:space-y-4">
@@ -879,7 +881,7 @@ export default function HomeEN() {
                     <i className="ri-exchange-line text-[#1e6b8a] text-2xl md:text-2xl"></i>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">Efficient cross-border payments</h4>
+                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">Sub-second cross-border settlement</h4>
                   </div>
                 </div>
 
@@ -1196,7 +1198,7 @@ export default function HomeEN() {
                     <div>
                       <h4 className="text-lg font-semibold text-white mb-2">Built-in Compliance</h4>
                       <p className="text-white/90 text-sm leading-relaxed">
-                        Regulatory-grade KYC/AML and reporting across 197 jurisdictions.
+                        Regulatory-grade KYC/AML and reporting across key global jurisdictions.
                       </p>
                     </div>
                   </div>
@@ -1491,7 +1493,7 @@ export default function HomeEN() {
                 </div>
                 <div className="flex items-start space-x-2">
                   <i className="ri-checkbox-circle-fill text-[#1e6b8a] mt-1 flex-shrink-0 text-sm"></i>
-                  <span className="text-xs md:text-sm text-[#1e6b8a]/70">Access to hundreds of millions of crypto users through 12 crypto exchange integrations</span>
+                  <span className="text-xs md:text-sm text-[#1e6b8a]/70">Connecting crypto platforms and e-commerce ecosystems through strategic exchange integrations</span>
                 </div>
               </div>
 
@@ -1575,6 +1577,17 @@ export default function HomeEN() {
           </div>
         </div>
       </section>
+
+      {/* Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-[#1e6b8a] hover:bg-[#f5b942] text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+          aria-label="Back to top"
+        >
+          <i className="ri-arrow-up-line text-xl"></i>
+        </button>
+      )}
 
       {/* Footer */}
       <footer id="contact" className="bg-[#1e6b8a] text-white py-8 md:py-12 px-4 md:px-6">

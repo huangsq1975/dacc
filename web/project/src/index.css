@@ -3,10 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Horizontal scrolling animation for testimonials */
 @keyframes scroll-horizontal {
   0% {
@@ -18,7 +14,7 @@
 }
 
 .animate-scroll-horizontal {
-  animation: scroll-horizontal 40s linear infinite;
+  animation: scroll-horizontal 60s linear infinite;
   will-change: transform;
 }
 

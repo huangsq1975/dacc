@@ -451,6 +451,7 @@ const Prism = ({
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [useCasesDropdownOpen, setUseCasesDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
@@ -458,6 +459,7 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+      setShowBackToTop(window.scrollY > 300);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -871,7 +873,7 @@ export default function Home() {
                 <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded flex items-center justify-center flex-shrink-0 mt-1 transform hover:rotate-90 transition-transform duration-500">
                   <i className="ri-play-fill text-white rotate-90 text-sm md:text-base"></i>
                 </div>
-                <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#1e6b8a]">我们实现的功能</h3>
+                <h3 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a]">我们实现的功能</h3>
               </div>
 
               <div className="space-y-3 md:space-y-4">
@@ -880,7 +882,7 @@ export default function Home() {
                     <i className="ri-exchange-line text-[#1e6b8a] text-2xl md:text-2xl"></i>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">高效的跨境支付</h4>
+                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">秒级跨境结算</h4>
                   </div>
                 </div>
 
@@ -1198,7 +1200,7 @@ export default function Home() {
                     <div>
                       <h4 className="text-lg font-semibold text-white mb-2">内置合规</h4>
                       <p className="text-white/90 text-sm leading-relaxed">
-                        覆盖 197 个司法管辖区的监管级 KYC/AML 和报告。
+                        覆盖全球主要司法管辖区的监管级 KYC/AML 与合规报告。
                       </p>
                     </div>
                   </div>
@@ -1493,7 +1495,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-start space-x-2">
                   <i className="ri-checkbox-circle-fill text-[#1e6b8a] mt-1 flex-shrink-0 text-sm"></i>
-                  <span className="text-xs md:text-sm text-[#1e6b8a]/70">通过 12 家加密交易所集成，接触数亿加密用户</span>
+                  <span className="text-xs md:text-sm text-[#1e6b8a]/70">支持加密平台与电商生态的互联互通，触达广泛加密用户群</span>
                 </div>
               </div>
 
@@ -1577,6 +1579,17 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-[#1e6b8a] hover:bg-[#f5b942] text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+          aria-label="回到顶部"
+        >
+          <i className="ri-arrow-up-line text-xl"></i>
+        </button>
+      )}
 
       {/* Footer */}
       <footer id="contact" className="bg-[#1e6b8a] text-white py-8 md:py-12 px-4 md:px-6">
