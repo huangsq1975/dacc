@@ -457,12 +457,21 @@ export default function HomeEN() {
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
 
   useEffect(() => {
+    let rafId = 0;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      setShowBackToTop(window.scrollY > 300);
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setScrolled(y > 50);
+        setShowBackToTop(y > 300);
+        rafId = 0;
+      });
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const scrollToContact = () => {
@@ -772,6 +781,7 @@ export default function HomeEN() {
             hoverStrength={2}
             inertia={0.05}
             noise={0}
+            suspendWhenOffscreen={true}
           />
 
           <div className="text-center max-w-5xl mx-auto relative z-10">
