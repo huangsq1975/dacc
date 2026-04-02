@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package chainfusion.gateway.v1;
+
+option go_package = "github.com/dacc/chain_fusion/proto/gateway";
+option java_package = "com.chainfusion.proto.gateway";
+
+// 網關統一消息格式（所有服務間內部通信使用）
+message GatewayMessage {
+    string request_id   = 1;  // 請求唯一 ID
+    int64  timestamp    = 2;  // UTC 毫秒時間戳
+    string source_chain = 3;  // 源鏈標識（conflux/eth/bsc/cips/mbridge）
+    string target_chain = 4;  // 目標鏈標識
+    string asset_type   = 5;  // 資產類型（RWA/CBDC/TOKEN）
+    string payload      = 6;  // 業務數據（JSON 序列化）
+    string signature    = 7;  // 請求簽名（ECDSA secp256k1 / SM2）
+    string bank_account = 8;  // 銀行賬戶（可選）
+    string did          = 9;  // 分布式身份標識（可選）
+}
+
+// 交易狀態枚舉
+enum TxStatus {
+    TX_STATUS_UNKNOWN   = 0;
+    TX_STATUS_PENDING   = 1;
+    TX_STATUS_SUBMITTED = 2;
+    TX_STATUS_CONFIRMED = 3;
+    TX_STATUS_FAILED    = 4;
+    TX_STATUS_ROLLED_BACK = 5;
+}
+
+// 路由決策請求
+message RouteRequest {
+    string   request_id  = 1;
+    string   source_chain = 2;
+    string   target_chain = 3;
+    string   tx_type     = 4;  // CROSS_BORDER_PAYMENT / RWA_TRANSFER / SETTLEMENT
+    double   amount      = 5;
+    string   currency    = 6;
+    bool     compliance_first = 7;
+}
+
+// 路由決策響應
+message RouteResponse {
+    string request_id    = 1;
+    string selected_node = 2;
+    string bridge        = 3;   // 跨鏈橋標識（如有）
+    double health_score  = 4;   // 節點健康評分 0-100
+    string route_reason  = 5;   // 選路原因
+}
+
+// 節點健康狀態
+message NodeHealth {
+    string chain_id         = 1;
+    string node_url         = 2;
+    double connectivity     = 3;  // 連通率 0-1
+    int64  confirm_latency_ms = 4; // 確認延遲（毫秒）
+    double gas_price_gwei   = 5;
+    double bridge_success_rate = 6; // 跨鏈橋成功率 0-1
+    bool   compliance_ok    = 7;
+    double health_score     = 8;  // 健康評分 = (連通率×40% + 延遲達標率×30% + 橋成功率×20% + 合規狀態×10%) × 100
+    int64  updated_at       = 9;
+}
+
+// 合規校驗請求
+message ComplianceCheckRequest {
+    string request_id    = 1;
+    string sender_did    = 2;
+    string receiver_did  = 3;
+    string sender_wallet = 4;
+    string receiver_wallet = 5;
+    double amount        = 6;
+    string currency      = 7;
+    string purpose       = 8;
+    string jurisdiction  = 9;  // EU / CN / HK / GLOBAL / BRICS
+}
+
+// 合規校驗響應
+message ComplianceCheckResponse {
+    string request_id  = 1;
+    bool   passed      = 2;
+    string risk_level  = 3;  // LOW / MEDIUM / HIGH / BLOCKED
+    repeated string violations = 4;
+    string report_id   = 5;
+}

@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: transaction-service
+  datasource:
+    url: jdbc:mysql://${DB_HOST:mysql}:3306/chain_fusion?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USER:root}
+    password: ${DB_PASS:changeme}
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: 6379
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+services:
+  compliance:
+    url: ${COMPLIANCE_SERVICE_URL:http://compliance-service:8080}
+  datasync:
+    url: ${DATA_SYNC_SERVICE_URL:http://data-sync-service:8080}
+  bankadapter:
+    url: ${BANK_ADAPTER_URL:http://bank-adapter:8080}
+
+alert:
+  wecom:
+    webhook: ${ALERT_WECOM_WEBHOOK:}
+  email:
+    endpoint: ${ALERT_EMAIL_ENDPOINT:}
+  sms:
+    endpoint: ${ALERT_SMS_ENDPOINT:}
+
+logging:
+  level:
+    com.chainfusion: INFO

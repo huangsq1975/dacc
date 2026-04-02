@@ -1,0 +1,41 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # APISIX 指標（通過 prometheus 插件暴露）
+  - job_name: 'apisix'
+    static_configs:
+      - targets: ['apisix:9091']
+    metrics_path: /metrics
+
+  # route-engine 節點健康指標
+  - job_name: 'route-engine'
+    static_configs:
+      - targets: ['route-engine:8090']
+    metrics_path: /metrics
+
+  - job_name: 'transaction-service'
+    static_configs:
+      - targets: ['transaction-service:8080']
+    metrics_path: /actuator/prometheus
+
+  - job_name: 'compliance-service'
+    static_configs:
+      - targets: ['compliance-service:8080']
+    metrics_path: /actuator/prometheus
+
+  - job_name: 'protocol-adapter'
+    static_configs:
+      - targets: ['protocol-adapter:8080']
+    metrics_path: /metrics
+
+  - job_name: 'bank-adapter'
+    static_configs:
+      - targets: ['bank-adapter:8080']
+    metrics_path: /actuator/prometheus
+
+  - job_name: 'etcd'
+    static_configs:
+      - targets: ['etcd:2379']
+    metrics_path: /metrics

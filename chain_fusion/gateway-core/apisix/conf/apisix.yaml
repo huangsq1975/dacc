@@ -1,0 +1,194 @@
+# Chain Fusion — APISIX 路由與上游聲明式配置
+# 同步到 etcd 後生效；本文件作為版本管理基準
+
+# ── Upstreams（後端服務） ─────────────────────────────────────────
+upstreams:
+  - id: transaction-service
+    name: transaction-service
+    type: roundrobin
+    nodes:
+      "transaction-service:8080": 1
+    checks:
+      active:
+        http_path: /healthz
+        interval: 5
+        timeout: 1
+        unhealthy:
+          http_failures: 2
+
+  - id: compliance-service
+    name: compliance-service
+    type: roundrobin
+    nodes:
+      "compliance-service:8080": 1
+    checks:
+      active:
+        http_path: /actuator/health
+        interval: 5
+        timeout: 2
+        unhealthy:
+          http_failures: 2
+
+  - id: protocol-adapter
+    name: protocol-adapter
+    type: roundrobin
+    nodes:
+      "protocol-adapter:8080": 1
+    checks:
+      active:
+        http_path: /healthz
+        interval: 5
+        timeout: 1
+
+  - id: admin-service
+    name: admin-service
+    type: roundrobin
+    nodes:
+      "admin-service:8080": 1
+
+  - id: bank-adapter
+    name: bank-adapter
+    type: roundrobin
+    nodes:
+      "bank-adapter:8080": 1
+
+  - id: route-engine
+    name: route-engine
+    type: roundrobin
+    nodes:
+      "route-engine:8090": 1
+
+  - id: data-sync-service
+    name: data-sync-service
+    type: roundrobin
+    nodes:
+      "data-sync-service:8080": 1
+
+# ── Routes（路由規則） ─────────────────────────────────────────────
+routes:
+  # —— 交易提交（核心路徑，合規前置 + 鏈路由） ——
+  - id: tx-submit
+    uri: /api/v1/tx/submit
+    methods: [POST]
+    upstream_id: transaction-service
+    plugins:
+      chain-fusion-auth:
+        algorithm: hmac-sha512
+      compliance-precheck:
+        timeout_ms: 500
+        on_failure: block          # 合規服務超時時攔截（金融安全優先）
+      chain-health-route:
+        strategy: compliance_first
+      limit-req:
+        rate: 1000
+        burst: 200
+        key: remote_addr
+      request-id:
+        include_in_response: true
+
+  # —— 批量交易 ——
+  - id: tx-batch
+    uri: /api/v1/tx/batch
+    methods: [POST]
+    upstream_id: transaction-service
+    plugins:
+      chain-fusion-auth:
+        algorithm: hmac-sha512
+      compliance-precheck:
+        timeout_ms: 1000
+        on_failure: block
+      limit-req:
+        rate: 100
+        burst: 20
+        key: remote_addr
+
+  # —— 交易狀態查詢 ——
+  - id: tx-status
+    uri: /api/v1/tx/status/*
+    methods: [GET]
+    upstream_id: transaction-service
+    plugins:
+      chain-fusion-auth:
+        algorithm: hmac-sha512
+
+  # —— 鏈節點健康狀態（公開，供監控系統調用） ——
+  - id: chain-health
+    uri: /api/v1/chain/health
+    methods: [GET]
+    upstream_id: route-engine
+    plugins:
+      ip-restriction:
+        whitelist:
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+
+  # —— 路由決策查詢（內部服務間調用） ——
+  - id: route-decision
+    uri: /api/v1/route/decide
+    methods: [POST]
+    upstream_id: route-engine
+    plugins:
+      ip-restriction:
+        whitelist:
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+
+  # —— 合規校驗（外部直接調用） ——
+  - id: compliance-check
+    uri: /api/v1/compliance/check
+    methods: [POST]
+    upstream_id: compliance-service
+    plugins:
+      chain-fusion-auth:
+        algorithm: hmac-sha512
+      limit-req:
+        rate: 500
+        burst: 100
+        key: remote_addr
+
+  # —— 協議適配（鏈上查詢） ——
+  - id: chain-query
+    uri: /api/v1/chain/*
+    methods: [GET, POST]
+    upstream_id: protocol-adapter
+    plugins:
+      chain-fusion-auth:
+        algorithm: hmac-sha512
+
+  # —— 管理後台（JWT 鑒權） ——
+  - id: admin-api
+    uri: /admin/api/*
+    methods: [GET, POST, PUT, DELETE]
+    upstream_id: admin-service
+    plugins:
+      jwt-auth: {}
+      ip-restriction:
+        whitelist:
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+
+  # —— 銀行側 SOAP/REST 接入（經 bank-adapter 轉換後進入） ——
+  - id: bank-inbound
+    uri: /bank/api/*
+    methods: [GET, POST]
+    upstream_id: bank-adapter
+    plugins:
+      chain-fusion-auth:
+        algorithm: hmac-sha512
+      limit-req:
+        rate: 200
+        burst: 50
+        key: remote_addr
+
+  # —— Prometheus 指標（僅內網） ——
+  - id: metrics
+    uri: /metrics
+    methods: [GET]
+    upstream_id: route-engine
+    plugins:
+      ip-restriction:
+        whitelist:
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+
+#END
