@@ -1,0 +1,32 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: data-sync-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chainfusion
+    username: chainfusion
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+# 依賴服務地址
+services:
+  blockchain-rpc: http://localhost:8090        # walletos / route-engine RPC
+  bank-adapter:   http://localhost:8083        # bank-adapter outbound
+  compliance:     http://localhost:8085        # compliance-service
+
+# 托管系統配置
+custody:
+  balance-threshold: "0.0001"                 # 余額一致性誤差閾值
+  sync-cron: "0 */5 * * * *"                  # 批量同步頻率（每 5 分鐘）
+
+# 日誌
+logging:
+  level:
+    com.chainfusion: INFO
+    root: WARN

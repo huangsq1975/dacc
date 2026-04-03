@@ -1,0 +1,39 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: compliance-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/chainfusion_compliance
+    username: chainfusion
+    password: changeme
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# 監管機構上報地址（生產環境通過 mTLS 連接）
+regulator:
+  pboc:
+    url: http://pboc-regulator/api/report         # 中國人民銀行監管節點
+  hkma:
+    url: http://hkma-regulator/api/report         # 香港金融管理局
+  cross-border:
+    url: http://cross-border-regulator/api/report # 跨境聯合監管節點
+
+# 合規規則配置
+compliance:
+  high-value-threshold: "1000000"                 # 大額審核閾值（USD 等值）
+  audit-retention-years: 7                        # 審計日誌保留年限
+
+# 日誌
+logging:
+  level:
+    com.chainfusion: INFO
+    root: WARN
