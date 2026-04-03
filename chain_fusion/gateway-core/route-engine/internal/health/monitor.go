@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -57,13 +59,16 @@ func CalcHealthScore(s *NodeScore) float64 {
 // Monitor 多鏈節點健康監控
 // 探測結果寫入 Redis，APISIX 插件和 route-engine API 均可讀取
 type Monitor struct {
-	chains  []ChainConfig
-	scores  map[string]*NodeScore
-	mu      sync.RWMutex
-	rdb     *redis.Client
-	ctx     context.Context
-	cancel  context.CancelFunc
+	chains    []ChainConfig
+	scores    map[string]*NodeScore
+	bridgeEMA map[string]float64 // chainID → 跨鏈橋成功率指數移動平均（EMA α=0.3）
+	mu        sync.RWMutex
+	rdb       *redis.Client
+	ctx       context.Context
+	cancel    context.CancelFunc
 }
+
+const bridgeEMAAlpha = 0.3 // EMA 平滑係數
 
 const redisKeyPrefix = "cf:health:"
 
@@ -74,11 +79,12 @@ func NewMonitor(chains []ChainConfig, redisCfg RedisConfig) *Monitor {
 		Password: redisCfg.Password,
 	})
 	return &Monitor{
-		chains: chains,
-		scores: make(map[string]*NodeScore),
-		rdb:    rdb,
-		ctx:    ctx,
-		cancel: cancel,
+		chains:    chains,
+		scores:    make(map[string]*NodeScore),
+		bridgeEMA: make(map[string]float64),
+		rdb:       rdb,
+		ctx:       ctx,
+		cancel:    cancel,
 	}
 }
 
@@ -123,9 +129,16 @@ func (m *Monitor) probeLoop(chain ChainConfig) {
 			return
 		case <-ticker.C:
 			score := m.probe(chain)
-			score.HealthScore = CalcHealthScore(score)
 
+			// 更新跨鏈橋成功率 EMA：bridgeOK=1 表示本次探測成功
 			m.mu.Lock()
+			prev, exists := m.bridgeEMA[chain.ChainID]
+			if !exists {
+				prev = score.BridgeSuccessRate // 首次用探測結果初始化
+			}
+			m.bridgeEMA[chain.ChainID] = bridgeEMAAlpha*score.BridgeSuccessRate + (1-bridgeEMAAlpha)*prev
+			score.BridgeSuccessRate = m.bridgeEMA[chain.ChainID]
+			score.HealthScore = CalcHealthScore(score)
 			m.scores[chain.ChainID] = score
 			m.mu.Unlock()
 
@@ -136,31 +149,109 @@ func (m *Monitor) probeLoop(chain ChainConfig) {
 }
 
 func (m *Monitor) probe(chain ChainConfig) *NodeScore {
+	nodeURL := chain.NodeURLs[0]
 	score := &NodeScore{
 		ChainID:      chain.ChainID,
-		NodeURL:      chain.NodeURLs[0],
+		NodeURL:      nodeURL,
 		UpdatedAt:    time.Now(),
 		ComplianceOK: true,
 	}
 
-	// 連通性探測（HTTP ping）
+	// 連通性探測：eth_blockNumber（同時驗證節點是否真實在線）
 	start := time.Now()
-	client := &http.Client{Timeout: 3 * time.Second}
-	resp, err := client.Get(chain.NodeURLs[0])
-	if err == nil {
-		resp.Body.Close()
+	latency, connected := probeNodeRPC(nodeURL)
+	score.ConfirmLatencyMs = latency
+	if connected {
 		score.Connectivity = 1.0
-		score.ConfirmLatencyMs = time.Since(start).Milliseconds()
 	} else {
 		score.Connectivity = 0
 		score.ConfirmLatencyMs = 99999
 	}
+	_ = start
 
-	// TODO: 實現真實的 Gas 價格查詢
-	// TODO: 實現跨鏈橋可用性探測
-	score.BridgeSuccessRate = 1.0 // 暫時默認可用
+	// Gas 價格查詢（僅 EVM 兼容鏈；非 EVM 鏈跳過）
+	if connected {
+		if gwei, err := probeGasPrice(nodeURL); err == nil {
+			score.GasPriceGwei = gwei
+		}
+	}
+
+	// 跨鏈橋可用性探測
+	if chain.BridgeURL != "" {
+		if probeBridge(chain.BridgeURL) {
+			score.BridgeSuccessRate = 1.0
+		} else {
+			score.BridgeSuccessRate = 0.0
+		}
+	} else {
+		score.BridgeSuccessRate = 1.0 // 未配置跨鏈橋則視為不適用，不懲罰評分
+	}
 
 	return score
+}
+
+// probeNodeRPC 發送 eth_blockNumber 探測節點連通性，返回延遲(ms)和是否成功
+func probeNodeRPC(nodeURL string) (latencyMs int64, ok bool) {
+	payload := `{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}`
+	client := &http.Client{Timeout: 3 * time.Second}
+	start := time.Now()
+	resp, err := client.Post(nodeURL, "application/json", strings.NewReader(payload))
+	if err != nil {
+		return 99999, false
+	}
+	defer resp.Body.Close()
+	latencyMs = time.Since(start).Milliseconds()
+
+	var result struct {
+		Result string `json:"result"`
+		Error  *struct {
+			Code    int    `json:"code"`
+			Message string `json:"message"`
+		} `json:"error"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return latencyMs, false
+	}
+	if result.Error != nil || result.Result == "" {
+		return latencyMs, false
+	}
+	return latencyMs, true
+}
+
+// probeGasPrice 查詢 EVM 兼容節點的 Gas 價格，返回 Gwei
+func probeGasPrice(nodeURL string) (float64, error) {
+	payload := `{"jsonrpc":"2.0","method":"eth_gasPrice","params":[],"id":2}`
+	client := &http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Post(nodeURL, "application/json", strings.NewReader(payload))
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+
+	var result struct {
+		Result string `json:"result"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return 0, err
+	}
+
+	hexStr := strings.TrimPrefix(result.Result, "0x")
+	wei, err := strconv.ParseUint(hexStr, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("parse gasPrice hex %q: %w", result.Result, err)
+	}
+	return float64(wei) / 1e9, nil // Wei → Gwei
+}
+
+// probeBridge HTTP GET 跨鏈橋健康端點，狀態碼 < 500 視為可用
+func probeBridge(bridgeURL string) bool {
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Get(bridgeURL)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	return resp.StatusCode < 500
 }
 
 func (m *Monitor) writeRedis(chainID string, score *NodeScore, ttl time.Duration) {

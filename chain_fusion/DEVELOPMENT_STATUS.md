@@ -133,7 +133,7 @@
   - 3 個自定義 Lua 插件：`chain-fusion-auth`、`compliance-precheck`、`chain-health-route`
   - Go route-engine：健康監控、路由決策、容災監控
 - **待實現：**
-  - 真實節點探測邏輯（Gas 查詢、跨鏈橋探測）
+  - ✅ 真實節點探測邏輯（Gas 查詢、跨鏈橋探測）
   - APISIX Admin API 動態 upstream 摘除/恢復
   - `sync-routes.sh` 完整的 YAML 解析與同步邏輯
   - 多種負載均衡算法（加權輪詢、最少連接）
