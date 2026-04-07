@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import icon2 from '../../icon2.png'
 
 interface NavigationProps {
   sectionIds?: string[]
   activeSection?: number
   onDotClick?: (index: number) => void
 }
-
-// Minimal TF icon for navigation
-const TFIcon = () => (
-  <svg viewBox="0 0 40 40" fill="white" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 flex-shrink-0">
-    <rect x="2" y="2" width="36" height="10" />
-    <rect x="15" y="12" width="10" height="12" />
-    <circle cx="20" cy="30" r="6" />
-  </svg>
-)
 
 export default function Navigation({ sectionIds, activeSection = 0, onDotClick }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -54,7 +46,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               className="flex items-center gap-3 group"
               onClick={e => { e.preventDefault(); navigate('/') }}
             >
-              <TFIcon />
+              <img src={icon2} alt="Tokenization Foundation icon" className="w-8 h-8 flex-shrink-0" />
               <span className="text-white font-inter font-bold text-base lg:text-lg tracking-wide leading-tight">
                 Tokenization<br />Foundation
               </span>

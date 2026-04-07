@@ -1,36 +1,9 @@
 import { useRef, useState, useEffect, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from '../../components/Navigation'
-
-// Large TF person figure logo used in hero and sections
-const TFPersonLogo = ({ color = 'white', className = '' }: { color?: string; className?: string }) => (
-  <svg
-    viewBox="0 0 260 340"
-    fill={color}
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-  >
-    {/* T crossbar */}
-    <rect x="0" y="0" width="260" height="58" />
-    {/* T stem */}
-    <rect x="95" y="58" width="70" height="88" />
-    {/* Head */}
-    <circle cx="130" cy="210" r="52" />
-    {/* Left leg */}
-    <rect x="30" y="276" width="80" height="64" />
-    {/* Right leg */}
-    <rect x="150" y="276" width="80" height="64" />
-  </svg>
-)
-
-// Small TF nav icon
-const TFNavIcon = () => (
-  <svg viewBox="0 0 36 36" fill="white" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 flex-shrink-0">
-    <rect x="0" y="0" width="36" height="9" />
-    <rect x="13" y="9" width="10" height="10" />
-    <circle cx="18" cy="26" r="7" />
-  </svg>
-)
+import icon from '../../../icon.png'
+import icon2 from '../../../icon2.png'
+import inIcon from '../../../in.png'
 
 function AnimatedSection({ children, className = '' }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -73,7 +46,7 @@ export default function Home() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(145deg, transparent 55%, rgba(255,255,255,0.04) 55%)',
+            background: 'linear-gradient(to bottom right, transparent 55%, rgba(255,255,255,0.04) 55%)',
           }}
         />
 
@@ -82,11 +55,12 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               {/* Left: Text */}
               <div>
-                <h1 className="font-inter font-bold text-3xl sm:text-4xl lg:text-5xl text-white leading-snug mb-6">
-                  Reimagining crisis capital infrastructure –
-                  {' '}with AI, blockchain, and digital assets -{' '}
-                  so that humanitarian aid is funded instantly, transparently,
-                  {' '}and at scale.
+                <h1 className="font-inter font-bold text-[42px] leading-[1.25] mb-6">
+                  <span className="text-black block whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
+                  <span className="text-white block whitespace-nowrap">with AI, blockchain, and digital assets -</span>
+                  <span className="text-black block whitespace-nowrap">so that humanitarian aid is funded</span>
+                  <span className="text-black block whitespace-nowrap">instantly, transparently,</span>
+                  <span className="text-black block whitespace-nowrap">and at scale.</span>
                 </h1>
 
                 <p className="font-inter font-bold text-xl text-white mb-8">
@@ -114,10 +88,7 @@ export default function Home() {
 
               {/* Right: TF Person Logo */}
               <div className="hidden lg:flex justify-end items-center">
-                <TFPersonLogo
-                  color="white"
-                  className="w-72 xl:w-80 opacity-90"
-                />
+                <img src={icon2} alt="Tokenization Foundation icon" className="w-[36rem] xl:w-[40rem] opacity-90 translate-x-1/2" />
               </div>
             </div>
           </div>
@@ -125,7 +96,7 @@ export default function Home() {
 
         {/* Small TF icon bottom-right corner */}
         <div className="absolute bottom-4 right-4 opacity-60">
-          <TFNavIcon />
+          <img src={icon} alt="Tokenization Foundation icon" className="w-10 h-10 object-contain" />
         </div>
       </section>
 
@@ -195,10 +166,7 @@ export default function Home() {
 
             {/* Right: Large TF logo */}
             <div className="hidden lg:flex justify-end items-center">
-              <TFPersonLogo
-                color="black"
-                className="w-64 xl:w-72 opacity-85"
-              />
+              <img src={icon} alt="Tokenization Foundation icon" className="w-[32rem] xl:w-[36rem] opacity-85 object-contain" />
             </div>
           </div>
         </div>
@@ -206,12 +174,12 @@ export default function Home() {
 
       {/* ===== IMPACT (A3) ===== */}
       <section id="impact" className="bg-[#EBEBEB] py-16 lg:py-20 relative overflow-hidden">
-        {/* TF logo watermark */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none opacity-15">
-          <TFPersonLogo color="#888" className="w-64" />
+        {/* Centered icon background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+          <img src={icon2} alt="" className="w-[24rem] lg:w-[34rem] object-contain opacity-30" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <AnimatedSection>
             {/* Centered section label */}
             <div className="flex justify-center mb-12">
@@ -247,11 +215,7 @@ export default function Home() {
 
         {/* Small TF icon bottom-right */}
         <div className="absolute bottom-4 right-4">
-          <svg viewBox="0 0 36 36" fill="#3264CC" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 opacity-60">
-            <rect x="0" y="0" width="36" height="9" />
-            <rect x="13" y="9" width="10" height="10" />
-            <circle cx="18" cy="26" r="7" />
-          </svg>
+          <img src={icon} alt="Tokenization Foundation icon" className="w-8 h-8 object-contain opacity-60" />
         </div>
       </section>
 
@@ -374,20 +338,19 @@ export default function Home() {
         <div className="flex items-center min-h-[120px] relative">
           {/* LinkedIn icon - left */}
           <div className="ml-6 lg:ml-10 bg-white w-16 h-16 flex flex-col items-center justify-center flex-shrink-0">
-            <i className="ri-linkedin-fill text-black text-3xl"></i>
-            <span className="text-black text-[7px] font-inter mt-0.5">®</span>
+            <img src={inIcon} alt="LinkedIn icon" className="w-16 h-16 object-contain" />
           </div>
 
           {/* Capital That Responds - center */}
           <div className="flex-1 text-center px-4">
             <p className="font-inter font-extrabold text-white text-3xl lg:text-5xl tracking-wide">
-              Capital That Responds
+              Capital That Responds When Humanity Needs It Most
             </p>
           </div>
 
           {/* TF Person Logo - right */}
           <div className="flex-shrink-0 overflow-hidden flex items-end self-stretch pr-4">
-            <TFPersonLogo color="white" className="w-36 lg:w-44 opacity-80" />
+            <img src={icon2} alt="Tokenization Foundation icon" className="w-56 lg:w-72 object-contain opacity-85" />
           </div>
         </div>
 
