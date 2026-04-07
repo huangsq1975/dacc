@@ -20,12 +20,19 @@ export default {
           medium: '#2d7dc7',
           light: '#d6e8f5',
           verylight: '#f0f7fc',
+          bright: '#3264CC',
         },
         tfgold: {
           DEFAULT: '#c9a55a',
           light: '#f0d9a0',
           dark: '#a07e35',
         },
+        tfgray: {
+          light: '#EBEBEB',
+          medium: '#909090',
+          section: '#8C8C8C',
+        },
+        tfcream: '#EDE8DA',
       },
       fontFamily: {
         playfair: ['"Playfair Display"', 'serif'],

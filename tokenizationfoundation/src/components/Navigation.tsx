@@ -2,26 +2,26 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 interface NavigationProps {
-  /** Sections for dot indicator (home page only) */
   sectionIds?: string[]
   activeSection?: number
   onDotClick?: (index: number) => void
 }
 
+// Minimal TF icon for navigation
+const TFIcon = () => (
+  <svg viewBox="0 0 40 40" fill="white" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 flex-shrink-0">
+    <rect x="2" y="2" width="36" height="10" />
+    <rect x="15" y="12" width="10" height="12" />
+    <circle cx="20" cy="30" r="6" />
+  </svg>
+)
+
 export default function Navigation({ sectionIds, activeSection = 0, onDotClick }: NavigationProps) {
-  const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const isHome = location.pathname === '/'
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false)
   }, [location.pathname])
@@ -37,8 +37,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
     } else {
       navigate('/')
       setTimeout(() => {
-        const el = document.getElementById('team')
-        if (el) el.scrollIntoView({ behavior: 'smooth' })
+        document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' })
       }, 300)
     }
     setMobileOpen(false)
@@ -46,66 +45,42 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
   return (
     <>
-      {/* Desktop Navigation */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled || mobileOpen ? 'nav-glass border-b border-white/10' : 'bg-transparent'
-        }`}
-      >
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#3264CC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <a
               href="/"
-              className="flex items-center gap-2 group"
+              className="flex items-center gap-3 group"
               onClick={e => { e.preventDefault(); navigate('/') }}
             >
-              <div className="w-8 h-8 rounded-full bg-tfgold flex items-center justify-center flex-shrink-0">
-                <span className="text-navy-900 font-bold text-xs font-inter">TF</span>
-              </div>
-              <span className="text-white font-inter font-semibold text-sm lg:text-base tracking-wide group-hover:text-tfgold transition-colors">
-                Tokenization Foundation
+              <TFIcon />
+              <span className="text-white font-inter font-bold text-base lg:text-lg tracking-wide leading-tight">
+                Tokenization<br />Foundation
               </span>
             </a>
 
             {/* Desktop Nav Links */}
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-10">
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach') }}
-                className={`text-sm font-inter font-medium transition-colors hover:text-tfgold ${
-                  location.pathname === '/approach' ? 'text-tfgold' : 'text-white/80'
-                }`}
+                className="text-base font-inter font-bold text-white hover:text-white/80 transition-colors"
               >
                 Approach
               </a>
               <button
                 onClick={handleTeamLink}
-                className="text-sm font-inter font-medium text-white/80 hover:text-tfgold transition-colors"
+                className="text-base font-inter font-bold text-white hover:text-white/80 transition-colors"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact') }}
-                className={`text-sm font-inter font-medium transition-colors hover:text-tfgold ${
-                  location.pathname === '/contact' ? 'text-tfgold' : 'text-white/80'
-                }`}
+                className="px-6 py-2 border-2 border-white text-white font-inter font-bold text-base hover:bg-white hover:text-[#3264CC] transition-all"
               >
                 Contact
-              </a>
-              <a
-                href="/contact#waitlist"
-                onClick={e => {
-                  e.preventDefault()
-                  navigate('/contact')
-                  setTimeout(() => {
-                    document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })
-                  }, 200)
-                }}
-                className="px-5 py-2 bg-tfgold text-navy-900 rounded-full text-sm font-inter font-semibold hover:bg-tfgold-light transition-colors whitespace-nowrap"
-              >
-                Join dSDR Waitlist
               </a>
             </nav>
 
@@ -122,25 +97,25 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden nav-glass border-t border-white/10 mobile-menu-enter">
+          <div className="lg:hidden bg-[#3264CC] border-t border-white/20 mobile-menu-enter">
             <nav className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-4">
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach'); setMobileOpen(false) }}
-                className="text-lg font-inter font-medium text-white hover:text-tfgold transition-colors py-2 border-b border-white/10"
+                className="text-lg font-inter font-bold text-white py-2 border-b border-white/20"
               >
                 Approach
               </a>
               <button
                 onClick={handleTeamLink}
-                className="text-lg font-inter font-medium text-white hover:text-tfgold transition-colors py-2 border-b border-white/10 text-left"
+                className="text-lg font-inter font-bold text-white py-2 border-b border-white/20 text-left"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact'); setMobileOpen(false) }}
-                className="text-lg font-inter font-medium text-white hover:text-tfgold transition-colors py-2 border-b border-white/10"
+                className="text-lg font-inter font-bold text-white py-2 border-b border-white/20"
               >
                 Contact
               </a>
@@ -149,12 +124,10 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                 onClick={e => {
                   e.preventDefault()
                   navigate('/contact')
-                  setTimeout(() => {
-                    document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })
-                  }, 200)
+                  setTimeout(() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' }), 200)
                   setMobileOpen(false)
                 }}
-                className="mt-2 px-6 py-3 bg-tfgold text-navy-900 rounded-full text-base font-inter font-semibold text-center hover:bg-tfgold-light transition-colors"
+                className="mt-2 px-6 py-3 border-2 border-white text-white font-inter font-bold text-center"
               >
                 Join dSDR Token Waitlist
               </a>
@@ -163,7 +136,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
         )}
       </header>
 
-      {/* Section Dot Indicators (desktop, home page only) */}
+      {/* Section Dot Indicators (home page only) */}
       {sectionIds && sectionIds.length > 0 && (
         <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
           {sectionIds.map((id, i) => (
@@ -176,14 +149,11 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               className="group flex items-center gap-2"
               aria-label={`Go to section ${i + 1}`}
             >
-              <span className={`hidden group-hover:block text-xs font-inter text-white/60 whitespace-nowrap transition-all`}>
-                {id.charAt(0).toUpperCase() + id.slice(1)}
-              </span>
               <div
                 className={`rounded-full transition-all duration-300 ${
                   activeSection === i
-                    ? 'w-3 h-3 bg-tfgold'
-                    : 'w-2 h-2 bg-white/30 hover:bg-white/60'
+                    ? 'w-3 h-3 bg-[#3264CC]'
+                    : 'w-2 h-2 bg-gray-400 hover:bg-gray-600'
                 }`}
               />
             </button>
