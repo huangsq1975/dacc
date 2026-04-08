@@ -21,7 +21,7 @@ export default function Approach() {
               </div>
 
               <div className="mt-4 rounded-2xl bg-[#005BDE] p-4 sm:p-6">
-                <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,3fr)_auto_0.85fr] items-center gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,0.375fr)_auto_0.85fr] items-center gap-3">
                   <div className="space-y-3">
                     <div className="rounded-2xl bg-white text-center font-inter font-extrabold text-2xl text-black py-3 px-2">
                       Money Market Fund
@@ -33,11 +33,11 @@ export default function Approach() {
 
                   <div className="hidden md:flex justify-center text-[#7ED9FF] text-4xl font-bold">→</div>
 
-                  <div className="rounded-[2rem] bg-white p-5 sm:p-8 flex items-center justify-center">
+                  <div className="rounded-[2rem] bg-white p-0 flex items-center justify-center aspect-square overflow-hidden">
                     <img
                       src={centerVerticalLogo}
                       alt="Tokenization Foundation logo"
-                      className="h-[100px] sm:h-[100px] md:h-[100px] w-auto max-w-full object-contain mx-auto"
+                      className="w-full h-full object-contain scale-[4]"
                     />
                   </div>
 
