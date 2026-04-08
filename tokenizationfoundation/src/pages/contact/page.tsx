@@ -261,19 +261,19 @@ export default function Contact() {
   ]
 
   return (
-    <div className="bg-tfblue-verylight min-h-screen">
+    <div className="bg-white min-h-screen">
       <Navigation />
 
       {/* Hero */}
-      <section className="bg-hero-pattern pt-24 pb-16 lg:pt-32 lg:pb-20">
+      <section className="bg-[#3264CC] mt-20 border-t border-[#244FB5] pt-20 pb-14 lg:pt-24 lg:pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 mb-6">
-              <div className="w-8 h-px bg-tfgold" />
-              <span className="text-tfgold text-xs font-inter font-semibold tracking-widest uppercase">Get In Touch</span>
+              <div className="w-8 h-px bg-white/70" />
+              <span className="text-white text-xs font-inter font-semibold tracking-widest uppercase">Get In Touch</span>
             </div>
-            <h1 className="font-playfair text-4xl lg:text-5xl text-white mb-4">Contact</h1>
-            <p className="text-white/60 font-inter text-lg leading-relaxed">
+            <h1 className="font-inter font-extrabold text-4xl lg:text-5xl text-white mb-4 leading-tight">Contact</h1>
+            <p className="text-white/90 font-inter text-lg leading-relaxed">
               Reach out to our team — we’ll get back to you by email.
             </p>
           </div>
@@ -308,7 +308,7 @@ export default function Contact() {
       </section>
 
       {/* Main Form Area */}
-      <section className="py-16 lg:py-24">
+      <section className="py-16 lg:py-24 bg-[#F8F9FC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             {/* Left copy */}
@@ -317,12 +317,12 @@ export default function Contact() {
                 <div className="w-8 h-px bg-tfgold" />
                 <span className="text-tfgold text-xs font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
               </div>
-              <h2 className="font-playfair text-3xl lg:text-4xl text-navy-950 mb-4">Talk with one of our team members.</h2>
+              <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-4 leading-tight">Talk with one of our team members.</h2>
               <p className="text-navy-900/70 font-inter text-base leading-relaxed max-w-lg">
                 Fill out the form on your right. We&rsquo;ll email you right back.
               </p>
 
-              <div className="mt-8 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+              <div className="mt-8 bg-white rounded-2xl border border-black/10 shadow-sm p-5">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-tfblue-verylight flex items-center justify-center flex-shrink-0">
                     <i className="ri-mail-line text-tfblue text-lg"></i>
@@ -344,13 +344,13 @@ export default function Contact() {
             </div>
 
             {/* Right form */}
-            <div id="contact-form" className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
+            <div id="contact-form" className="bg-white rounded-2xl shadow-sm border border-black/10 p-8 lg:p-10">
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl bg-tfblue/10 flex items-center justify-center">
                     <i className="ri-file-list-3-line text-tfblue text-lg"></i>
                   </div>
-                  <h3 className="font-playfair text-2xl text-navy-900">
+                  <h3 className="font-inter font-extrabold text-3xl text-black leading-tight">
                     {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join dSDR Token Waitlist'}
                   </h3>
                 </div>
@@ -730,7 +730,7 @@ export default function Contact() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-navy-950 py-10">
+      <footer className="bg-[#2244EE] py-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">

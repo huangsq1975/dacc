@@ -10,30 +10,31 @@ export default function Approach() {
     <div className="bg-white min-h-screen">
       <Navigation />
 
-      <main className="pt-28 pb-16 bg-[#F5F5F5]">
+      <main className="pt-24 sm:pt-28 pb-14 sm:pb-16 bg-[#F5F5F5]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
+          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6 sm:mb-8">
             <div className="p-4 sm:p-6 lg:p-8 bg-white">
-              <div className="bg-[#2F64BD] px-3 py-3 sm:py-4 text-center">
-                <h2 className="inline-block bg-white px-3 py-1 font-inter font-extrabold text-lg sm:text-3xl text-black">
+              <div className="bg-[#2F64BD] px-3 py-3 sm:py-4 text-center rounded-lg">
+                <h2 className="inline-block bg-white px-3 py-1 font-inter font-extrabold text-base sm:text-2xl lg:text-3xl leading-snug text-black">
                   Reimaging A Fully Tokenized Ecosystem for Humanitarian Aid Capital
                 </h2>
               </div>
 
               <div className="mt-4 rounded-2xl bg-[#005BDE] p-4 sm:p-6">
-                <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,0.375fr)_auto_0.85fr] items-center gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,0.375fr)_auto_0.85fr] items-center gap-4">
                   <div className="space-y-3">
-                    <div className="rounded-2xl bg-white text-center font-inter font-extrabold text-2xl text-black py-3 px-2">
+                    <div className="rounded-2xl bg-white text-center font-inter font-extrabold text-xl sm:text-2xl text-black py-3 px-2">
                       Money Market Fund
                     </div>
-                    <div className="rounded-2xl bg-white text-center font-inter font-extrabold text-2xl text-black py-3 px-2">
+                    <div className="rounded-2xl bg-white text-center font-inter font-extrabold text-xl sm:text-2xl text-black py-3 px-2">
                       Tokens
                     </div>
                   </div>
 
                   <div className="hidden md:flex justify-center text-[#7ED9FF] text-4xl font-bold">→</div>
+                  <div className="flex md:hidden justify-center text-[#7ED9FF] text-3xl font-bold">↓</div>
 
-                  <div className="rounded-[2rem] bg-white p-0 flex items-center justify-center aspect-square overflow-hidden">
+                  <div className="rounded-[2rem] bg-white p-0 flex items-center justify-center aspect-square overflow-hidden w-full max-w-[180px] md:max-w-none mx-auto">
                     <img
                       src={centerVerticalLogo}
                       alt="Tokenization Foundation logo"
@@ -41,9 +42,10 @@ export default function Approach() {
                     />
                   </div>
 
+                  <div className="flex md:hidden justify-center text-[#7ED9FF] text-3xl font-bold">↓</div>
                   <div className="hidden md:flex justify-center text-[#7ED9FF] text-4xl font-bold">←</div>
 
-                  <div className="rounded-2xl bg-white text-center font-inter font-bold text-xl sm:text-2xl text-black py-4 px-3 leading-tight">
+                  <div className="rounded-2xl bg-white text-center font-inter font-bold text-lg sm:text-2xl text-black py-4 px-3 leading-tight">
                     <p>Aegis</p>
                     <p>Trust</p>
                     <p className="mt-2 font-semibold">Mint, Custody,</p>
@@ -52,7 +54,7 @@ export default function Approach() {
                 </div>
               </div>
 
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-2 sm:space-y-2.5">
                 {[
                   { label: 'Blockchain', tone: 'bg-[#DAECFF] text-black' },
                   { label: 'AI Technology', tone: 'bg-[#BFD9FF] text-black' },
@@ -61,7 +63,7 @@ export default function Approach() {
                 ].map(item => (
                   <div
                     key={item.label}
-                    className={`rounded-lg border border-[#9EB5D7] py-3 text-center font-inter font-extrabold text-3xl ${item.tone}`}
+                    className={`rounded-lg border border-[#9EB5D7] py-3 text-center font-inter font-extrabold text-xl sm:text-2xl lg:text-3xl ${item.tone}`}
                   >
                     {item.label}
                   </div>
@@ -70,20 +72,20 @@ export default function Approach() {
             </div>
           </section>
 
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
+          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6 sm:mb-8">
             <div className="bg-[#7F7F7F] p-4 sm:p-8">
               <button
                 type="button"
-                className="bg-white border border-[#7EA2E0] px-4 sm:px-6 py-3 text-left font-inter font-bold text-xl text-black"
+                className="w-full sm:w-auto bg-white border border-[#7EA2E0] px-4 sm:px-6 py-3 text-left font-inter font-bold text-base sm:text-lg lg:text-xl text-black"
               >
                 <span className="text-[#0A58FF]">Click</span> To Read Our White Paper (pdf)
               </button>
             </div>
             <div className="p-6 sm:p-8 lg:p-10">
-              <h2 className="font-inter font-extrabold text-3xl sm:text-5xl text-black mb-4">
+              <h2 className="font-inter font-extrabold text-2xl sm:text-4xl lg:text-5xl text-black mb-4 sm:mb-5">
                 The dSDR Token Explained
               </h2>
-              <p className="font-inter text-lg sm:text-[32px] leading-[1.65] text-black">
+              <p className="max-w-5xl font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black">
                 The network is designed for stability, participation, and long-term growth, with a fixed total
                 supply of 10 billion tokens. Governance is led by a 10-member Governing Council of partners
                 responsible for network oversight, stability, and adoption. Users can stake dSDR with validators
@@ -96,9 +98,9 @@ export default function Approach() {
             </div>
           </section>
 
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-8">
+          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6 sm:mb-8">
             <div className="p-6 sm:p-8 lg:p-10 bg-[#F5F5F5]">
-              <h2 className="font-inter font-extrabold text-3xl sm:text-5xl text-black mb-6 text-center">
+              <h2 className="font-inter font-extrabold text-2xl sm:text-4xl lg:text-5xl text-black mb-6 text-center leading-tight">
                 The Token&apos;s Role In Creating A Capital Loop
               </h2>
               <div className="relative mx-auto w-full max-w-4xl aspect-square">
@@ -110,7 +112,7 @@ export default function Approach() {
                 <img
                   src={centerVerticalLogo}
                   alt="Tokenization Foundation center logo"
-                  className="absolute left-1/2 top-1/2 w-[26%] max-w-[220px] -translate-x-1/2 -translate-y-1/2 object-contain"
+                  className="absolute left-1/2 top-1/2 w-[26%] max-w-[220px] -translate-x-1/2 -translate-y-1/2 object-contain scale-[5]"
                 />
               </div>
             </div>
@@ -118,11 +120,11 @@ export default function Approach() {
 
           <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
             <div className="p-6 sm:p-8 lg:p-10">
-              <h2 className="font-inter font-extrabold text-3xl sm:text-5xl text-black mb-4">
+              <h2 className="font-inter font-extrabold text-2xl sm:text-4xl lg:text-5xl text-black mb-4 sm:mb-5">
                 How AI Powers The Tokenization Foundation
               </h2>
 
-              <p className="font-inter text-lg sm:text-[32px] leading-[1.65] text-black mb-6">
+              <p className="max-w-5xl font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black mb-5 sm:mb-6">
                 The gap between available resources and the people who need them has never been a shortage of
                 funding. It has been a shortage of infrastructure intelligent enough to move that funding
                 accurately, transparently, and at scale. Our AI-powered core principle is built on &apos;Skills as
@@ -131,41 +133,41 @@ export default function Approach() {
                 A payment moves once. A skill multiplies.
               </p>
 
-              <p className="font-inter text-lg sm:text-[32px] leading-[1.65] text-black mb-6">
+              <p className="max-w-5xl font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black mb-5 sm:mb-6">
                 At Tokenization Foundation, we embed skills augmentation directly into the distribution layer.
                 As resources move to participants, AI simultaneously identifies skill gaps, surfaces relevant
                 learning, and delivers certified capability - not generic training, but precise, context-specific
                 expertise matched to each participant&apos;s situation and goals. AI augments both:
               </p>
 
-              <p className="font-inter text-lg sm:text-[32px] leading-[1.65] text-black mb-3">
+              <p className="max-w-5xl font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black mb-3">
                 <em>Practitioner intelligence.</em> Field practitioners are the most valuable layer of any
                 distribution network. AI amplifies practitioners&apos; judgment by surfacing relevant context,
                 flagging anomalies, and reducing administrative burden, allowing them to spend time with
                 participants, not paperwork.
               </p>
 
-              <p className="font-inter text-lg sm:text-[32px] leading-[1.65] text-black mb-6">
+              <p className="max-w-5xl font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black mb-6">
                 <em>Precision allocation.</em> AI continuously analyzes need signals - geographic, contextual,
                 and temporal - and routes resources to where they create the most impact. Reduced manual
                 gatekeeping and committee delays. The system makes allocation decisions in real time, based on
                 verifiable data.
               </p>
 
-              <h3 className="font-inter font-extrabold italic text-[30px] sm:text-[40px] text-black mb-3">
+              <h3 className="font-inter font-extrabold italic text-2xl sm:text-3xl lg:text-[40px] text-black mb-3">
                 What this means in practice:
               </h3>
-              <ul className="list-disc pl-8 sm:pl-10 space-y-2">
-                <li className="font-inter text-lg sm:text-[32px] leading-[1.6] text-black">
+              <ul className="max-w-5xl list-disc pl-6 sm:pl-8 lg:pl-10 space-y-2.5">
+                <li className="font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black">
                   <strong>For participants,</strong> resources arrive with the knowledge to use them well,
                   whether that is financial literacy, agricultural technique, health protocol, or legal
                   understanding.
                 </li>
-                <li className="font-inter text-lg sm:text-[32px] leading-[1.6] text-black">
+                <li className="font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black">
                   <strong>For practitioners,</strong> AI surfaces relevant skills in real time, reducing the
                   time between identifying a need and addressing it.
                 </li>
-                <li className="font-inter text-lg sm:text-[32px] leading-[1.6] text-black">
+                <li className="font-inter text-base sm:text-xl lg:text-2xl leading-relaxed text-black">
                   <strong>For funding organizations,</strong> every transfer is paired with capability data,
                   creating a longitudinal record of impact that goes beyond disbursement to measurable growth.
                 </li>

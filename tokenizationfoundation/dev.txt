@@ -24,3 +24,12 @@
   5. AI 如何驅動 Foundation                                                                                  
                                                                                                                
   現有實作是否符合？          
+
+Join Council 或 Join Waitlist
+
+
+1，HD Wallet 12週/人
+2，QR Code，4周/人
+長距離那個是沒辦法使用 QR Code的。 不過QR Code 這邊有一個需求是，台灣的銀行希望掃描的時候，能夠先知道現在要提交的內容是什麼 (例如：交易 from / to / amount)，前的版本只是一邊顯示 QR Code，另一邊掃描，他們認為這樣是在盲掃，所以有這個需求。
+3，后台繁体版本的需求 3周/人
+

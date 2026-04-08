@@ -283,22 +283,7 @@ export default function Home() {
 
             <hr className="border-[#3264CC] border mb-10" />
 
-            {/* As Featured In */}
-            <div className="mb-6">
-              <span className="font-inter font-bold text-2xl text-black">As Featured In </span>
-              <span className="font-inter text-red-600 text-sm">
-                (this section will need to be added after we get media coverage)
-              </span>
-            </div>
-
-            <div className="flex flex-wrap gap-10 items-center opacity-70">
-              {/* CNN */}
-              <span className="font-inter font-extrabold text-2xl text-red-600 tracking-tight">CNN</span>
-              {/* Coindesk */}
-              <span className="font-inter font-bold text-2xl text-[#D4A017] tracking-wide">coindesk</span>
-              {/* Forbes */}
-              <span className="font-inter font-black text-3xl text-black italic tracking-tight">Forbes</span>
-            </div>
+            {/* Media coverage section intentionally hidden until launch-ready. */}
           </AnimatedSection>
         </div>
       </section>
@@ -343,7 +328,7 @@ export default function Home() {
         {/* Main footer bar */}
         <div className="flex items-center min-h-[104px] relative py-3 md:py-0 md:-translate-y-2">
           {/* Right-side background icon for footer text */}
-          <div className="absolute right-[-3.5rem] sm:right-[-2.5rem] lg:right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0">
+          <div className="absolute right-[-3.5rem] sm:right-[-2.5rem] lg:right-0 top-1/2 -translate-y-[30%] pointer-events-none z-0">
             <img
               src={icon2}
               alt=""
@@ -359,7 +344,7 @@ export default function Home() {
           {/* Capital That Responds - center */}
           <div className="flex-1 text-center px-3 md:px-4 relative z-10">
             <p className="font-inter font-extrabold text-white text-xl sm:text-2xl lg:text-5xl tracking-wide leading-tight">
-              Capital That Responds When Humanity Needs It Most
+              Capital That Responds
             </p>
           </div>
         </div>
