@@ -1,0 +1,26 @@
+結合 Website_Outline.pptx 文檔和 system_audio_20260407_090103.txt 會議討論記錄使用 Node.js + Vite 框架開發整個網站。Website_Outline.pptx 前 5 頁要放到首頁上下滑動進行顯示。要考慮到電腦端和手機端的顯示。
+
+
+● 根據音頻記錄，"Approach" 按鍵的處理方式如下：                                                                
+                                                                                                               
+  行為：導航到獨立的 /approach 頁面                                                                            
+                                                                                                               
+  對話中明確指出（第 444-450 行、第 576-588 行）：                                                             
+  ▎ "if you click approach up here in the nav bar... you'll be on the approach part."                          
+  ▎ "if I clicked on approach, what I would see... you're going to see the nav bar across the top. Then you're 
+  going to see this will be at the very top, reimagining a fully tokenized ecosystem..."                       
+                                                                                                               
+  並且（第 711-720 行）：
+  ▎ "It's not like the approach. The approach you have to click the Nav bar... You have to click the navigation
+   bar."                                                                                                       
+                                                                                                               
+  意即：Approach 不是首頁內滾動的 section，而是必須透過 Nav bar 點擊後跳轉的獨立頁面。                         
+                                                                                                               
+  頁面內容結構（依對話第 753-760 行）：
+  1. "Reimagining a fully tokenized ecosystem for humanitarian aid capital"（頁首標題）                        
+  2. 閱讀白皮書的連結                                                                                          
+  3. Token 說明（dSDR）
+  4. 創建 capital loop 的機制                                                                                  
+  5. AI 如何驅動 Foundation                                                                                  
+                                                                                                               
+  現有實作是否符合？          

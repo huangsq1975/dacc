@@ -12,26 +12,13 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
   const [mobileOpen, setMobileOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const isHome = location.pathname === '/'
 
   useEffect(() => {
     setMobileOpen(false)
   }, [location.pathname])
 
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
-
   const handleTeamLink = () => {
-    if (isHome) {
-      scrollToSection('team')
-    } else {
-      navigate('/')
-      setTimeout(() => {
-        document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' })
-      }, 300)
-    }
+    navigate('/team')
     setMobileOpen(false)
   }
 
