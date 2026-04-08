@@ -92,10 +92,7 @@ export default function Home() {
                     Contact
                   </button>
                   <button
-                    onClick={() => {
-                      navigate('/contact')
-                      setTimeout(() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' }), 200)
-                    }}
+                    onClick={() => navigate('/contact#waitlist')}
                     className="px-8 py-3 bg-[#EDE8DA] text-black font-inter font-semibold text-sm hover:bg-[#E0D9C5] transition-colors"
                   >
                     Join dSDR Token Waitlist
@@ -277,7 +274,7 @@ export default function Home() {
             <p className="font-inter text-sm text-black mb-8">
               Interested in getting on our Council?{' '}
               <button
-                onClick={() => navigate('/contact')}
+                onClick={() => navigate('/contact#council')}
                 className="underline font-semibold hover:text-[#3264CC] transition-colors"
               >
                 Link
@@ -330,10 +327,7 @@ export default function Home() {
                   Contact Us
                 </button>
                 <button
-                  onClick={() => {
-                    navigate('/contact')
-                    setTimeout(() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' }), 200)
-                  }}
+                  onClick={() => navigate('/contact#waitlist')}
                   className="px-8 py-3 bg-[#EDE8DA] text-black font-inter font-semibold text-sm border border-black hover:bg-[#E0D9C5] transition-colors"
                 >
                   Join dSDR Token Waitlist

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import Navigation from '../../components/Navigation'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
+type ContactTab = 'contact' | 'council' | 'waitlist'
 
 function useFormSubmit(endpoint: string) {
   const [status, setStatus] = useState<FormStatus>('idle')
@@ -49,6 +50,32 @@ function StatusMessage({ status }: { status: FormStatus }) {
     )
   }
   return null
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        'px-4 py-2 rounded-full text-sm font-inter font-semibold transition-all border',
+        active
+          ? 'bg-navy-900 text-white border-navy-900'
+          : 'bg-white text-navy-900 border-gray-200 hover:border-navy-900/30 hover:bg-gray-50',
+      ].join(' ')}
+      aria-pressed={active}
+    >
+      {children}
+    </button>
+  )
 }
 
 function FormField({
@@ -102,64 +129,135 @@ function TextAreaField({
 export default function Contact() {
   const navigate = useNavigate()
   const location = useLocation()
-  const [activeTab, setActiveTab] = useState<'contact' | 'council' | 'waitlist'>('contact')
-
-  // Contact form
-  const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' })
+  const [activeTab, setActiveTab] = useState<ContactTab>('contact')
+  const [contactForm, setContactForm] = useState({
+    firstName: '',
+    lastName: '',
+    workEmail: '',
+    jobTitle: '',
+    countryCode: '+1',
+    phoneNumber: '',
+    companyName: '',
+    explore: '',
+    details: '',
+  })
   const contactSubmit = useFormSubmit('https://formspree.io/f/placeholder-contact')
 
-  // Council form
-  const [councilForm, setCouncilForm] = useState({ name: '', email: '', organization: '', role: '', message: '' })
+  const [councilForm, setCouncilForm] = useState({
+    firstName: '',
+    lastName: '',
+    workEmail: '',
+    organization: '',
+    role: '',
+    interest: '',
+  })
   const councilSubmit = useFormSubmit('https://formspree.io/f/placeholder-council')
 
-  // Waitlist form
-  const [waitlistForm, setWaitlistForm] = useState({ name: '', email: '', organization: '', interest: '' })
+  const [waitlistForm, setWaitlistForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    country: '',
+    organization: '',
+    participantType: '',
+    allocationRange: '',
+    notes: '',
+  })
   const waitlistSubmit = useFormSubmit('https://formspree.io/f/placeholder-waitlist')
 
   // Auto-scroll to section if hash in URL
   useEffect(() => {
     const hash = location.hash
-    if (hash === '#waitlist') {
-      setActiveTab('waitlist')
-      setTimeout(() => {
-        document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })
-      }, 300)
-    } else if (hash === '#council') {
-      setActiveTab('council')
-      setTimeout(() => {
-        document.getElementById('council-form')?.scrollIntoView({ behavior: 'smooth' })
-      }, 300)
-    }
+    const nextTab: ContactTab =
+      hash === '#waitlist' ? 'waitlist' : hash === '#council' ? 'council' : 'contact'
+    setActiveTab(nextTab)
+    const targetId = hash === '#waitlist' ? 'waitlist' : hash === '#council' ? 'council' : 'contact-form'
+    setTimeout(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' })
+    }, 250)
   }, [location.hash])
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await contactSubmit.submit(contactForm)
+    await contactSubmit.submit({
+      'First Name': contactForm.firstName,
+      'Last Name': contactForm.lastName,
+      'Work Email': contactForm.workEmail,
+      'Job Title': contactForm.jobTitle,
+      'Phone': `${contactForm.countryCode} ${contactForm.phoneNumber}`.trim(),
+      'Company Name': contactForm.companyName,
+      'What would you like to explore?': contactForm.explore,
+      'Write more here, if you’d like': contactForm.details,
+    })
     if (contactSubmit.status === 'success') {
-      setContactForm({ name: '', email: '', company: '', message: '' })
+      setContactForm({
+        firstName: '',
+        lastName: '',
+        workEmail: '',
+        jobTitle: '',
+        countryCode: '+1',
+        phoneNumber: '',
+        companyName: '',
+        explore: '',
+        details: '',
+      })
     }
   }
 
   const handleCouncilSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await councilSubmit.submit(councilForm)
+    await councilSubmit.submit({
+      'First Name': councilForm.firstName,
+      'Last Name': councilForm.lastName,
+      'Work Email': councilForm.workEmail,
+      Organization: councilForm.organization,
+      Role: councilForm.role,
+      'Why do you want to join the council?': councilForm.interest,
+    })
     if (councilSubmit.status === 'success') {
-      setCouncilForm({ name: '', email: '', organization: '', role: '', message: '' })
+      setCouncilForm({
+        firstName: '',
+        lastName: '',
+        workEmail: '',
+        organization: '',
+        role: '',
+        interest: '',
+      })
     }
   }
 
   const handleWaitlistSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await waitlistSubmit.submit(waitlistForm)
+    await waitlistSubmit.submit({
+      'First Name': waitlistForm.firstName,
+      'Last Name': waitlistForm.lastName,
+      Email: waitlistForm.email,
+      Country: waitlistForm.country,
+      Organization: waitlistForm.organization,
+      'Participant Type': waitlistForm.participantType,
+      'Expected Allocation': waitlistForm.allocationRange,
+      Notes: waitlistForm.notes,
+    })
     if (waitlistSubmit.status === 'success') {
-      setWaitlistForm({ name: '', email: '', organization: '', interest: '' })
+      setWaitlistForm({
+        firstName: '',
+        lastName: '',
+        email: '',
+        country: '',
+        organization: '',
+        participantType: '',
+        allocationRange: '',
+        notes: '',
+      })
     }
   }
 
-  const tabs = [
-    { id: 'contact' as const, label: 'Contact Us', icon: 'ri-mail-line' },
-    { id: 'council' as const, label: 'Join Council', icon: 'ri-government-line' },
-    { id: 'waitlist' as const, label: 'dSDR Waitlist', icon: 'ri-token-swap-line' },
+  const exploreOptions = [
+    { value: 'Institutional investment', label: 'Institutional investment' },
+    { value: 'Easy access to our dSDR Waitlist and/or Whitelist', label: 'Easy access to our dSDR Waitlist and/or Whitelist' },
+    { value: 'Interest in our Governing Council', label: 'Interest in our Governing Council' },
+    { value: 'Media inquiries', label: 'Media inquiries' },
+    { value: 'Other', label: 'Other' },
   ]
 
   return (
@@ -176,8 +274,7 @@ export default function Contact() {
             </div>
             <h1 className="font-playfair text-4xl lg:text-5xl text-white mb-4">Contact</h1>
             <p className="text-white/60 font-inter text-lg leading-relaxed">
-              Three ways to connect with the Tokenization Foundation — whether you're curious,
-              interested in governance, or ready to join the movement.
+              Reach out to our team — we’ll get back to you by email.
             </p>
           </div>
         </div>
@@ -212,274 +309,422 @@ export default function Contact() {
 
       {/* Main Form Area */}
       <section className="py-16 lg:py-24">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-
-          {/* Tab Switcher */}
-          <div className="flex rounded-2xl bg-white shadow-sm border border-gray-100 p-1.5 mb-10">
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-inter font-semibold transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-navy-900 text-white shadow-sm'
-                    : 'text-gray-500 hover:text-navy-900'
-                }`}
-              >
-                <i className={`${tab.icon} text-base`}></i>
-                <span className="hidden sm:block">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Form 1: General Contact */}
-          {activeTab === 'contact' && (
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-tfblue/10 flex items-center justify-center">
-                    <i className="ri-mail-send-line text-tfblue text-lg"></i>
-                  </div>
-                  <h2 className="font-playfair text-2xl text-navy-900">Contact Us</h2>
-                </div>
-                <p className="text-gray-500 font-inter text-sm leading-relaxed">
-                  Have a question, media inquiry, or partnership idea? We'd love to hear from you.
-                </p>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            {/* Left copy */}
+            <div className="lg:sticky lg:top-28">
+              <div className="inline-flex items-center gap-2 mb-6">
+                <div className="w-8 h-px bg-tfgold" />
+                <span className="text-tfgold text-xs font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
               </div>
+              <h2 className="font-playfair text-3xl lg:text-4xl text-navy-950 mb-4">Talk with one of our team members.</h2>
+              <p className="text-navy-900/70 font-inter text-base leading-relaxed max-w-lg">
+                Fill out the form on your right. We&rsquo;ll email you right back.
+              </p>
 
-              <form onSubmit={handleContactSubmit} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <FormField
-                    label="Full Name" id="c-name" required
-                    placeholder="Jane Smith"
-                    value={contactForm.name}
-                    onChange={v => setContactForm(p => ({ ...p, name: v }))}
-                  />
-                  <FormField
-                    label="Email Address" id="c-email" type="email" required
-                    placeholder="jane@example.com"
-                    value={contactForm.email}
-                    onChange={v => setContactForm(p => ({ ...p, email: v }))}
-                  />
-                </div>
-                <FormField
-                  label="Organization" id="c-company"
-                  placeholder="Your organization (optional)"
-                  value={contactForm.company}
-                  onChange={v => setContactForm(p => ({ ...p, company: v }))}
-                />
-                <TextAreaField
-                  label="Message" id="c-message" required
-                  placeholder="Tell us how we can help..."
-                  value={contactForm.message}
-                  onChange={v => setContactForm(p => ({ ...p, message: v }))}
-                  rows={5}
-                />
-
-                <StatusMessage status={contactSubmit.status} />
-
-                <button
-                  type="submit"
-                  disabled={contactSubmit.status === 'submitting'}
-                  className="w-full py-4 bg-navy-900 text-white rounded-full font-inter font-bold text-sm hover:bg-tfblue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {contactSubmit.status === 'submitting' ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <i className="ri-loader-4-line animate-spin"></i> Sending...
-                    </span>
-                  ) : 'Send Message'}
-                </button>
-              </form>
-            </div>
-          )}
-
-          {/* Form 2: Council Interest */}
-          {activeTab === 'council' && (
-            <div id="council-form" className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-tfgold/10 flex items-center justify-center">
-                    <i className="ri-government-line text-tfgold text-lg"></i>
-                  </div>
-                  <h2 className="font-playfair text-2xl text-navy-900">Join Our Governing Council</h2>
-                </div>
-                <p className="text-gray-500 font-inter text-sm leading-relaxed">
-                  The Governing Council guides our network's oversight, stability, and global adoption.
-                  Institutions and organizations interested in shaping the future of humanitarian infrastructure
-                  are invited to express interest.
-                </p>
-              </div>
-
-              <div className="bg-tfblue-verylight rounded-xl p-4 mb-6">
+              <div className="mt-8 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                 <div className="flex items-start gap-3">
-                  <i className="ri-information-line text-tfblue text-lg flex-shrink-0 mt-0.5"></i>
-                  <p className="text-tfblue text-xs font-inter leading-relaxed">
-                    Council membership is open to qualified institutions, NGOs, governmental bodies,
-                    and financial organizations aligned with our mission. Membership is reviewed by
-                    the founding council.
-                  </p>
-                </div>
-              </div>
-
-              <form onSubmit={handleCouncilSubmit} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <FormField
-                    label="Your Name" id="co-name" required
-                    placeholder="Jane Smith"
-                    value={councilForm.name}
-                    onChange={v => setCouncilForm(p => ({ ...p, name: v }))}
-                  />
-                  <FormField
-                    label="Email Address" id="co-email" type="email" required
-                    placeholder="jane@organization.org"
-                    value={councilForm.email}
-                    onChange={v => setCouncilForm(p => ({ ...p, email: v }))}
-                  />
-                </div>
-                <FormField
-                  label="Organization Name" id="co-org" required
-                  placeholder="e.g. UNICEF, World Bank, Fidelity"
-                  value={councilForm.organization}
-                  onChange={v => setCouncilForm(p => ({ ...p, organization: v }))}
-                />
-                <FormField
-                  label="Your Role / Title" id="co-role" required
-                  placeholder="e.g. Chief Strategy Officer"
-                  value={councilForm.role}
-                  onChange={v => setCouncilForm(p => ({ ...p, role: v }))}
-                />
-                <TextAreaField
-                  label="Why is your organization interested?" id="co-message" required
-                  placeholder="Please describe your organization's mission and why you're interested in joining the Governing Council..."
-                  value={councilForm.message}
-                  onChange={v => setCouncilForm(p => ({ ...p, message: v }))}
-                  rows={5}
-                />
-
-                <StatusMessage status={councilSubmit.status} />
-
-                <button
-                  type="submit"
-                  disabled={councilSubmit.status === 'submitting'}
-                  className="w-full py-4 bg-navy-900 text-white rounded-full font-inter font-bold text-sm hover:bg-tfblue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {councilSubmit.status === 'submitting' ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <i className="ri-loader-4-line animate-spin"></i> Submitting...
-                    </span>
-                  ) : 'Express Council Interest'}
-                </button>
-              </form>
-            </div>
-          )}
-
-          {/* Form 3: dSDR Token Waitlist */}
-          {activeTab === 'waitlist' && (
-            <div id="waitlist" className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-tfgold/10 flex items-center justify-center">
-                    <i className="ri-token-swap-line text-tfgold text-lg"></i>
+                  <div className="w-10 h-10 rounded-xl bg-tfblue-verylight flex items-center justify-center flex-shrink-0">
+                    <i className="ri-mail-line text-tfblue text-lg"></i>
                   </div>
-                  <h2 className="font-playfair text-2xl text-navy-900">Join dSDR Token Waitlist</h2>
-                </div>
-                <p className="text-gray-500 font-inter text-sm leading-relaxed">
-                  Be among the first to participate in the dSDR token ecosystem. Register your interest
-                  and we'll keep you updated on our launch timeline and pre-sale opportunities.
-                </p>
-              </div>
-
-              <div className="bg-navy-900 rounded-xl p-5 mb-6">
-                <div className="flex items-start gap-3">
-                  <i className="ri-shield-line text-tfgold text-lg flex-shrink-0 mt-0.5"></i>
                   <div>
-                    <p className="text-white text-xs font-inter font-semibold mb-1">Important Disclosure</p>
-                    <p className="text-white/60 text-xs font-inter leading-relaxed">
-                      There will be no sale activity on this website. Token sales will be conducted
-                      exclusively through licensed platforms such as CoinList. Joining this waitlist
-                      does not constitute a purchase or commitment to purchase any tokens.
+                    <div className="text-xs text-gray-400 font-inter">Email</div>
+                    <a
+                      href="mailto:info@tokenizationfoundation.org"
+                      className="text-sm font-inter font-medium text-navy-900 hover:text-tfblue transition-colors"
+                    >
+                      info@tokenizationfoundation.org
+                    </a>
+                    <p className="mt-2 text-xs text-gray-400 font-inter">
+                      Required fields are marked with <span className="text-tfgold font-semibold">*</span>.
                     </p>
                   </div>
                 </div>
               </div>
-
-              <form onSubmit={handleWaitlistSubmit} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <FormField
-                    label="Full Name" id="w-name" required
-                    placeholder="Jane Smith"
-                    value={waitlistForm.name}
-                    onChange={v => setWaitlistForm(p => ({ ...p, name: v }))}
-                  />
-                  <FormField
-                    label="Email Address" id="w-email" type="email" required
-                    placeholder="jane@example.com"
-                    value={waitlistForm.email}
-                    onChange={v => setWaitlistForm(p => ({ ...p, email: v }))}
-                  />
-                </div>
-                <FormField
-                  label="Organization (optional)" id="w-org"
-                  placeholder="Your company or institution"
-                  value={waitlistForm.organization}
-                  onChange={v => setWaitlistForm(p => ({ ...p, organization: v }))}
-                />
-                <div>
-                  <label htmlFor="w-interest" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
-                    Area of Interest <span className="text-tfgold">*</span>
-                  </label>
-                  <select
-                    id="w-interest"
-                    required
-                    value={waitlistForm.interest}
-                    onChange={e => setWaitlistForm(p => ({ ...p, interest: e.target.value }))}
-                    className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm focus:outline-none transition-all cursor-pointer"
-                  >
-                    <option value="">Select your primary interest</option>
-                    <option value="token-holder">Token Holder / Investor</option>
-                    <option value="validator">Validator / Network Participant</option>
-                    <option value="partner">Distribution Partner</option>
-                    <option value="donor">Donor / Impact Investor</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-
-                <StatusMessage status={waitlistSubmit.status} />
-
-                <button
-                  type="submit"
-                  disabled={waitlistSubmit.status === 'submitting'}
-                  className="w-full py-4 bg-tfgold text-navy-900 rounded-full font-inter font-bold text-sm hover:bg-tfgold-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {waitlistSubmit.status === 'submitting' ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <i className="ri-loader-4-line animate-spin text-navy-900"></i> Joining...
-                    </span>
-                  ) : 'Join dSDR Token Waitlist'}
-                </button>
-              </form>
             </div>
-          )}
 
-          {/* Tab hints */}
-          <div className="mt-8 grid grid-cols-3 gap-3">
-            {tabs.filter(t => t.id !== activeTab).map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-200 bg-white hover:border-tfblue/30 hover:bg-tfblue-verylight transition-all group"
-              >
-                <i className={`${tab.icon} text-gray-400 group-hover:text-tfblue text-xl transition-colors`}></i>
-                <span className="text-xs font-inter text-gray-500 group-hover:text-navy-900 transition-colors text-center leading-tight">{tab.label}</span>
-              </button>
-            ))}
-            <button
-              onClick={() => navigate('/')}
-              className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-200 bg-white hover:border-tfblue/30 hover:bg-tfblue-verylight transition-all group"
-            >
-              <i className="ri-home-line text-gray-400 group-hover:text-tfblue text-xl transition-colors"></i>
-              <span className="text-xs font-inter text-gray-500 group-hover:text-navy-900 transition-colors text-center leading-tight">Back to Home</span>
-            </button>
+            {/* Right form */}
+            <div id="contact-form" className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-tfblue/10 flex items-center justify-center">
+                    <i className="ri-file-list-3-line text-tfblue text-lg"></i>
+                  </div>
+                  <h3 className="font-playfair text-2xl text-navy-900">
+                    {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join dSDR Token Waitlist'}
+                  </h3>
+                </div>
+                <p className="text-gray-500 font-inter text-sm leading-relaxed">
+                  {activeTab === 'contact'
+                    ? 'Please complete the form below and our team will respond by email.'
+                    : activeTab === 'council'
+                      ? 'Tell us a bit about you and your organization, and we’ll follow up.'
+                      : 'Add your details below to join the dSDR Token waitlist.'}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-8">
+                <TabButton
+                  active={activeTab === 'contact'}
+                  onClick={() => {
+                    setActiveTab('contact')
+                    navigate('/contact#contact-form')
+                  }}
+                >
+                  Contact Us
+                </TabButton>
+                <TabButton
+                  active={activeTab === 'council'}
+                  onClick={() => {
+                    setActiveTab('council')
+                    navigate('/contact#council')
+                  }}
+                >
+                  Join Council
+                </TabButton>
+                <TabButton
+                  active={activeTab === 'waitlist'}
+                  onClick={() => {
+                    setActiveTab('waitlist')
+                    navigate('/contact#waitlist')
+                  }}
+                >
+                  Join Waitlist
+                </TabButton>
+              </div>
+
+              {activeTab === 'contact' && (
+                <form onSubmit={handleContactSubmit} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FormField
+                      label="First Name"
+                      id="c-first-name"
+                      required
+                      placeholder="Jane"
+                      value={contactForm.firstName}
+                      onChange={v => setContactForm(p => ({ ...p, firstName: v }))}
+                    />
+                    <FormField
+                      label="Last Name"
+                      id="c-last-name"
+                      required
+                      placeholder="Smith"
+                      value={contactForm.lastName}
+                      onChange={v => setContactForm(p => ({ ...p, lastName: v }))}
+                    />
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FormField
+                      label="Work Email"
+                      id="c-work-email"
+                      type="email"
+                      required
+                      placeholder="jane@company.com"
+                      value={contactForm.workEmail}
+                      onChange={v => setContactForm(p => ({ ...p, workEmail: v }))}
+                    />
+                    <FormField
+                      label="Job Title"
+                      id="c-job-title"
+                      placeholder="e.g. Director of Partnerships"
+                      value={contactForm.jobTitle}
+                      onChange={v => setContactForm(p => ({ ...p, jobTitle: v }))}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="c-phone-number" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
+                      Phone number
+                    </label>
+                    <div className="grid grid-cols-[120px_1fr] gap-3">
+                      <select
+                        id="c-country-code"
+                        value={contactForm.countryCode}
+                        onChange={e => setContactForm(p => ({ ...p, countryCode: e.target.value }))}
+                        className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm focus:outline-none transition-all cursor-pointer"
+                        aria-label="Country code"
+                      >
+                        <option value="+1">+1 (US)</option>
+                        <option value="+44">+44 (UK)</option>
+                        <option value="+49">+49 (DE)</option>
+                        <option value="+33">+33 (FR)</option>
+                        <option value="+41">+41 (CH)</option>
+                        <option value="+61">+61 (AU)</option>
+                        <option value="+65">+65 (SG)</option>
+                        <option value="+81">+81 (JP)</option>
+                        <option value="+82">+82 (KR)</option>
+                        <option value="+86">+86 (CN)</option>
+                        <option value="+852">+852 (HK)</option>
+                        <option value="+886">+886 (TW)</option>
+                        <option value="+971">+971 (AE)</option>
+                      </select>
+                      <input
+                        id="c-phone-number"
+                        type="tel"
+                        placeholder="Phone number"
+                        value={contactForm.phoneNumber}
+                        onChange={e => setContactForm(p => ({ ...p, phoneNumber: e.target.value }))}
+                        className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm placeholder:text-gray-400 focus:outline-none transition-all"
+                      />
+                    </div>
+                    <p className="mt-2 text-xs text-gray-400 font-inter">
+                      Drop down country codes - if easy.
+                    </p>
+                  </div>
+
+                  <FormField
+                    label="Company Name"
+                    id="c-company-name"
+                    placeholder="Company / Organization"
+                    value={contactForm.companyName}
+                    onChange={v => setContactForm(p => ({ ...p, companyName: v }))}
+                  />
+
+                  <div>
+                    <label htmlFor="c-explore" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
+                      What would you like to explore? <span className="text-tfgold">*</span>
+                    </label>
+                    <select
+                      id="c-explore"
+                      required
+                      value={contactForm.explore}
+                      onChange={e => setContactForm(p => ({ ...p, explore: e.target.value }))}
+                      className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm focus:outline-none transition-all cursor-pointer"
+                    >
+                      <option value="">Select an option</option>
+                      {exploreOptions.map(o => (
+                        <option key={o.value} value={o.value}>{o.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <TextAreaField
+                    label="Write more here, if you’d like"
+                    id="c-details"
+                    placeholder="Write more here, if you’d like"
+                    value={contactForm.details}
+                    onChange={v => setContactForm(p => ({ ...p, details: v }))}
+                    rows={5}
+                  />
+
+                  <StatusMessage status={contactSubmit.status} />
+
+                  <button
+                    type="submit"
+                    disabled={contactSubmit.status === 'submitting'}
+                    className="w-full py-4 bg-navy-900 text-white rounded-full font-inter font-bold text-sm hover:bg-tfblue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {contactSubmit.status === 'submitting' ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <i className="ri-loader-4-line animate-spin"></i> Submitting...
+                      </span>
+                    ) : 'Submit'}
+                  </button>
+
+                  <p className="text-xs text-gray-400 font-inter">
+                    Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
+                  </p>
+                </form>
+              )}
+
+              {activeTab === 'council' && (
+                <form id="council" onSubmit={handleCouncilSubmit} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FormField
+                      label="First Name"
+                      id="gc-first-name"
+                      required
+                      placeholder="Jane"
+                      value={councilForm.firstName}
+                      onChange={v => setCouncilForm(p => ({ ...p, firstName: v }))}
+                    />
+                    <FormField
+                      label="Last Name"
+                      id="gc-last-name"
+                      required
+                      placeholder="Smith"
+                      value={councilForm.lastName}
+                      onChange={v => setCouncilForm(p => ({ ...p, lastName: v }))}
+                    />
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FormField
+                      label="Work Email"
+                      id="gc-work-email"
+                      type="email"
+                      required
+                      placeholder="jane@company.com"
+                      value={councilForm.workEmail}
+                      onChange={v => setCouncilForm(p => ({ ...p, workEmail: v }))}
+                    />
+                    <FormField
+                      label="Role / Title"
+                      id="gc-role"
+                      placeholder="e.g. Head of Strategy"
+                      value={councilForm.role}
+                      onChange={v => setCouncilForm(p => ({ ...p, role: v }))}
+                    />
+                  </div>
+
+                  <FormField
+                    label="Organization"
+                    id="gc-organization"
+                    placeholder="Company / Organization"
+                    value={councilForm.organization}
+                    onChange={v => setCouncilForm(p => ({ ...p, organization: v }))}
+                  />
+
+                  <TextAreaField
+                    label="Why do you want to join the council?"
+                    id="gc-interest"
+                    required
+                    placeholder="Tell us what you’d like to contribute and why you’re interested."
+                    value={councilForm.interest}
+                    onChange={v => setCouncilForm(p => ({ ...p, interest: v }))}
+                    rows={5}
+                  />
+
+                  <StatusMessage status={councilSubmit.status} />
+
+                  <button
+                    type="submit"
+                    disabled={councilSubmit.status === 'submitting'}
+                    className="w-full py-4 bg-navy-900 text-white rounded-full font-inter font-bold text-sm hover:bg-tfblue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {councilSubmit.status === 'submitting' ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <i className="ri-loader-4-line animate-spin"></i> Submitting...
+                      </span>
+                    ) : 'Submit'}
+                  </button>
+
+                  <p className="text-xs text-gray-400 font-inter">
+                    Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
+                  </p>
+                </form>
+              )}
+
+              {activeTab === 'waitlist' && (
+                <form id="waitlist" onSubmit={handleWaitlistSubmit} className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FormField
+                      label="First Name"
+                      id="wl-first-name"
+                      required
+                      placeholder="Jane"
+                      value={waitlistForm.firstName}
+                      onChange={v => setWaitlistForm(p => ({ ...p, firstName: v }))}
+                    />
+                    <FormField
+                      label="Last Name"
+                      id="wl-last-name"
+                      required
+                      placeholder="Smith"
+                      value={waitlistForm.lastName}
+                      onChange={v => setWaitlistForm(p => ({ ...p, lastName: v }))}
+                    />
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <FormField
+                      label="Email"
+                      id="wl-email"
+                      type="email"
+                      required
+                      placeholder="jane@company.com"
+                      value={waitlistForm.email}
+                      onChange={v => setWaitlistForm(p => ({ ...p, email: v }))}
+                    />
+                    <FormField
+                      label="Country / Region"
+                      id="wl-country"
+                      required
+                      placeholder="United States"
+                      value={waitlistForm.country}
+                      onChange={v => setWaitlistForm(p => ({ ...p, country: v }))}
+                    />
+                  </div>
+
+                  <FormField
+                    label="Organization (optional)"
+                    id="wl-organization"
+                    placeholder="Company / Organization"
+                    value={waitlistForm.organization}
+                    onChange={v => setWaitlistForm(p => ({ ...p, organization: v }))}
+                  />
+
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="wl-participant-type" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
+                        Participant Type <span className="text-tfgold">*</span>
+                      </label>
+                      <select
+                        id="wl-participant-type"
+                        required
+                        value={waitlistForm.participantType}
+                        onChange={e => setWaitlistForm(p => ({ ...p, participantType: e.target.value }))}
+                        className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm focus:outline-none transition-all cursor-pointer"
+                      >
+                        <option value="">Select an option</option>
+                        <option value="Institution / Fund">Institution / Fund</option>
+                        <option value="Company / Builder">Company / Builder</option>
+                        <option value="Advisor / Research">Advisor / Research</option>
+                        <option value="Individual">Individual</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="wl-allocation" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
+                        Expected Allocation <span className="text-tfgold">*</span>
+                      </label>
+                      <select
+                        id="wl-allocation"
+                        required
+                        value={waitlistForm.allocationRange}
+                        onChange={e => setWaitlistForm(p => ({ ...p, allocationRange: e.target.value }))}
+                        className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm focus:outline-none transition-all cursor-pointer"
+                      >
+                        <option value="">Select a range</option>
+                        <option value="&lt;$10k">&lt;$10k</option>
+                        <option value="$10k–$50k">$10k–$50k</option>
+                        <option value="$50k–$250k">$50k–$250k</option>
+                        <option value="$250k–$1m">$250k–$1m</option>
+                        <option value="$1m+">$1m+</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <TextAreaField
+                    label="Notes (optional)"
+                    id="wl-notes"
+                    placeholder="Anything else you’d like us to know?"
+                    value={waitlistForm.notes}
+                    onChange={v => setWaitlistForm(p => ({ ...p, notes: v }))}
+                    rows={5}
+                  />
+
+                  <StatusMessage status={waitlistSubmit.status} />
+
+                  <button
+                    type="submit"
+                    disabled={waitlistSubmit.status === 'submitting'}
+                    className="w-full py-4 bg-navy-900 text-white rounded-full font-inter font-bold text-sm hover:bg-tfblue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {waitlistSubmit.status === 'submitting' ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <i className="ri-loader-4-line animate-spin"></i> Submitting...
+                      </span>
+                    ) : 'Join Waitlist'}
+                  </button>
+
+                  <p className="text-xs text-gray-400 font-inter">
+                    Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
+                  </p>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </section>

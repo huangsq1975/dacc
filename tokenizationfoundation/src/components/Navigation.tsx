@@ -102,8 +102,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                 href="/contact#waitlist"
                 onClick={e => {
                   e.preventDefault()
-                  navigate('/contact')
-                  setTimeout(() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' }), 200)
+                  navigate('/contact#waitlist')
                   setMobileOpen(false)
                 }}
                 className="mt-2 px-6 py-3 border-2 border-white text-white font-inter font-bold text-center"
