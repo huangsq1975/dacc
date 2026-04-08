@@ -39,7 +39,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#3264CC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a
               href="/"
@@ -89,7 +89,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-[#3264CC] border-t border-white/20 mobile-menu-enter">
+          <div className="lg:hidden bg-[#3264CC] border-t border-white/20 mobile-menu-enter relative z-10">
             <nav className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-4">
               <a
                 href="/approach"

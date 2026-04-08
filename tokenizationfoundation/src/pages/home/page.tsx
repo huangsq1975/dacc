@@ -30,6 +30,14 @@ function AnimatedSection({ children, className = '' }: { children: ReactNode; cl
   )
 }
 
+function SectionBadge({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return (
+    <div className={`inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 ${className}`}>
+      {children}
+    </div>
+  )
+}
+
 export default function Home() {
   const navigate = useNavigate()
 
@@ -40,27 +48,36 @@ export default function Home() {
       {/* ===== HERO (A1) ===== */}
       <section
         id="hero"
-        className="bg-[#3264CC] min-h-screen pt-20 relative overflow-hidden flex flex-col"
+        className="bg-[#3264CC] mt-20 min-h-[calc(85vh-5rem)] border-t border-[#244FB5] relative overflow-hidden flex flex-col"
       >
         {/* Diagonal divider */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom right, transparent 55%, rgba(255,255,255,0.04) 55%)',
+            backgroundColor: '#3E72DA',
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
           }}
         />
 
         <div className="flex-1 flex items-center relative">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-12 lg:py-0">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              {/* Left: Text */}
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-12 lg:py-0 relative">
+            {/* Right-side background icon for hero text */}
+            <div className="absolute right-[-15.5rem] sm:right-[-3rem] lg:right-[-8rem] top-1/2 -translate-y-1/2 pointer-events-none z-0">
+              <img
+                src={icon2}
+                alt=""
+                className="w-[34rem] xl:w-[40rem] object-contain opacity-25"
+              />
+            </div>
+
+            <div className="relative z-10 max-w-4xl">
               <div>
-                <h1 className="font-inter font-bold text-[42px] leading-[1.25] mb-6">
-                  <span className="text-black block whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
-                  <span className="text-white block whitespace-nowrap">with AI, blockchain, and digital assets -</span>
-                  <span className="text-black block whitespace-nowrap">so that humanitarian aid is funded</span>
-                  <span className="text-black block whitespace-nowrap">instantly, transparently,</span>
-                  <span className="text-black block whitespace-nowrap">and at scale.</span>
+                <h1 className="font-inter font-bold text-3xl sm:text-[42px] leading-[1.25] mb-6">
+                  <span className="text-black block sm:whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
+                  <span className="text-white block sm:whitespace-nowrap">with AI, blockchain, and digital assets -</span>
+                  <span className="text-black block sm:whitespace-nowrap">so that humanitarian aid is funded</span>
+                  <span className="text-black block sm:whitespace-nowrap">instantly, transparently,</span>
+                  <span className="text-black block sm:whitespace-nowrap">and at scale.</span>
                 </h1>
 
                 <p className="font-inter font-bold text-xl text-white mb-8">
@@ -85,31 +102,26 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-
-              {/* Right: TF Person Logo */}
-              <div className="hidden lg:flex justify-end items-center">
-                <img src={icon2} alt="Tokenization Foundation icon" className="w-[36rem] xl:w-[40rem] opacity-90 translate-x-1/2" />
-              </div>
             </div>
           </div>
         </div>
 
         {/* Small TF icon bottom-right corner */}
         <div className="absolute bottom-4 right-4 opacity-60">
-          <img src={icon} alt="Tokenization Foundation icon" className="w-10 h-10 object-contain" />
+          <img src={icon} alt="Tokenization Foundation icon" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
         </div>
       </section>
 
-      {/* ===== THE PROBLEM (A2 top) ===== */}
-      <section id="problem" className="bg-white py-16 lg:py-20">
+      {/* ===== THE PROBLEM + SOLUTIONS (A2) ===== */}
+      <section id="problem" className="bg-white py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection>
+          <AnimatedSection className="bg-white border border-black/10 rounded-2xl px-8 py-10 lg:px-12 lg:py-14 shadow-sm">
             {/* Section label */}
-            <div className="inline-block bg-black text-white font-inter font-bold text-base px-8 py-3 mb-8">
+            <SectionBadge className="bg-black text-white mb-8">
               The Problem
-            </div>
+            </SectionBadge>
 
-            <h2 className="font-inter font-bold text-3xl lg:text-4xl text-black mb-5">
+            <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-7 leading-tight">
               A Broken System In Need Of Reinvention
             </h2>
 
@@ -126,28 +138,22 @@ export default function Home() {
               NGOs face high administrative burdens, while opaque reporting further limits
               accountability and impact.
             </p>
-          </AnimatedSection>
-        </div>
-      </section>
 
-      {/* ===== THE SOLUTIONS (A2 bottom) ===== */}
-      <section id="solutions" className="bg-[#EBEBEB] py-16 lg:py-20 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Content */}
-            <AnimatedSection>
+            <div id="solutions" className="mt-12 grid lg:grid-cols-2 gap-12 items-center border-t border-[#3264CC]/20 pt-12">
+              {/* Left: Content */}
+              <div>
               {/* Section label */}
-              <div className="inline-block bg-[#3264CC] text-white font-inter font-bold text-base px-8 py-3 mb-8">
-                The Solutions
-              </div>
+              <SectionBadge className="bg-[#3264CC] text-white mb-8">
+                  The Solutions
+              </SectionBadge>
 
-              <h2 className="font-inter font-bold text-3xl lg:text-4xl text-black mb-5">
-                A Reimagined Model: Programmable Humanitarian Infrastructure
+              <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-7 leading-tight">
+                  A Reimagined Model: Programmable Humanitarian Infrastructure
               </h2>
 
               <p className="font-inter text-base text-gray-700 mb-5 max-w-xl">
-                The Tokenization Foundation replaces fragmented aid systems with a programmable,
-                time infrastructure:
+                  The Tokenization Foundation replaces fragmented aid systems with a programmable,
+                  time infrastructure:
               </p>
 
               <ul className="space-y-3">
@@ -162,33 +168,34 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-            </AnimatedSection>
+              </div>
 
-            {/* Right: Large TF logo */}
-            <div className="hidden lg:flex justify-end items-center">
-              <img src={icon} alt="Tokenization Foundation icon" className="w-[32rem] xl:w-[36rem] opacity-85 object-contain" />
+              {/* Right: Large TF logo */}
+              <div className="hidden lg:flex justify-end items-center">
+                <img src={icon} alt="Tokenization Foundation icon" className="w-[32rem] xl:w-[36rem] opacity-85 object-contain" />
+              </div>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* ===== IMPACT (A3) ===== */}
-      <section id="impact" className="bg-[#EBEBEB] py-16 lg:py-20 relative overflow-hidden">
+      <section id="impact" className="bg-[#EBEBEB] py-20 lg:py-28 relative overflow-hidden">
         {/* Centered icon background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
           <img src={icon2} alt="" className="w-[24rem] lg:w-[34rem] object-contain opacity-30" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <AnimatedSection>
+          <AnimatedSection className="bg-white/90 backdrop-blur-[1px] border border-black/10 rounded-2xl px-8 py-10 lg:px-12 lg:py-14 shadow-sm">
             {/* Centered section label */}
             <div className="flex justify-center mb-12">
-              <div className="bg-[#3264CC] text-white font-inter font-bold text-base px-12 py-3">
+              <SectionBadge className="bg-[#3264CC] text-white px-12">
                 Impact
-              </div>
+              </SectionBadge>
             </div>
 
-            <h2 className="font-inter font-bold text-2xl lg:text-3xl text-black mb-6">
+            <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-8 leading-tight">
               Infrastructure Designed To Deliver:
             </h2>
 
@@ -220,10 +227,11 @@ export default function Home() {
       </section>
 
       {/* ===== GOVERNING COUNCIL / PARTNERS (A4) ===== */}
-      <section id="council" className="bg-white py-16 lg:py-20">
+      <section id="council" className="bg-white py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection>
-            <h2 className="font-inter font-bold text-2xl lg:text-4xl text-black mb-10 max-w-3xl">
+          <AnimatedSection className="bg-[#F8F9FC] border border-black/10 rounded-2xl px-8 py-10 lg:px-12 lg:py-14 shadow-sm">
+
+            <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-12 max-w-4xl leading-tight">
               Building The Infrastructure Ecosystem With Two Initial Founding Governing Council Members
             </h2>
 
@@ -299,11 +307,15 @@ export default function Home() {
       </section>
 
       {/* ===== JOIN THE MOVEMENT (A5 top) ===== */}
-      <section id="join" className="bg-white py-10 lg:py-16">
+      <section id="join" className="bg-white py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection>
-            <div className="bg-[#8C8C8C] p-10 lg:p-14">
-              <h2 className="font-inter font-bold text-3xl lg:text-4xl text-white mb-5">
+            <div className="bg-[#7A7A7A] border border-black/10 rounded-2xl p-10 lg:p-14 shadow-sm">
+              <SectionBadge className="bg-white text-black mb-8">
+                Join
+              </SectionBadge>
+
+              <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-white mb-7 leading-tight">
                 Join The Movement
               </h2>
               <p className="font-inter text-base text-white mb-8 max-w-2xl">
@@ -335,29 +347,33 @@ export default function Home() {
       {/* ===== FOOTER (A5 bottom) ===== */}
       <footer className="bg-[#2244EE] relative overflow-hidden">
         {/* Main footer bar */}
-        <div className="flex items-center min-h-[120px] relative">
+        <div className="flex items-center min-h-[104px] relative py-3 md:py-0 md:-translate-y-2">
+          {/* Right-side background icon for footer text */}
+          <div className="absolute right-[-3.5rem] sm:right-[-2.5rem] lg:right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0">
+            <img
+              src={icon2}
+              alt=""
+              className="w-40 sm:w-44 lg:w-72 object-contain opacity-85"
+            />
+          </div>
+
           {/* LinkedIn icon - left */}
-          <div className="ml-6 lg:ml-10 bg-white w-16 h-16 flex flex-col items-center justify-center flex-shrink-0">
+          <div className="ml-0 md:ml-6 lg:ml-10 bg-white w-12 h-12 md:w-16 md:h-16 flex flex-col items-center justify-center flex-shrink-0 z-10">
             <img src={inIcon} alt="LinkedIn icon" className="w-16 h-16 object-contain" />
           </div>
 
           {/* Capital That Responds - center */}
-          <div className="flex-1 text-center px-4">
-            <p className="font-inter font-extrabold text-white text-3xl lg:text-5xl tracking-wide">
+          <div className="flex-1 text-center px-3 md:px-4 relative z-10">
+            <p className="font-inter font-extrabold text-white text-xl sm:text-2xl lg:text-5xl tracking-wide leading-tight">
               Capital That Responds When Humanity Needs It Most
             </p>
-          </div>
-
-          {/* TF Person Logo - right */}
-          <div className="flex-shrink-0 overflow-hidden flex items-end self-stretch pr-4">
-            <img src={icon2} alt="Tokenization Foundation icon" className="w-56 lg:w-72 object-contain opacity-85" />
           </div>
         </div>
 
         {/* Legal text */}
         <div className="px-6 lg:px-10 pb-6 pt-4 border-t border-white/20">
           <div className="flex flex-col md:flex-row justify-between gap-4 text-white/60 text-xs font-inter">
-            <p>© 2026 Tokenization Foundation. All rights reserved.</p>
+            <p>© 2026. All rights reserved.</p>
             <p className="max-w-xl text-right">
               This website is for informational purposes only and does not constitute an offer to
               sell or a solicitation of an offer to buy any securities or tokens.
