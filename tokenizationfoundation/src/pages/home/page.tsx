@@ -59,7 +59,7 @@ export default function Home() {
           }}
         />
 
-        <div className="relative pt-8 pb-0 lg:pt-10 lg:pb-0">
+        <div className="relative pt-8 pb-16 lg:pt-10 lg:pb-20">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative">
             {/* Right-side background icon for hero text */}
             <div className="absolute right-[-15.5rem] sm:right-[-3rem] lg:right-[-8rem] top-1/2 -translate-y-1/2 pointer-events-none z-0">
@@ -110,9 +110,9 @@ export default function Home() {
       </section>
 
       {/* ===== THE PROBLEM + SOLUTIONS (A2) ===== */}
-      <section id="problem" className="bg-white pb-20 lg:pb-28 pt-0 -mt-px">
+      <section id="problem" className="bg-white pb-20 lg:pb-28 pt-0 -mt-16 lg:-mt-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-0">
-          <AnimatedSection className="bg-white border border-black/10 rounded-b-2xl px-8 pt-4 pb-10 sm:pt-5 lg:px-12 lg:py-14 shadow-sm">
+          <AnimatedSection className="bg-white border border-black/10 rounded-2xl px-8 pt-4 pb-10 sm:pt-5 lg:px-12 lg:py-14 shadow-sm">
             {/* Section label */}
             <SectionBadge className="bg-black text-white mb-8">
               The Problem
