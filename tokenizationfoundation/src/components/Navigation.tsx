@@ -36,7 +36,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               <img
                 src={logoHoriz}
                 alt="Tokenization Foundation"
-                className="h-10 w-auto max-w-[min(100%,220px)] origin-left scale-[8] object-contain object-left"
+                className="h-30 w-auto max-w-[min(16%,200px)] origin-right scale-[3] object-contain object-right"
               />
             </a>
 

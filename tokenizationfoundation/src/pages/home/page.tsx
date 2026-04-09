@@ -48,7 +48,7 @@ export default function Home() {
       {/* ===== HERO (A1) ===== */}
       <section
         id="hero"
-        className="bg-[#5B8DEB] mt-20 min-h-[calc(85vh-5rem)] border-t border-[#4F7FD9] relative overflow-hidden flex flex-col"
+        className="bg-[#5B8DEB] mt-20 border-t border-[#4F7FD9] relative overflow-hidden"
       >
         {/* Diagonal — lighter than nav (#3264CC), paired for contrast with white copy */}
         <div
@@ -59,8 +59,8 @@ export default function Home() {
           }}
         />
 
-        <div className="flex-1 flex items-center relative">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-12 lg:py-0 relative">
+        <div className="relative pt-8 pb-4 lg:pt-10 lg:pb-5">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative">
             {/* Right-side background icon for hero text */}
             <div className="absolute right-[-15.5rem] sm:right-[-3rem] lg:right-[-8rem] top-1/2 -translate-y-1/2 pointer-events-none z-0">
               <img
@@ -104,15 +104,15 @@ export default function Home() {
         </div>
 
         {/* Small TF icon bottom-right corner */}
-        <div className="absolute bottom-4 right-4 opacity-60">
+        <div className="absolute bottom-2 right-4 opacity-60">
           <img src={icon} alt="Tokenization Foundation icon" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
         </div>
       </section>
 
       {/* ===== THE PROBLEM + SOLUTIONS (A2) ===== */}
-      <section id="problem" className="bg-white py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="bg-white border border-black/10 rounded-2xl px-8 py-10 lg:px-12 lg:py-14 shadow-sm">
+      <section id="problem" className="bg-white pb-20 lg:pb-28 -mt-px pt-0">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-0">
+          <AnimatedSection className="bg-white border border-black/10 rounded-2xl px-8 pt-4 pb-10 sm:pt-5 lg:px-12 lg:py-14 shadow-sm -mt-1 sm:-mt-0.5 lg:-mt-px">
             {/* Section label */}
             <SectionBadge className="bg-black text-white mb-8">
               The Problem
@@ -281,7 +281,7 @@ export default function Home() {
               </button>
             </p>
 
-            <hr className="border-[#3264CC] border mb-10" />
+            <hr className="border-[#3264CC] border mb-0" />
 
             {/* Media coverage section intentionally hidden until launch-ready. */}
           </AnimatedSection>
