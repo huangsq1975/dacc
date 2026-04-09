@@ -48,13 +48,13 @@ export default function Home() {
       {/* ===== HERO (A1) ===== */}
       <section
         id="hero"
-        className="bg-[#3264CC] mt-20 min-h-[calc(85vh-5rem)] border-t border-[#244FB5] relative overflow-hidden flex flex-col"
+        className="bg-[#5B8DEB] mt-20 min-h-[calc(85vh-5rem)] border-t border-[#4F7FD9] relative overflow-hidden flex flex-col"
       >
-        {/* Diagonal divider */}
+        {/* Diagonal — lighter than nav (#3264CC), paired for contrast with white copy */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundColor: '#3E72DA',
+            backgroundColor: '#72A0F0',
             clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
           }}
         />
@@ -72,7 +72,7 @@ export default function Home() {
 
             <div className="relative z-10 max-w-4xl">
               <div>
-                <h1 className="font-inter font-bold text-3xl sm:text-[42px] leading-[1.25] mb-6">
+                <h1 className="tf-h1 mb-6">
                   <span className="text-black block sm:whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
                   <span className="text-white block sm:whitespace-nowrap">with AI, blockchain, and digital assets -</span>
                   <span className="text-black block sm:whitespace-nowrap">so that humanitarian aid is funded</span>
@@ -80,7 +80,7 @@ export default function Home() {
                   <span className="text-black block sm:whitespace-nowrap">and at scale.</span>
                 </h1>
 
-                <p className="font-inter font-bold text-xl text-white mb-8">
+                <p className="tf-subhead text-white mb-8">
                   Turn your capital into impact
                 </p>
 
@@ -118,18 +118,18 @@ export default function Home() {
               The Problem
             </SectionBadge>
 
-            <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-7 leading-tight">
+            <h2 className="tf-h2 text-black mb-7">
               A Broken System In Need Of Reinvention
             </h2>
 
-            <p className="font-inter text-base text-gray-700 mb-4 max-w-3xl">
+            <p className="font-inter text-gray-700 mb-4 max-w-3xl">
               The global crisis infrastructure is{' '}
               <strong>fragmented</strong>,{' '}
               <strong>delayed</strong>, and{' '}
               <strong>inefficient</strong>.
             </p>
 
-            <p className="font-inter text-base text-gray-700 max-w-3xl">
+            <p className="font-inter text-gray-700 max-w-3xl">
               It's marked by disbursement lags of up to 20 months in U.S. federal programs,
               17–30% leakage across traditional aid flows, and capital trapped in slow grant cycles.
               NGOs face high administrative burdens, while opaque reporting further limits
@@ -144,11 +144,11 @@ export default function Home() {
                   The Solutions
               </SectionBadge>
 
-              <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-7 leading-tight">
+              <h2 className="tf-h2 text-black mb-7">
                   A Reimagined Model: Programmable Humanitarian Infrastructure
               </h2>
 
-              <p className="font-inter text-base text-gray-700 mb-5 max-w-xl">
+              <p className="font-inter text-gray-700 mb-5 max-w-xl">
                   The Tokenization Foundation replaces fragmented aid systems with a programmable,
                   time infrastructure:
               </p>
@@ -159,7 +159,7 @@ export default function Home() {
                   'Blockchain enables instant, traceable, and secure transfers',
                   'AI provides real-time oversight, analytics, and adaptive governance',
                 ].map(item => (
-                  <li key={item} className="flex items-start gap-3 font-inter text-base text-gray-700">
+                  <li key={item} className="flex items-start gap-3 font-inter text-gray-700">
                     <span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />
                     {item}
                   </li>
@@ -192,7 +192,7 @@ export default function Home() {
               </SectionBadge>
             </div>
 
-            <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-8 leading-tight">
+            <h2 className="tf-h2 text-black mb-8">
               Infrastructure Designed To Deliver:
             </h2>
 
@@ -202,14 +202,14 @@ export default function Home() {
                 '30–50% reduction in administrative overhead',
                 'Real-time transparency and traceability',
               ].map(item => (
-                <li key={item} className="flex items-start gap-3 font-inter text-base text-gray-700">
+                <li key={item} className="flex items-start gap-3 font-inter text-gray-700">
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
 
-            <p className="font-inter text-2xl lg:text-3xl text-black max-w-3xl leading-snug">
+            <p className="font-inter font-semibold text-black max-w-3xl">
               Over five years, the platform is expected to reach{' '}
               <strong>+ billion people globally</strong>, while scaling transaction volume into the
               hundreds of millions annually.
@@ -228,7 +228,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="bg-[#F8F9FC] border border-black/10 rounded-2xl px-8 py-10 lg:px-12 lg:py-14 shadow-sm">
 
-            <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-12 max-w-4xl leading-tight">
+            <h2 className="tf-h2 text-black mb-12 max-w-4xl">
               Building The Infrastructure Ecosystem With Two Initial Founding Governing Council Members
             </h2>
 
@@ -264,14 +264,14 @@ export default function Home() {
                   <line x1="40" y1="4" x2="40" y2="28" stroke="#1B3A6B" strokeWidth="5" />
                   <line x1="40" y1="52" x2="40" y2="76" stroke="#1B3A6B" strokeWidth="5" />
                 </svg>
-                <span className="font-inter font-bold text-[#1B3A6B] text-lg tracking-widest uppercase">
+                <span className="font-inter font-bold text-[#1B3A6B] text-sm tracking-widest uppercase">
                   <span className="font-black">AEGIS</span>{' '}
                   <span className="font-light tracking-widest">TRUST</span>
                 </span>
               </div>
             </div>
 
-            <p className="font-inter text-sm text-black mb-8">
+            <p className="font-inter text-black mb-8">
               Interested in getting on our Council?{' '}
               <button
                 onClick={() => navigate('/contact#council')}
@@ -297,10 +297,10 @@ export default function Home() {
                 Join
               </SectionBadge>
 
-              <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-white mb-7 leading-tight">
+              <h2 className="tf-h2 text-white mb-7">
                 Join The Movement
               </h2>
-              <p className="font-inter text-base text-white mb-8 max-w-2xl">
+              <p className="font-inter text-white mb-8 max-w-2xl">
                 The Tokenization Foundation invites institutions, partners, and early supporters to
                 participate in building a new global standard for humanitarian aid.
               </p>
@@ -343,7 +343,7 @@ export default function Home() {
 
           {/* Capital That Responds - center */}
           <div className="flex-1 text-center px-3 md:px-4 relative z-10">
-            <p className="font-inter font-extrabold text-white text-xl sm:text-2xl lg:text-5xl tracking-wide leading-tight">
+            <p className="tf-h1 text-white tracking-wide">
               Capital That Responds
             </p>
           </div>
@@ -351,7 +351,7 @@ export default function Home() {
 
         {/* Legal text */}
         <div className="px-6 lg:px-10 pb-6 pt-4 border-t border-white/20">
-          <div className="flex flex-col md:flex-row justify-between gap-4 text-white/60 text-xs font-inter">
+          <div className="flex flex-col md:flex-row justify-between gap-4 text-white/60 text-sm font-inter">
             <p>© 2026. All rights reserved.</p>
             <p className="max-w-xl text-right">
               This website is for informational purposes only and does not constitute an offer to

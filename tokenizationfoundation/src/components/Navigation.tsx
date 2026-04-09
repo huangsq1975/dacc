@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import icon2 from '../../icon2.png'
+import logoHoriz from '../assets/TK_Logo_Horiz_White_Tag.png'
 
 interface NavigationProps {
   sectionIds?: string[]
@@ -24,19 +24,20 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#3264CC]">
+      <header className="fixed top-0 left-0 right-0 z-50 overflow-visible bg-[#3264CC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
+          <div className="flex h-20 items-center justify-between">
+            {/* Logo：版面維持 h-20，用 scale 放大顯示（不增加導覽列高度） */}
             <a
               href="/"
-              className="flex items-center gap-3 group"
+              className="group flex items-center gap-3"
               onClick={e => { e.preventDefault(); navigate('/') }}
             >
-              <img src={icon2} alt="Tokenization Foundation icon" className="w-8 h-8 flex-shrink-0" />
-              <span className="text-white font-inter font-bold text-base lg:text-lg tracking-wide leading-tight">
-                Tokenization<br />Foundation
-              </span>
+              <img
+                src={logoHoriz}
+                alt="Tokenization Foundation"
+                className="h-10 w-auto max-w-[min(100%,220px)] origin-left scale-[8] object-contain object-left"
+              />
             </a>
 
             {/* Desktop Nav Links */}
@@ -81,20 +82,20 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach'); setMobileOpen(false) }}
-                className="text-lg font-inter font-bold text-white py-2 border-b border-white/20"
+                className="text-base font-inter font-bold text-white py-2 border-b border-white/20"
               >
                 Approach
               </a>
               <button
                 onClick={handleTeamLink}
-                className="text-lg font-inter font-bold text-white py-2 border-b border-white/20 text-left"
+                className="text-base font-inter font-bold text-white py-2 border-b border-white/20 text-left"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact'); setMobileOpen(false) }}
-                className="text-lg font-inter font-bold text-white py-2 border-b border-white/20"
+                className="text-base font-inter font-bold text-white py-2 border-b border-white/20"
               >
                 Contact
               </a>
@@ -105,7 +106,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                   navigate('/contact#waitlist')
                   setMobileOpen(false)
                 }}
-                className="mt-2 px-6 py-3 border-2 border-white text-white font-inter font-bold text-center"
+                className="mt-2 px-6 py-3 border-2 border-white text-white font-inter font-bold text-base text-center"
               >
                 Join dSDR Token Waitlist
               </a>

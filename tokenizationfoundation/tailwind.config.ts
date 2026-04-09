@@ -38,6 +38,9 @@ export default {
         playfair: ['"Playfair Display"', 'serif'],
         inter: ['Inter', 'sans-serif'],
       },
+      fontSize: {
+        base: ['1rem', { lineHeight: '1.65' }],
+      },
       animation: {
         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
         'fade-in-left': 'fadeInLeft 0.8s ease-out forwards',

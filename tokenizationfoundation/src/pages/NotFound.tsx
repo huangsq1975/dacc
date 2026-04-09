@@ -9,8 +9,8 @@ export default function NotFound() {
         <i className="ri-error-warning-line text-tfgold text-3xl"></i>
       </div>
       <div className="font-playfair text-8xl font-bold text-white/10 mb-4">404</div>
-      <h1 className="font-playfair text-3xl text-white mb-4">Page Not Found</h1>
-      <p className="text-white/50 font-inter text-base mb-8 max-w-sm">
+      <h1 className="tf-h1 text-white mb-4">Page Not Found</h1>
+      <p className="text-white/50 font-inter mb-8 max-w-sm">
         The page you're looking for doesn't exist or has been moved.
       </p>
       <button

@@ -270,10 +270,10 @@ export default function Contact() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 mb-6">
               <div className="w-8 h-px bg-white/70" />
-              <span className="text-white text-xs font-inter font-semibold tracking-widest uppercase">Get In Touch</span>
+              <span className="text-white text-sm font-inter font-semibold tracking-widest uppercase">Get In Touch</span>
             </div>
-            <h1 className="font-inter font-extrabold text-4xl lg:text-5xl text-white mb-4 leading-tight">Contact</h1>
-            <p className="text-white/90 font-inter text-lg leading-relaxed">
+            <h1 className="tf-h1 text-white mb-4">Contact</h1>
+            <p className="text-white/90 font-inter leading-relaxed">
               Reach out to our team — we’ll get back to you by email.
             </p>
           </div>
@@ -294,7 +294,7 @@ export default function Contact() {
                   <i className={`${item.icon} text-tfblue text-lg`}></i>
                 </div>
                 <div>
-                  <div className="text-xs text-gray-400 font-inter">{item.label}</div>
+                  <div className="text-sm text-gray-400 font-inter">{item.label}</div>
                   {item.href ? (
                     <a href={item.href} className="text-sm font-inter font-medium text-navy-900 hover:text-tfblue transition-colors">{item.value}</a>
                   ) : (
@@ -315,10 +315,10 @@ export default function Contact() {
             <div className="lg:sticky lg:top-28">
               <div className="inline-flex items-center gap-2 mb-6">
                 <div className="w-8 h-px bg-tfgold" />
-                <span className="text-tfgold text-xs font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
+                <span className="text-tfgold text-sm font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
               </div>
-              <h2 className="font-inter font-extrabold text-4xl lg:text-5xl text-black mb-4 leading-tight">Talk with one of our team members.</h2>
-              <p className="text-navy-900/70 font-inter text-base leading-relaxed max-w-lg">
+              <h2 className="tf-h2 text-black mb-4">Talk with one of our team members.</h2>
+              <p className="text-navy-900/70 font-inter leading-relaxed max-w-lg">
                 Fill out the form on your right. We&rsquo;ll email you right back.
               </p>
 
@@ -328,14 +328,14 @@ export default function Contact() {
                     <i className="ri-mail-line text-tfblue text-lg"></i>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-400 font-inter">Email</div>
+                    <div className="text-sm text-gray-400 font-inter">Email</div>
                     <a
                       href="mailto:info@tokenizationfoundation.org"
                       className="text-sm font-inter font-medium text-navy-900 hover:text-tfblue transition-colors"
                     >
                       info@tokenizationfoundation.org
                     </a>
-                    <p className="mt-2 text-xs text-gray-400 font-inter">
+                    <p className="mt-2 text-sm text-gray-400 font-inter">
                       Required fields are marked with <span className="text-tfgold font-semibold">*</span>.
                     </p>
                   </div>
@@ -350,11 +350,11 @@ export default function Contact() {
                   <div className="w-10 h-10 rounded-xl bg-tfblue/10 flex items-center justify-center">
                     <i className="ri-file-list-3-line text-tfblue text-lg"></i>
                   </div>
-                  <h3 className="font-inter font-extrabold text-3xl text-black leading-tight">
+                  <h3 className="tf-h3 text-black">
                     {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join dSDR Token Waitlist'}
                   </h3>
                 </div>
-                <p className="text-gray-500 font-inter text-sm leading-relaxed">
+                <p className="text-gray-500 font-inter leading-relaxed">
                   {activeTab === 'contact'
                     ? 'Please complete the form below and our team will respond by email.'
                     : activeTab === 'council'
@@ -468,7 +468,7 @@ export default function Contact() {
                         className="form-input w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-navy-900 font-inter text-sm placeholder:text-gray-400 focus:outline-none transition-all"
                       />
                     </div>
-                    <p className="mt-2 text-xs text-gray-400 font-inter">
+                    <p className="mt-2 text-sm text-gray-400 font-inter">
                       Drop down country codes - if easy.
                     </p>
                   </div>
@@ -522,7 +522,7 @@ export default function Contact() {
                     ) : 'Submit'}
                   </button>
 
-                  <p className="text-xs text-gray-400 font-inter">
+                  <p className="text-sm text-gray-400 font-inter">
                     Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
                   </p>
                 </form>
@@ -600,7 +600,7 @@ export default function Contact() {
                     ) : 'Submit'}
                   </button>
 
-                  <p className="text-xs text-gray-400 font-inter">
+                  <p className="text-sm text-gray-400 font-inter">
                     Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
                   </p>
                 </form>
@@ -719,7 +719,7 @@ export default function Contact() {
                     ) : 'Join Waitlist'}
                   </button>
 
-                  <p className="text-xs text-gray-400 font-inter">
+                  <p className="text-sm text-gray-400 font-inter">
                     Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
                   </p>
                 </form>
@@ -735,11 +735,11 @@ export default function Contact() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-tfgold flex items-center justify-center">
-                <span className="text-navy-900 font-bold text-xs font-inter">TF</span>
+                <span className="text-navy-900 font-bold text-sm font-inter">TF</span>
               </div>
               <span className="text-white/40 text-sm font-inter">Tokenization Foundation</span>
             </div>
-            <p className="text-white/25 text-xs font-inter text-center">
+            <p className="text-white/25 text-sm font-inter text-center">
               © 2026 Tokenization Foundation. All rights reserved.
             </p>
             <div className="flex gap-4">

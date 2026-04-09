@@ -82,7 +82,7 @@ export default function TeamPage() {
         <section className="max-w-7xl mx-auto">
           <div className="flex justify-center mb-14">
             <div className="bg-[#3264CC] px-10 py-5 md:px-20 md:py-6">
-              <h1 className="font-inter font-semibold text-white text-3xl md:text-5xl tracking-wide">
+              <h1 className="tf-h1 text-white tracking-wide">
                 Meet the Team
               </h1>
             </div>
@@ -94,7 +94,7 @@ export default function TeamPage() {
                 key={member.name}
                 className="flex flex-col items-center text-center border border-gray-200 bg-white px-5 py-6 rounded-lg shadow-sm"
               >
-                <div className="w-full max-w-[200px] bg-[#0D47A1] text-white text-sm font-inter font-semibold py-1 rounded mb-4">
+                <div className="w-full max-w-[200px] bg-[#0D47A1] text-white font-inter font-semibold text-sm py-1.5 px-2 rounded mb-4">
                   {member.name}
                 </div>
 
@@ -104,7 +104,7 @@ export default function TeamPage() {
 
                 <span className="w-3 h-3 rounded-full bg-[#3264CC] mb-5" aria-hidden="true" />
 
-                <p className="font-inter text-[14px] text-gray-700 leading-6 mb-5 min-h-[108px]">
+                <p className="font-inter text-gray-700 leading-relaxed mb-5 min-h-[108px]">
                   {member.bio}
                 </p>
 
@@ -123,7 +123,7 @@ export default function TeamPage() {
           <div className="flex justify-center mt-14">
             <button
               onClick={() => navigate('/contact')}
-              className="bg-[#3264CC] text-white font-inter font-semibold text-2xl px-12 py-4 hover:bg-[#2857b8] transition-colors"
+              className="bg-[#3264CC] text-white tf-subhead px-12 py-4 hover:bg-[#2857b8] transition-colors"
             >
               Contact Us
             </button>
