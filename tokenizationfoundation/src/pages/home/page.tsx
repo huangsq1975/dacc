@@ -127,8 +127,8 @@ export default function Home() {
 
       {/* ===== THE PROBLEM (full-bleed gray; no side logo) ===== */}
       <section id="problem" className="relative tf-section bg-white -mt-px">
-        <AnimatedSection className="w-full">
-          <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <AnimatedSection className="px-8 lg:px-12">
             <SectionBadge className="!inline-flex bg-black text-white mb-8 w-[13.5rem] justify-center box-border">
               The Problem
             </SectionBadge>
@@ -152,14 +152,14 @@ export default function Home() {
                 accountability and impact.
               </p>
             </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
+        </div>
       </section>
 
       {/* ===== THE SOLUTIONS (full-bleed gray; no side logo) ===== */}
       <section id="solutions" className="relative tf-section bg-[#F3F4F6] -mt-px">
-        <AnimatedSection className="w-full">
-          <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <AnimatedSection className="px-8 lg:px-12">
             <SectionBadge className="!inline-flex bg-[#3264CC] text-white mb-8 w-[13.5rem] justify-center box-border">
               The Solutions
             </SectionBadge>
@@ -188,8 +188,8 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
+        </div>
       </section>
 
       {/* ===== IMPACT (A3) ===== */}
