@@ -22,43 +22,51 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
     setMobileOpen(false)
   }
 
+  const goToHomeFirstSection = () => {
+    if (location.pathname === '/') return
+    setMobileOpen(false)
+    navigate({ pathname: '/', hash: '#hero' })
+  }
+
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 overflow-visible bg-[#3264CC]">
+      <header className="fixed top-0 left-0 right-0 z-50 overflow-visible bg-[#0033CC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
-            {/* Logo：版面維持 h-20，用 scale 放大顯示（不增加導覽列高度） */}
-            <a
-              href="/"
-              className="group flex items-center gap-3"
-              onClick={e => { e.preventDefault(); navigate('/') }}
-            >
-              <img
-                src={logoHoriz}
-                alt="Tokenization Foundation"
-                className="h-30 w-auto max-w-[min(16%,200px)] origin-right scale-[3] object-contain object-right"
-              />
-            </a>
+            <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+              <button
+                type="button"
+                onClick={goToHomeFirstSection}
+                className="shrink-0 p-1 rounded-md flex items-center"
+                aria-label="Go to first section"
+              >
+                <img
+                  src={logoHoriz}
+                  alt=""
+                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[8] object-left"
+                />
+              </button>
+            </div>
 
             {/* Desktop Nav Links */}
             <nav className="hidden lg:flex items-center gap-10">
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach') }}
-                className="text-base font-inter font-bold text-white hover:text-white/80 transition-colors"
+                className="tf-body font-semibold text-white hover:text-white/80 transition-colors"
               >
                 Approach
               </a>
               <button
                 onClick={handleTeamLink}
-                className="text-base font-inter font-bold text-white hover:text-white/80 transition-colors"
+                className="tf-body font-semibold text-white hover:text-white/80 transition-colors"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact') }}
-                className="px-6 py-2 border-2 border-white text-white font-inter font-bold text-base hover:bg-white hover:text-[#3264CC] transition-all"
+                className="px-6 py-2 border-2 border-white rounded-full tf-body font-semibold text-white hover:bg-white hover:text-[#0033CC] transition-all"
               >
                 Contact
               </a>
@@ -77,25 +85,25 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-[#3264CC] border-t border-white/20 mobile-menu-enter relative z-10">
+          <div className="lg:hidden bg-[#0033CC] border-t border-white/20 mobile-menu-enter relative z-10">
             <nav className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-4">
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach'); setMobileOpen(false) }}
-                className="text-base font-inter font-bold text-white py-2 border-b border-white/20"
+                className="tf-body font-semibold text-white py-2 border-b border-white/20"
               >
                 Approach
               </a>
               <button
                 onClick={handleTeamLink}
-                className="text-base font-inter font-bold text-white py-2 border-b border-white/20 text-left"
+                className="tf-body font-semibold text-white py-2 border-b border-white/20 text-left"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact'); setMobileOpen(false) }}
-                className="text-base font-inter font-bold text-white py-2 border-b border-white/20"
+                className="tf-body font-semibold text-white py-2 border-b border-white/20"
               >
                 Contact
               </a>
@@ -106,7 +114,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                   navigate('/contact#waitlist')
                   setMobileOpen(false)
                 }}
-                className="mt-2 px-6 py-3 border-2 border-white text-white font-inter font-bold text-base text-center"
+                className="mt-2 px-6 py-3 border-2 border-white text-white tf-body font-semibold text-center"
               >
                 Join dSDR Token Waitlist
               </a>

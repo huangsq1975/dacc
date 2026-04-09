@@ -1,4 +1,5 @@
 import Navigation from '../../components/Navigation'
+import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom'
 
 type TeamMember = {
@@ -47,25 +48,25 @@ function LineAvatar({ seed, accent }: { seed: number; accent: string }) {
 const teamMembers: TeamMember[] = [
   {
     name: 'Serra M. Kaya',
-    bio: 'Leads strategic partnerships across humanitarian and digital finance ecosystems. Focuses on rapid deployment models that turn pledged capital into immediate relief outcomes.',
+    bio: 'Builds humanitarian and digital-finance partnerships to turn pledged capital into faster relief.',
     linkedin: 'https://www.linkedin.com/in/serra-kaya',
     accent: '#3264CC',
   },
   {
     name: 'Lynne R. Foster',
-    bio: 'Oversees product and operations with an emphasis on scalable delivery infrastructure. Aligns technical execution with transparent governance and measurable impact.',
+    bio: 'Leads product and operations to scale delivery with transparent governance and measurable impact.',
     linkedin: 'https://www.linkedin.com/in/lynne-foster',
     accent: '#1D4ED8',
   },
   {
     name: 'Anita S. Mehra',
-    bio: 'Designs tokenization frameworks that improve traceability and disbursement speed. Bridges policy, compliance, and engineering to support trusted aid pipelines.',
+    bio: 'Designs tokenization frameworks that improve traceability and speed disbursement across teams.',
     linkedin: 'https://www.linkedin.com/in/anita-mehra',
     accent: '#2563EB',
   },
   {
     name: 'Kerstin P. Holm',
-    bio: 'Drives AI-enabled oversight and analytics for real-time decision support. Works on data standards that strengthen accountability for institutional partners.',
+    bio: 'Drives AI-powered oversight and analytics for real-time decisions and stronger partner accountability.',
     linkedin: 'https://www.linkedin.com/in/kerstin-holm',
     accent: '#3B82F6',
   },
@@ -78,14 +79,12 @@ export default function TeamPage() {
     <div className="bg-white min-h-screen">
       <Navigation />
 
-      <main className="pt-28 pb-16 px-6 lg:px-8">
+      <main className="pt-28 pb-16 px-6 lg:px-8 bg-[#F8F9FC]">
         <section className="max-w-7xl mx-auto">
           <div className="flex justify-center mb-14">
-            <div className="bg-[#3264CC] px-10 py-5 md:px-20 md:py-6">
-              <h1 className="tf-h1 text-white tracking-wide">
-                Meet the Team
-              </h1>
-            </div>
+            <h1 className="tf-headline text-[#0f172a] tracking-wide">
+              Meet the Team
+            </h1>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-10">
@@ -94,7 +93,7 @@ export default function TeamPage() {
                 key={member.name}
                 className="flex flex-col items-center text-center border border-gray-200 bg-white px-5 py-6 rounded-lg shadow-sm"
               >
-                <div className="w-full max-w-[200px] bg-[#0D47A1] text-white font-inter font-semibold text-sm py-1.5 px-2 rounded mb-4">
+                <div className="w-full max-w-[200px] bg-[#0D47A1] text-white tf-body font-semibold py-1.5 px-2 rounded mb-4">
                   {member.name}
                 </div>
 
@@ -104,7 +103,7 @@ export default function TeamPage() {
 
                 <span className="w-3 h-3 rounded-full bg-[#3264CC] mb-5" aria-hidden="true" />
 
-                <p className="font-inter text-gray-700 leading-relaxed mb-5 min-h-[108px]">
+                <p className="tf-body text-gray-700 mb-5 min-h-[108px]">
                   {member.bio}
                 </p>
 
@@ -112,9 +111,17 @@ export default function TeamPage() {
                   href={member.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-inter text-sm font-semibold text-[#3264CC] underline hover:text-[#244FB5] transition-colors"
+                  aria-label={`${member.name} LinkedIn`}
+                  className="inline-flex items-center gap-2 tf-body font-semibold text-[#3264CC] hover:text-[#244FB5] transition-colors"
                 >
-                  LinkedIn
+                  <span className="inline-flex items-center rounded-sm border border-[#3264CC] overflow-hidden">
+                    <span className="bg-[#3264CC] text-white px-2 py-1 text-xs leading-none font-bold">
+                      in
+                    </span>
+                    <span className="px-2 py-1 text-xs leading-none bg-white">
+                      LinkedIn
+                    </span>
+                  </span>
                 </a>
               </article>
             ))}
@@ -123,13 +130,14 @@ export default function TeamPage() {
           <div className="flex justify-center mt-14">
             <button
               onClick={() => navigate('/contact')}
-              className="bg-[#3264CC] text-white tf-subhead px-12 py-4 hover:bg-[#2857b8] transition-colors"
+              className="bg-[#3264CC] text-white tf-subhead-layer px-12 py-4 hover:bg-[#2857b8] transition-colors"
             >
               Contact Us
             </button>
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   )
 }

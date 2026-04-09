@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Navigation from '../../components/Navigation'
+import Footer from '../../components/Footer'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 type ContactTab = 'contact' | 'council' | 'waitlist'
@@ -265,24 +266,17 @@ export default function Contact() {
       <Navigation />
 
       {/* Hero */}
-      <section className="bg-[#3264CC] mt-20 border-t border-[#244FB5] pt-20 pb-14 lg:pt-24 lg:pb-16">
+      <section className="bg-[#3264CC] mt-20 border-t border-[#244FB5] pt-20 pb-16 lg:pt-24 lg:pb-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 mb-6">
-              <div className="w-8 h-px bg-white/70" />
-              <span className="text-white text-sm font-inter font-semibold tracking-widest uppercase">Get In Touch</span>
-            </div>
-            <h1 className="tf-h1 text-white mb-4">Contact</h1>
-            <p className="text-white/90 font-inter leading-relaxed">
-              Reach out to our team — we’ll get back to you by email.
-            </p>
+            <h1 className="tf-h1 text-white">Contact</h1>
           </div>
         </div>
       </section>
 
       {/* Contact Info Bar */}
       <section className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               { icon: 'ri-mail-line', label: 'Email', value: 'info@tokenizationfoundation.org', href: 'mailto:info@tokenizationfoundation.org' },
@@ -308,7 +302,7 @@ export default function Contact() {
       </section>
 
       {/* Main Form Area */}
-      <section className="py-16 lg:py-24 bg-[#F8F9FC]">
+      <section className="tf-section bg-[#F8F9FC]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             {/* Left copy */}
@@ -317,8 +311,8 @@ export default function Contact() {
                 <div className="w-8 h-px bg-tfgold" />
                 <span className="text-tfgold text-sm font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
               </div>
-              <h2 className="tf-h2 text-black mb-4">Talk with one of our team members.</h2>
-              <p className="text-navy-900/70 font-inter leading-relaxed max-w-lg">
+              <h2 className="tf-headline text-black mb-4">Talk with one of our team members.</h2>
+              <p className="tf-body text-navy-900/70 max-w-lg">
                 Fill out the form on your right. We&rsquo;ll email you right back.
               </p>
 
@@ -351,10 +345,10 @@ export default function Contact() {
                     <i className="ri-file-list-3-line text-tfblue text-lg"></i>
                   </div>
                   <h3 className="tf-h3 text-black">
-                    {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join dSDR Token Waitlist'}
+                    {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join the waitlist'}
                   </h3>
                 </div>
-                <p className="text-gray-500 font-inter leading-relaxed">
+                <p className="tf-body text-gray-500">
                   {activeTab === 'contact'
                     ? 'Please complete the form below and our team will respond by email.'
                     : activeTab === 'council'
@@ -389,7 +383,7 @@ export default function Contact() {
                     navigate('/contact#waitlist')
                   }}
                 >
-                  Join Waitlist
+                  Join the waitlist
                 </TabButton>
               </div>
 
@@ -716,7 +710,7 @@ export default function Contact() {
                       <span className="flex items-center justify-center gap-2">
                         <i className="ri-loader-4-line animate-spin"></i> Submitting...
                       </span>
-                    ) : 'Join Waitlist'}
+                    ) : 'Join the waitlist'}
                   </button>
 
                   <p className="text-sm text-gray-400 font-inter">
@@ -729,26 +723,7 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#2244EE] py-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-tfgold flex items-center justify-center">
-                <span className="text-navy-900 font-bold text-sm font-inter">TF</span>
-              </div>
-              <span className="text-white/40 text-sm font-inter">Tokenization Foundation</span>
-            </div>
-            <p className="text-white/25 text-sm font-inter text-center">
-              © 2026 Tokenization Foundation. All rights reserved.
-            </p>
-            <div className="flex gap-4">
-              <a href="/" onClick={e => { e.preventDefault(); navigate('/') }} className="text-white/40 hover:text-tfgold text-sm font-inter transition-colors">Home</a>
-              <a href="/approach" onClick={e => { e.preventDefault(); navigate('/approach') }} className="text-white/40 hover:text-tfgold text-sm font-inter transition-colors">Approach</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

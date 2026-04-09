@@ -33,13 +33,20 @@ export default {
           section: '#8C8C8C',
         },
         tfcream: '#EDE8DA',
+        /* Aegis-like cool neutrals */
+        tfslate: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+        },
       },
       fontFamily: {
-        playfair: ['"Playfair Display"', 'serif'],
-        inter: ['Inter', 'sans-serif'],
+        /* Institutional fintech headline stack (cf. aegiscustody.com) */
+        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        inter: ['Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
-        base: ['1rem', { lineHeight: '1.65' }],
+        base: ['1rem', { lineHeight: '1.6' }],
       },
       animation: {
         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',

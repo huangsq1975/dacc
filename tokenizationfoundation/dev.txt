@@ -27,9 +27,39 @@
 
 Join Council 或 Join Waitlist
 
+Just like Serra has on her website: https://www.aegiscustody.com/
+-----------------------------------------------------------
 
-1，HD Wallet 12週/人
-2，QR Code，4周/人
-長距離那個是沒辦法使用 QR Code的。 不過QR Code 這邊有一個需求是，台灣的銀行希望掃描的時候，能夠先知道現在要提交的內容是什麼 (例如：交易 from / to / amount)，前的版本只是一邊顯示 QR Code，另一邊掃描，他們認為這樣是在盲掃，所以有這個需求。
-3，后台繁体版本的需求 3周/人
+
+
+“Different color backgrounds for each section are suggested to create a distinction between the topics”  
+
+“Pick a consistent size for headlines, subheads and copy (see other email)“
+
+”If you're on the Team page and click the logo in the upper left, it should bring you back to the homepage (above the fold)“
+
+”Logo in Navigation Bar is incorrect. Use this one - click link.“
+
+”Lighten up the watermark logo“
+
+”Move The Problem section up so the white space between the blue section and the next white section isn't so great“
+
+”Remove the black logo here“
+
+”Make the background gray color.  Backgrounds should bleed to edge.  No white space on sides.“
+
+”Run headline across the page.“
+
+”Remove the header rectangle.“
+
+”Move copy up in box“
+”Connect +billion - maybe look at 2 lines Line one: Over five years, the platform is expected to reach a billion + people globally,Line two: while scaling transaction volume into hundreds of millions annually.“
+
+”Make the font size same as the bullets“
+
+”Use the correct logos that each company has on their websites“
+
+“Change the copy below to Interested in being on our Council?  Click this link.”
+
+“Remove the white space between GOVERNING COUNCIL and JOIN THE MOVEMENT sections”
 

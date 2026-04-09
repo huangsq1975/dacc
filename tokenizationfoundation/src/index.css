@@ -5,15 +5,16 @@
 /* Sans scale: body 16px (max), secondary/label 14px via text-sm — avoid extra mid-sizes on a section */
 @layer base {
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: Inter, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 1rem; /* 16px */
-    line-height: 1.65;
+    line-height: 1.6;
+    color: #0f172a; /* slate-900 — institutional body default */
   }
 }
 
-/* ===== Typography scale (H1–H3: Playfair; body: Inter via body/base) ===== */
+/* ===== Typography scale (H1–H3: Plus Jakarta Sans; body: Inter) — Aegis-style institutional sans ===== */
 :root {
   --tf-h1: clamp(2.5rem, 0.75rem + 6vw, 4rem); /* ~40px–64px */
   --tf-h2: clamp(2.25rem, 1.35rem + 2.2vw, 2.625rem); /* ~36px–42px */
@@ -21,42 +22,80 @@
 }
 
 .tf-h1 {
-  font-family: "Playfair Display", serif;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 700;
   font-size: var(--tf-h1);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
 }
 
 .tf-h2 {
-  font-family: "Playfair Display", serif;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 700;
   font-size: var(--tf-h2);
-  line-height: 1.18;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
 }
 
 .tf-h3 {
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 600;
   font-size: var(--tf-h3);
-  line-height: 1.25;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
 }
 
 .tf-h3-italic {
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 600;
   font-style: italic;
   font-size: var(--tf-h3);
-  line-height: 1.25;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
 }
 
 /* Sans lead under H1: same size as body, stronger weight (not a third display size) */
 .tf-subhead {
-  font-family: Inter, sans-serif;
+  font-family: Inter, system-ui, sans-serif;
   font-weight: 600;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.55;
+}
+
+/* ===== Semantic text layers (Headline / Subhead / Body) ===== */
+.tf-headline {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: var(--tf-h2);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.tf-subhead-layer {
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.tf-body {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ===== Full-bleed section rhythm ===== */
+.tf-section {
+  width: 100%;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .tf-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
 }
 
 /* ===== Full-page scroll snap (desktop only) ===== */
@@ -159,7 +198,7 @@
 }
 
 .bg-impact-pattern {
-  background-color: #EBEBEB;
+  background-color: #f1f5f9; /* tfslate-100 — cooler section wash like institutional fintech */
 }
 
 /* ===== Mobile menu ===== */
