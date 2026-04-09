@@ -48,7 +48,7 @@ export default function Home() {
       {/* ===== HERO (A1) ===== */}
       <section
         id="hero"
-        className="bg-[#5B8DEB] mt-20 border-t border-[#4F7FD9] relative overflow-hidden pb-0"
+        className="bg-[#5B8DEB] mt-20 border-t border-[#4F7FD9] relative overflow-hidden min-h-[calc(100vh-5rem)]"
       >
         {/* Diagonal — lighter than nav (#3264CC), paired for contrast with white copy */}
         <div
@@ -59,7 +59,7 @@ export default function Home() {
           }}
         />
 
-        <div className="relative pt-8 pb-16 lg:pt-10 lg:pb-20">
+        <div className="relative pt-8 pb-0 lg:pt-10 lg:pb-0">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative">
             {/* Right-side background icon for hero text */}
             <div className="absolute right-[-15.5rem] sm:right-[-3rem] lg:right-[-8rem] top-1/2 -translate-y-1/2 pointer-events-none z-0">
@@ -110,7 +110,7 @@ export default function Home() {
       </section>
 
       {/* ===== THE PROBLEM + SOLUTIONS (A2) ===== */}
-      <section id="problem" className="bg-white pb-20 lg:pb-28 pt-0 -mt-16 lg:-mt-20">
+      <section id="problem" className="bg-white pb-20 lg:pb-28 pt-0 -mt-px">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-0">
           <AnimatedSection className="bg-white border border-black/10 rounded-2xl px-8 pt-4 pb-10 sm:pt-5 lg:px-12 lg:py-14 shadow-sm">
             {/* Section label */}
