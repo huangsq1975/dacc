@@ -8,10 +8,10 @@ export default function Approach() {
     <div className="bg-white min-h-screen">
       <Navigation />
 
-      <main className="pt-24 sm:pt-28 pb-16 sm:pb-20 bg-[#F5F5F5]">
+      <main className="pt-24 sm:pt-28 pb-16 sm:pb-20 bg-[#f8fafc]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6 sm:mb-8">
-            <div className="bg-[#2F64BD] px-4 sm:px-6 lg:px-8 py-4 sm:py-5 text-center rounded-lg">
+            <div className="bg-[#0d1f3c] px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-center rounded-lg">
               <h1 className="tf-headline text-white leading-snug">
                 Reimagining a fully tokenized ecosystem
                 <br />
@@ -20,10 +20,10 @@ export default function Approach() {
             </div>
           </div>
 
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6 sm:mb-8">
+          <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
             <div className="p-4 sm:p-6 lg:p-8 bg-white">
 
-              <div className="mt-4 rounded-2xl bg-[#005BDE] p-4 sm:p-6">
+              <div className="mt-4 rounded-xl bg-[#0d1f3c] p-4 sm:p-6">
                 <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,0.375fr)_auto_0.85fr] items-center gap-4">
                   <div className="space-y-3">
                     <div className="rounded-2xl bg-white text-center tf-h3 text-black py-3 px-2">
@@ -77,14 +77,14 @@ export default function Approach() {
 
           <div className="h-px bg-[#D6DEEA] mb-6 sm:mb-8" aria-hidden="true" />
 
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6 sm:mb-8">
-            <div className="w-full bg-[#7F7F7F]">
-              <div className="px-4 sm:px-8 py-4 sm:py-8">
+          <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
+            <div className="w-full bg-[#0d1f3c]">
+              <div className="px-4 sm:px-8 py-4 sm:py-6">
                 <button
                   type="button"
-                  className="w-full sm:w-auto rounded-lg bg-white border border-[#7EA2E0] px-4 sm:px-6 py-3 text-left font-inter font-semibold text-black"
+                  className="w-full sm:w-auto rounded border border-white/30 bg-white/10 hover:bg-white/15 px-5 py-3 text-left font-inter font-medium text-white transition-colors"
                 >
-                  <span className="text-[#0A58FF]">Click</span> To Read Our White Paper (pdf)
+                  <span className="text-[#7EC8FF]">Click</span> To Read Our White Paper (pdf)
                 </button>
               </div>
             </div>
@@ -111,9 +111,9 @@ export default function Approach() {
 
           <div className="h-px bg-[#D6DEEA] mb-6 sm:mb-8" aria-hidden="true" />
 
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-6 sm:mb-8">
-            <div className="p-6 sm:p-8 lg:p-10 bg-[#F5F5F5]">
-              <h2 className="tf-headline text-black mb-6 text-center">
+          <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
+            <div className="p-6 sm:p-8 lg:p-10 bg-[#f8fafc]">
+              <h2 className="tf-headline text-[#0d1f3c] mb-6 text-center">
                 The Token&apos;s Role In Creating A Capital Loop
               </h2>
               <div className="relative mx-auto w-full max-w-4xl aspect-square">
@@ -133,7 +133,7 @@ export default function Approach() {
 
           <div className="h-px bg-[#D6DEEA] mb-6 sm:mb-8" aria-hidden="true" />
 
-          <section className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+          <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             <div className="p-6 sm:p-8 lg:p-10">
               <h2 className="tf-headline text-black mb-4 sm:mb-5">
                 How AI Powers The Tokenization Foundation

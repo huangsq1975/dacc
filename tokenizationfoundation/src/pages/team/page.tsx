@@ -79,31 +79,31 @@ export default function TeamPage() {
     <div className="bg-white min-h-screen">
       <Navigation />
 
-      <main className="pt-28 pb-16 px-6 lg:px-8 bg-[#F8F9FC]">
+      <main className="pt-28 pb-16 px-6 lg:px-8 bg-[#f8fafc]">
         <section className="max-w-7xl mx-auto">
           <div className="flex justify-center mb-14">
-            <h1 className="tf-headline text-[#0f172a] tracking-wide">
+            <h1 className="tf-headline text-[#0d1f3c] tracking-wide">
               Meet the Team
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
             {teamMembers.map((member, idx) => (
               <article
                 key={member.name}
-                className="flex flex-col items-center text-center border border-gray-200 bg-white px-5 py-6 rounded-lg shadow-sm"
+                className="flex flex-col items-center text-center border border-gray-200 bg-white px-5 py-7 rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="w-full max-w-[200px] bg-[#0D47A1] text-white tf-body font-semibold py-1.5 px-2 rounded mb-4">
-                  {member.name}
-                </div>
-
-                <div className="w-[170px] h-[170px] bg-white mb-4">
+                <div className="w-[160px] h-[160px] mb-5">
                   <LineAvatar seed={idx + 1} accent={member.accent} />
                 </div>
 
-                <span className="w-3 h-3 rounded-full bg-[#3264CC] mb-5" aria-hidden="true" />
+                <div className="w-px h-6 bg-[#1a4f8a]/30 mb-4" aria-hidden="true" />
 
-                <p className="tf-body text-gray-700 mb-5 min-h-[108px]">
+                <h3 className="font-inter font-semibold text-[#0d1f3c] text-base mb-3">
+                  {member.name}
+                </h3>
+
+                <p className="tf-body text-gray-500 mb-6 min-h-[108px] text-sm leading-relaxed">
                   {member.bio}
                 </p>
 
@@ -112,10 +112,10 @@ export default function TeamPage() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${member.name} LinkedIn`}
-                  className="inline-flex items-center gap-2 tf-body font-semibold text-[#3264CC] hover:text-[#244FB5] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-inter font-medium text-[#1a4f8a] hover:text-[#0d3a6e] transition-colors"
                 >
-                  <span className="inline-flex items-center rounded-sm border border-[#3264CC] overflow-hidden">
-                    <span className="bg-[#3264CC] text-white px-2 py-1 text-xs leading-none font-bold">
+                  <span className="inline-flex items-center rounded border border-[#1a4f8a] overflow-hidden">
+                    <span className="bg-[#1a4f8a] text-white px-2 py-1 text-xs leading-none font-bold">
                       in
                     </span>
                     <span className="px-2 py-1 text-xs leading-none bg-white">
@@ -129,8 +129,9 @@ export default function TeamPage() {
 
           <div className="flex justify-center mt-14">
             <button
+              type="button"
               onClick={() => navigate('/contact')}
-              className="bg-[#3264CC] text-white tf-subhead-layer px-12 py-4 hover:bg-[#2857b8] transition-colors"
+              className="bg-[#0d1f3c] text-white tf-subhead-layer px-10 py-3.5 rounded hover:bg-[#1a3a6a] transition-colors"
             >
               Contact Us
             </button>

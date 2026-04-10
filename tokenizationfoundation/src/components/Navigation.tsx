@@ -10,12 +10,20 @@ interface NavigationProps {
 
 export default function Navigation({ sectionIds, activeSection = 0, onDotClick }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
 
   useEffect(() => {
     setMobileOpen(false)
   }, [location.pathname])
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const handleTeamLink = () => {
     navigate('/team')
@@ -30,14 +38,18 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 overflow-visible bg-[#0033CC]">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 overflow-visible bg-[#0d1f3c] transition-shadow duration-200 ${
+          scrolled ? 'shadow-[0_2px_16px_rgba(0,0,0,0.25)]' : 'border-b border-white/10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between">
-            <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+          <div className="flex h-[72px] items-center justify-between">
+            <div className="flex items-center min-w-0">
               <button
                 type="button"
                 onClick={goToHomeFirstSection}
-                className="shrink-0 p-1 rounded-md flex items-center"
+                className="shrink-0 p-1 rounded flex items-center"
                 aria-label="Go to first section"
               >
                 <img
@@ -48,62 +60,62 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               </button>
             </div>
 
-            {/* Desktop Nav Links */}
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-8">
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach') }}
-                className="tf-body font-semibold text-white hover:text-white/80 transition-colors"
+                className="tf-body text-white/75 hover:text-white transition-colors tracking-wide text-[0.9rem]"
               >
                 Approach
               </a>
               <button
+                type="button"
                 onClick={handleTeamLink}
-                className="tf-body font-semibold text-white hover:text-white/80 transition-colors"
+                className="tf-body text-white/75 hover:text-white transition-colors tracking-wide text-[0.9rem]"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact') }}
-                className="px-6 py-2 border-2 border-white rounded-full tf-body font-semibold text-white hover:bg-white hover:text-[#0033CC] transition-all"
+                className="px-5 py-2 border border-white/35 rounded text-white/85 hover:border-white hover:text-white text-[0.9rem] font-inter font-medium tracking-wide transition-all"
               >
                 Contact
               </a>
             </nav>
 
-            {/* Mobile hamburger */}
             <button
-              className="lg:hidden text-white p-2"
+              type="button"
+              className="lg:hidden text-white/80 hover:text-white p-2 transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
-              <i className={`text-2xl transition-all ${mobileOpen ? 'ri-close-line' : 'ri-menu-line'}`}></i>
+              <i className={`text-2xl transition-all ${mobileOpen ? 'ri-close-line' : 'ri-menu-line'}`} />
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-[#0033CC] border-t border-white/20 mobile-menu-enter relative z-10">
-            <nav className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-4">
+          <div className="lg:hidden bg-[#0d1f3c] border-t border-white/10 mobile-menu-enter relative z-10">
+            <nav className="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-1">
               <a
                 href="/approach"
                 onClick={e => { e.preventDefault(); navigate('/approach'); setMobileOpen(false) }}
-                className="tf-body font-semibold text-white py-2 border-b border-white/20"
+                className="tf-body text-white/75 hover:text-white py-3 border-b border-white/10 transition-colors"
               >
                 Approach
               </a>
               <button
+                type="button"
                 onClick={handleTeamLink}
-                className="tf-body font-semibold text-white py-2 border-b border-white/20 text-left"
+                className="tf-body text-white/75 hover:text-white py-3 border-b border-white/10 text-left transition-colors"
               >
                 Team
               </button>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact'); setMobileOpen(false) }}
-                className="tf-body font-semibold text-white py-2 border-b border-white/20"
+                className="tf-body text-white/75 hover:text-white py-3 border-b border-white/10 transition-colors"
               >
                 Contact
               </a>
@@ -114,7 +126,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                   navigate('/contact#waitlist')
                   setMobileOpen(false)
                 }}
-                className="mt-2 px-6 py-3 border-2 border-white text-white tf-body font-semibold text-center"
+                className="mt-3 px-5 py-3 border border-white/35 text-white/85 tf-body font-medium text-center hover:border-white hover:text-white transition-all rounded"
               >
                 Join dSDR Token Waitlist
               </a>
@@ -123,12 +135,12 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
         )}
       </header>
 
-      {/* Section Dot Indicators (home page only) */}
       {sectionIds && sectionIds.length > 0 && (
         <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
           {sectionIds.map((id, i) => (
             <button
               key={id}
+              type="button"
               onClick={() => {
                 onDotClick?.(i)
                 document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -139,8 +151,8 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               <div
                 className={`rounded-full transition-all duration-300 ${
                   activeSection === i
-                    ? 'w-3 h-3 bg-[#3264CC]'
-                    : 'w-2 h-2 bg-gray-400 hover:bg-gray-600'
+                    ? 'w-3 h-3 bg-[#1a4f8a]'
+                    : 'w-2 h-2 bg-gray-400 hover:bg-gray-500'
                 }`}
               />
             </button>

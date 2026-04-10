@@ -31,14 +31,6 @@ function AnimatedSection({ children, className = '' }: { children: ReactNode; cl
   )
 }
 
-function SectionBadge({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={`inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 ${className}`}>
-      {children}
-    </div>
-  )
-}
-
 export default function Home() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -47,7 +39,6 @@ export default function Home() {
     if (location.hash !== '#hero') return
 
     const scrollToPageStart = () => {
-      // 從其他路由進來時，視窗常仍停留在上一頁的捲動位置；需強制回到頂端才會對齊第一區開頭
       window.scrollTo(0, 0)
     }
 
@@ -65,55 +56,54 @@ export default function Home() {
     <div>
       <Navigation />
 
-      {/* ===== HERO (A1) ===== */}
+      {/* ===== HERO ===== */}
       <section
         id="hero"
-        className="bg-[#5B8DEB] mt-20 relative overflow-hidden min-h-[calc(100vh-5rem)]"
+        className="bg-[#0d1f3c] mt-[72px] relative overflow-hidden min-h-[calc(100vh-72px)]"
       >
-        {/* Diagonal — lighter than nav (#3264CC), paired for contrast with white copy */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundColor: '#72A0F0',
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
+            background: 'radial-gradient(ellipse 70% 60% at 70% 50%, rgba(26,79,138,0.35) 0%, transparent 70%)',
           }}
         />
 
-        <div className="relative pt-8 pb-0 lg:pt-10 lg:pb-0">
+        <div className="relative pt-16 pb-20 lg:pt-20 lg:pb-24">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative">
-            {/* Right-side background icon for hero text */}
             <div className="absolute right-[-15.5rem] sm:right-[-3rem] lg:right-[-8rem] top-1/2 -translate-y-1/2 pointer-events-none z-0">
               <img
                 src={icon2}
                 alt=""
-                className="w-[34rem] xl:w-[40rem] object-contain opacity-85"
+                className="w-[34rem] xl:w-[40rem] object-contain opacity-[0.07]"
               />
             </div>
 
             <div className="relative z-10 max-w-4xl">
               <div>
-                <h1 className="tf-h1 mb-6">
-                  <span className="text-black block sm:whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
-                  <span className="text-white block sm:whitespace-nowrap">with AI, blockchain, and digital assets -</span>
-                  <span className="text-black block sm:whitespace-nowrap">so that humanitarian aid is funded</span>
-                  <span className="text-black block sm:whitespace-nowrap">instantly, transparently,</span>
-                  <span className="text-black block sm:whitespace-nowrap">and at scale.</span>
+                <h1 className="tf-h1 mb-8">
+                  <span className="text-white block sm:whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
+                  <span className="text-white/60 block sm:whitespace-nowrap">with AI, blockchain, and digital assets -</span>
+                  <span className="text-white block sm:whitespace-nowrap">so that humanitarian aid is funded</span>
+                  <span className="text-white block sm:whitespace-nowrap">instantly, transparently,</span>
+                  <span className="text-white block sm:whitespace-nowrap">and at scale.</span>
                 </h1>
 
-                <p className="tf-subhead-layer text-white mb-8">
+                <p className="tf-subhead-layer text-white/55 mb-10 tracking-wide">
                   Turn your capital into impact
                 </p>
 
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-3">
                   <button
+                    type="button"
                     onClick={() => navigate('/contact')}
-                    className="rounded-lg px-8 py-3 bg-[#EDE8DA] text-black font-inter font-semibold text-sm hover:bg-[#E0D9C5] transition-colors"
+                    className="px-7 py-3 bg-white text-[#0d1f3c] font-inter font-semibold text-sm rounded hover:bg-gray-100 transition-colors"
                   >
                     Contact
                   </button>
                   <button
+                    type="button"
                     onClick={() => navigate('/contact#waitlist')}
-                    className="rounded-lg px-8 py-3 bg-[#EDE8DA] text-black font-inter font-semibold text-sm hover:bg-[#E0D9C5] transition-colors"
+                    className="px-7 py-3 border border-white/35 text-white font-inter font-semibold text-sm rounded hover:border-white/60 hover:bg-white/5 transition-all"
                   >
                     Join dSDR Token Waitlist
                   </button>
@@ -125,27 +115,27 @@ export default function Home() {
 
       </section>
 
-      {/* ===== THE PROBLEM (full-bleed gray; no side logo) ===== */}
-      <section id="problem" className="relative tf-section bg-white -mt-px">
+      {/* ===== THE PROBLEM ===== */}
+      <section id="problem" className="relative tf-section bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 lg:px-12">
-            <SectionBadge className="!inline-flex bg-black text-white mb-8 w-[13.5rem] justify-center box-border">
+            <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-gray-300 text-gray-500 mb-8">
               The Problem
-            </SectionBadge>
+            </div>
 
-            <h2 className="tf-headline text-black mb-7 w-full max-w-none">
+            <h2 className="tf-headline text-[#0d1f3c] mb-7 w-full max-w-none">
               A Broken System In Need Of Reinvention
             </h2>
 
             <div className="max-w-3xl">
-              <p className="tf-body text-gray-700 mb-4">
+              <p className="tf-body text-gray-600 mb-4">
                 The global crisis infrastructure is{' '}
-                <strong>fragmented</strong>,{' '}
-                <strong>delayed</strong>, and{' '}
-                <strong>inefficient</strong>.
+                <strong className="text-[#0d1f3c]">fragmented</strong>,{' '}
+                <strong className="text-[#0d1f3c]">delayed</strong>, and{' '}
+                <strong className="text-[#0d1f3c]">inefficient</strong>.
               </p>
 
-              <p className="tf-body text-gray-700">
+              <p className="tf-body text-gray-600">
                 It's marked by disbursement lags of up to 20 months in U.S. federal programs,
                 17–30% leakage across traditional aid flows, and capital trapped in slow grant cycles.
                 NGOs face high administrative burdens, while opaque reporting further limits
@@ -156,21 +146,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== THE SOLUTIONS (full-bleed gray; no side logo) ===== */}
-      <section id="solutions" className="relative tf-section bg-[#F3F4F6] -mt-px">
+      {/* ===== THE SOLUTIONS ===== */}
+      <section id="solutions" className="relative tf-section bg-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 lg:px-12">
-            <SectionBadge className="!inline-flex bg-[#3264CC] text-white mb-8 w-[13.5rem] justify-center box-border">
+            <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-[#1a4f8a]/40 text-[#1a4f8a] mb-8">
               The Solutions
-            </SectionBadge>
+            </div>
 
-            <h2 className="tf-headline text-black mb-7 w-full max-w-none">
+            <h2 className="tf-headline text-[#0d1f3c] mb-7 w-full max-w-none">
               <span className="block">A reimagined model</span>
               <span className="block">programmable humanitarian infrastructure</span>
             </h2>
 
             <div className="max-w-3xl">
-              <p className="tf-body text-gray-700 mb-5">
+              <p className="tf-body text-gray-600 mb-5">
                 The Tokenization Foundation replaces fragmented aid systems with a programmable,
                 time infrastructure:
               </p>
@@ -181,8 +171,8 @@ export default function Home() {
                   'Blockchain enables instant, traceable, and secure transfers',
                   'AI provides real-time oversight, analytics, and adaptive governance',
                 ].map(item => (
-                  <li key={item} className="tf-body flex items-start gap-3 text-gray-700">
-                    <span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />
+                  <li key={item} className="tf-body flex items-start gap-3 text-gray-600">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#1a4f8a] flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -192,16 +182,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== IMPACT (A3) ===== */}
+      {/* ===== IMPACT ===== */}
       <section id="impact" className="tf-section bg-white relative overflow-hidden">
-        {/* Centered icon background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-          <img src={icon2} alt="" className="w-[24rem] lg:w-[34rem] object-contain opacity-20" />
+          <img src={icon2} alt="" className="w-[24rem] lg:w-[34rem] object-contain opacity-[0.04]" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
-            <h2 className="tf-headline text-black mb-6">
+            <h2 className="tf-headline text-[#0d1f3c] mb-6">
               Infrastructure Designed To Deliver:
             </h2>
 
@@ -211,14 +200,14 @@ export default function Home() {
                 '30–50% reduction in administrative overhead',
                 'Real-time transparency and traceability',
               ].map(item => (
-                <li key={item} className="tf-body flex items-start gap-3 text-gray-700">
-                  <span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />
+                <li key={item} className="tf-body flex items-start gap-3 text-gray-600">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#1a4f8a] flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
 
-            <p className="tf-body text-gray-700 max-w-3xl">
+            <p className="tf-body text-gray-600 max-w-3xl">
               <span className="block">
                 Over five years, the platform is expected to reach a billion+ people globally,
               </span>
@@ -231,18 +220,16 @@ export default function Home() {
 
       </section>
 
-      {/* ===== GOVERNING COUNCIL / PARTNERS (A4) ===== */}
-      <section id="council" className="bg-[#F3F4F6] pt-16 pb-0 lg:pt-24 lg:pb-0">
+      {/* ===== GOVERNING COUNCIL / PARTNERS ===== */}
+      <section id="council" className="bg-[#f8fafc] pt-16 pb-0 lg:pt-24 lg:pb-0">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-10 lg:px-12 lg:py-14">
 
-            <h2 className="tf-headline text-black mb-12 max-w-4xl">
+            <h2 className="tf-headline text-[#0d1f3c] mb-12 max-w-4xl">
               Building The Infrastructure Ecosystem With Two Founding Governing Council Members
             </h2>
 
-            {/* Partner logos */}
             <div className="flex flex-wrap gap-12 mb-8">
-              {/* United Nations */}
               <div className="relative h-48 w-48">
                 <img
                   src={unLogo}
@@ -251,7 +238,6 @@ export default function Home() {
                 />
               </div>
 
-              {/* Aegis Trust */}
               <div className="relative h-48 w-48">
                 <img
                   src={aegisLogo}
@@ -261,44 +247,46 @@ export default function Home() {
               </div>
             </div>
 
-            <p className="tf-body text-black mb-8">
+            <p className="tf-body text-gray-600 mb-8">
               Interested in being on our Council?{' '}
               <button
+                type="button"
                 onClick={() => navigate('/contact#council')}
-                className="underline font-semibold hover:text-[#3264CC] transition-colors"
+                className="underline font-semibold text-[#1a4f8a] hover:text-[#0d3a6e] transition-colors"
               >
                 Click this link
               </button>
             </p>
 
-            <hr className="border-0 h-px bg-[#3264CC] mb-0" />
+            <hr className="border-0 h-px bg-gray-200 mb-0" />
 
-            {/* Media coverage section intentionally hidden until launch-ready. */}
           </AnimatedSection>
         </div>
       </section>
 
-      {/* ===== JOIN THE MOVEMENT (A5 top) ===== */}
+      {/* ===== JOIN THE MOVEMENT ===== */}
       <section id="join" className="bg-white pt-0 pb-16 lg:pt-0 lg:pb-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="bg-white rounded-2xl px-8 py-8 lg:px-12 lg:py-10">
-            <h2 className="tf-headline text-black mb-7">
+          <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
+            <h2 className="tf-headline text-[#0d1f3c] mb-7">
               Join The Movement
             </h2>
-            <p className="tf-body text-gray-700 mb-8 max-w-2xl">
+            <p className="tf-body text-gray-600 mb-8 max-w-2xl">
               The Tokenization Foundation invites institutions, partners, and early supporters to
               participate in building a new global standard for humanitarian aid.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               <button
+                type="button"
                 onClick={() => navigate('/contact')}
-                className="rounded-lg px-8 py-3 bg-[#EDE8DA] text-black font-inter font-semibold text-sm hover:bg-[#E0D9C5] transition-colors"
+                className="px-7 py-3 bg-[#0d1f3c] text-white font-inter font-semibold text-sm rounded hover:bg-[#1a3a6a] transition-colors"
               >
                 Contact Us
               </button>
               <button
+                type="button"
                 onClick={() => navigate('/contact#waitlist')}
-                className="rounded-lg px-8 py-3 bg-[#EDE8DA] text-black font-inter font-semibold text-sm hover:bg-[#E0D9C5] transition-colors"
+                className="px-7 py-3 border border-[#0d1f3c]/30 text-[#0d1f3c] font-inter font-semibold text-sm rounded hover:border-[#0d1f3c]/60 hover:bg-[#0d1f3c]/5 transition-all"
               >
                 Join dSDR Token Waitlist
               </button>
@@ -307,7 +295,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FOOTER (A5 bottom) ===== */}
       <Footer />
     </div>
   )

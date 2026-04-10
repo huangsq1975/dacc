@@ -98,31 +98,13 @@
   }
 }
 
-/* ===== Full-page scroll snap (desktop only) ===== */
-@media (min-width: 1024px) {
-  html {
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-    overflow-y: scroll;
-  }
-
-  .snap-section {
-    height: 100vh;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    overflow: hidden;
-  }
+/* Natural scroll (matches production build; no full-page snap) */
+html {
+  scroll-behavior: smooth;
 }
 
-/* ===== Mobile: natural scroll ===== */
-@media (max-width: 1023px) {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  .snap-section {
-    min-height: 100svh;
-  }
+.snap-section {
+  min-height: 100svh;
 }
 
 /* ===== Animation helpers ===== */
@@ -165,21 +147,21 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a1628;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a4f8a;
+  background: #94a3b8;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c9a55a;
+  background: #1a4f8a;
 }
 
 /* ===== Nav glass effect ===== */
 .nav-glass {
-  background: rgba(10, 22, 40, 0.85);
+  background: #0d1f3ceb;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -194,7 +176,7 @@
 
 /* ===== Section backgrounds ===== */
 .bg-hero-pattern {
-  background-color: #3264CC;
+  background-color: #0d1f3c;
 }
 
 .bg-impact-pattern {
