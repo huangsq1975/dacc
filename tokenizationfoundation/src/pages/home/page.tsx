@@ -59,12 +59,12 @@ export default function Home() {
       {/* ===== HERO ===== */}
       <section
         id="hero"
-        className="bg-[#15365c] mt-[72px] relative overflow-hidden min-h-[calc(100vh-72px)] border-t border-white/5"
+        className="bg-[#0066ff] mt-[72px] relative overflow-hidden min-h-[calc(100vh-72px)] border-t border-white/5"
       >
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 70% 60% at 70% 50%, rgba(26,79,138,0.45) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 60% at 70% 50%, rgba(0,93,236,0.45) 0%, transparent 70%)',
           }}
         />
 
@@ -74,7 +74,7 @@ export default function Home() {
               <img
                 src={icon2}
                 alt=""
-                className="w-[34rem] xl:w-[40rem] object-contain opacity-[0.07]"
+                className="w-[34rem] xl:w-[40rem] object-contain opacity-[0.15]"
               />
             </div>
 
@@ -88,15 +88,15 @@ export default function Home() {
                   <span className="text-white block sm:whitespace-nowrap">and at scale.</span>
                 </h1>
 
-                <p className="tf-h3 text-white mb-10 tracking-wide">
-                  Turn your capital into impact
+                <p className="text-[clamp(1.75rem,1.35rem+1.2vw,2.125rem)] font-semibold leading-[1.3] text-white mb-10 tracking-wide">
+                  Turn your capital into impact.
                 </p>
 
                 <div className="flex flex-wrap gap-3">
                   <button
                     type="button"
                     onClick={() => navigate('/contact')}
-                    className="px-7 py-3 bg-white text-[#0d1f3c] font-inter font-semibold text-sm rounded hover:bg-gray-100 transition-colors"
+                    className="px-7 py-3 bg-white text-[#0066cc] font-inter font-semibold text-sm rounded hover:bg-gray-100 transition-colors"
                   >
                     Contact
                   </button>
@@ -123,16 +123,16 @@ export default function Home() {
               The Problem
             </div>
 
-            <h2 className="tf-headline text-[#0d1f3c] mb-7 w-full max-w-none">
+            <h2 className="tf-headline text-[#0066cc] mb-7 w-full max-w-none">
               A Broken System In Need Of Reinvention
             </h2>
 
             <div className="max-w-3xl">
               <p className="tf-body text-gray-600 mb-4">
                 The global crisis infrastructure is{' '}
-                <strong className="text-[#0d1f3c]">fragmented</strong>,{' '}
-                <strong className="text-[#0d1f3c]">delayed</strong>, and{' '}
-                <strong className="text-[#0d1f3c]">inefficient</strong>.
+                <strong className="text-[#0066cc]">fragmented</strong>,{' '}
+                <strong className="text-[#0066cc]">delayed</strong>, and{' '}
+                <strong className="text-[#0066cc]">inefficient</strong>.
               </p>
 
               <p className="tf-body text-gray-600">
@@ -150,11 +150,11 @@ export default function Home() {
       <section id="solutions" className="relative tf-section bg-[#ecf0f3]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 lg:px-12">
-            <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-[#1a4f8a]/40 text-[#1a4f8a] mb-8">
+            <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-[#005dec]/40 text-[#005dec] mb-8">
               The Solutions
             </div>
 
-            <h2 className="tf-headline text-[#0d1f3c] mb-7 w-full max-w-none">
+            <h2 className="tf-headline text-[#0066cc] mb-7 w-full max-w-none">
               <span className="block">A reimagined model</span>
               <span className="block">programmable humanitarian infrastructure</span>
             </h2>
@@ -172,7 +172,7 @@ export default function Home() {
                   'AI provides real-time oversight, analytics, and adaptive governance',
                 ].map(item => (
                   <li key={item} className="tf-body flex items-start gap-3 text-gray-600">
-                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#1a4f8a] flex-shrink-0" />
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#005dec] flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -201,7 +201,7 @@ export default function Home() {
                 'Real-time transparency and traceability',
               ].map(item => (
                 <li key={item} className="tf-body flex items-start gap-3 text-gray-600">
-                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#1a4f8a] flex-shrink-0" />
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#005dec] flex-shrink-0" />
                   {item}
                 </li>
               ))}
@@ -225,7 +225,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
 
-            <h2 className="tf-headline text-[#0d1f3c] mb-0 max-w-4xl">
+            <h2 className="tf-headline text-[#0066cc] mb-0 max-w-4xl">
               Building The Infrastructure Ecosystem With Two Founding Governing Council Members
             </h2>
 
@@ -234,7 +234,7 @@ export default function Home() {
                 href="https://www.un.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1a4f8a] focus-visible:ring-offset-2 rounded"
+                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005dec] focus-visible:ring-offset-2 rounded"
               >
                 <img
                   src={unLogo}
@@ -247,7 +247,7 @@ export default function Home() {
                 href="https://www.aegiscustody.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1a4f8a] focus-visible:ring-offset-2 rounded"
+                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005dec] focus-visible:ring-offset-2 rounded"
               >
                 <img
                   src={aegisLogo}
@@ -262,7 +262,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => navigate('/contact#council')}
-                className="underline font-semibold text-[#1a4f8a] hover:text-[#0d3a6e] transition-colors"
+                className="underline font-semibold text-[#005dec] hover:text-[#0066cc] transition-colors"
               >
                 Click this link
               </button>
@@ -278,7 +278,7 @@ export default function Home() {
       <section id="join" className="bg-white pt-0 pb-10 lg:pt-0 lg:pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-6 lg:px-12 lg:py-8">
-            <h2 className="tf-headline text-[#0d1f3c] mb-7">
+            <h2 className="tf-headline text-[#0066cc] mb-7">
               Join The Movement
             </h2>
             <p className="tf-body text-gray-600 mb-8 max-w-2xl">
@@ -289,14 +289,14 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => navigate('/contact')}
-                className="px-7 py-3 bg-[#0d1f3c] text-white font-inter font-semibold text-sm rounded hover:bg-[#1a3a6a] transition-colors"
+                className="px-7 py-3 bg-[#0071bc] text-white font-inter font-semibold text-sm rounded hover:bg-[#0066cc] transition-colors"
               >
                 Contact Us
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/contact#waitlist')}
-                className="px-7 py-3 border border-[#0d1f3c]/30 text-[#0d1f3c] font-inter font-semibold text-sm rounded hover:border-[#0d1f3c]/60 hover:bg-[#0d1f3c]/5 transition-all"
+                className="px-7 py-3 border border-[#0071bc]/30 text-[#0071bc] font-inter font-semibold text-sm rounded hover:border-[#0071bc]/60 hover:bg-[#0071bc]/5 transition-all"
               >
                 Join dSDR Token Waitlist
               </button>

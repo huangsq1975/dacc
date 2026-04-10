@@ -50,25 +50,25 @@ const teamMembers: TeamMember[] = [
     name: 'Serra M. Kaya',
     bio: 'Builds humanitarian and digital-finance partnerships to turn pledged capital into faster relief.',
     linkedin: 'https://www.linkedin.com/in/serra-kaya',
-    accent: '#3264CC',
+    accent: '#0066ff',
   },
   {
     name: 'Lynne R. Foster',
     bio: 'Leads product and operations to scale delivery with transparent governance and measurable impact.',
     linkedin: 'https://www.linkedin.com/in/lynne-foster',
-    accent: '#1a4f8a',
+    accent: '#005dec',
   },
   {
     name: 'Anita S. Mehra',
     bio: 'Designs tokenization frameworks that improve traceability and speed disbursement across teams.',
     linkedin: 'https://www.linkedin.com/in/anita-mehra',
-    accent: '#2d7dc7',
+    accent: '#0071bc',
   },
   {
     name: 'Kerstin P. Holm',
     bio: 'Drives AI-powered oversight and analytics for real-time decisions and stronger partner accountability.',
     linkedin: 'https://www.linkedin.com/in/kerstin-holm',
-    accent: '#3264CC',
+    accent: '#0066ff',
   },
 ]
 
@@ -82,7 +82,7 @@ export default function TeamPage() {
       <main className="pt-28 pb-16 px-6 lg:px-8 bg-[#f8fafc]">
         <section className="max-w-7xl mx-auto">
           <div className="flex justify-center mb-14">
-            <h1 className="tf-headline text-[#0d1f3c] tracking-wide">
+            <h1 className="tf-headline text-[#0066cc] tracking-wide">
               Meet the Team
             </h1>
           </div>
@@ -97,9 +97,9 @@ export default function TeamPage() {
                   <LineAvatar seed={idx + 1} accent={member.accent} />
                 </div>
 
-                <div className="w-px h-6 bg-[#1a4f8a]/30 mb-4" aria-hidden="true" />
+                <div className="w-px h-6 bg-[#005dec]/30 mb-4" aria-hidden="true" />
 
-                <h3 className="font-inter font-semibold text-[#0d1f3c] text-base mb-3">
+                <h3 className="font-inter font-semibold text-[#0066cc] text-base mb-3">
                   {member.name}
                 </h3>
 
@@ -112,10 +112,10 @@ export default function TeamPage() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${member.name} LinkedIn`}
-                  className="inline-flex items-center gap-2 text-sm font-inter font-medium text-[#1a4f8a] hover:text-[#0d3a6e] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-inter font-medium text-[#005dec] hover:text-[#0066cc] transition-colors"
                 >
-                  <span className="inline-flex items-center rounded border border-[#1a4f8a] overflow-hidden">
-                    <span className="bg-[#1a4f8a] text-white px-2 py-1 text-xs leading-none font-bold">
+                  <span className="inline-flex items-center rounded border border-[#005dec] overflow-hidden">
+                    <span className="bg-[#005dec] text-white px-2 py-1 text-xs leading-none font-bold">
                       in
                     </span>
                     <span className="px-2 py-1 text-xs leading-none bg-white">
@@ -131,7 +131,7 @@ export default function TeamPage() {
             <button
               type="button"
               onClick={() => navigate('/contact')}
-              className="bg-[#0d1f3c] text-white tf-subhead-layer px-10 py-3.5 rounded hover:bg-[#1a3a6a] transition-colors"
+              className="bg-[#0071bc] text-white tf-subhead-layer px-10 py-3.5 rounded hover:bg-[#0066cc] transition-colors"
             >
               Contact Us
             </button>

@@ -21,7 +21,7 @@ export default function Approach() {
           <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
             <div className="p-4 sm:p-6 lg:p-8 bg-white">
 
-              <div className="mt-4 rounded-xl bg-[#0d1f3c] p-4 sm:p-6">
+              <div className="mt-4 rounded-xl bg-[#0071bc] p-4 sm:p-6">
                 <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,0.375fr)_auto_0.85fr] items-center gap-4">
                   <div className="space-y-3">
                     <div className="rounded-2xl bg-white text-center tf-h3 text-black py-3 px-2">
@@ -76,7 +76,7 @@ export default function Approach() {
           <div className="h-px bg-[#D6DEEA] mb-6 sm:mb-8" aria-hidden="true" />
 
           <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
-            <div className="w-full bg-[#0d1f3c]">
+            <div className="w-full bg-[#0071bc]">
               <div className="px-4 sm:px-8 py-4 sm:py-6">
                 <button
                   type="button"
@@ -111,7 +111,7 @@ export default function Approach() {
 
           <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
             <div className="p-6 sm:p-8 lg:p-10 bg-[#f8fafc]">
-              <h2 className="tf-headline text-[#0d1f3c] mb-6 text-center">
+              <h2 className="tf-headline text-[#0066cc] mb-6 text-center">
                 The Token&apos;s Role In Creating A Capital Loop
               </h2>
               <div className="relative mx-auto w-full max-w-4xl aspect-square">

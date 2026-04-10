@@ -31,7 +31,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
   }
 
   const isHome = location.pathname === '/'
-  const navBarBg = isHome ? 'bg-[#040a14]' : 'bg-[#0d1f3c]'
+  const navBarBg = isHome ? 'bg-[#0071bc]' : 'bg-[#0071bc]'
 
   const goToHomeFirstSection = () => {
     if (location.pathname === '/') return
@@ -154,7 +154,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
               <div
                 className={`rounded-full transition-all duration-300 ${
                   activeSection === i
-                    ? 'w-3 h-3 bg-[#1a4f8a]'
+                    ? 'w-3 h-3 bg-[#005dec]'
                     : 'w-2 h-2 bg-gray-400 hover:bg-gray-500'
                 }`}
               />

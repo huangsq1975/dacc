@@ -156,19 +156,19 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1a4f8a;
+  background: #005dec;
 }
 
 /* ===== Nav glass effect ===== */
 .nav-glass {
-  background: #0d1f3ceb;
+  background: #0066cceb;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 /* ===== Brand gradient text (primary → secondary blue, TF Style Guide) ===== */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #1a4f8a 0%, #3264cc 50%, #1a4f8a 100%);
+  background: linear-gradient(135deg, #005dec 0%, #0071bc 50%, #0066ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -176,7 +176,7 @@ html {
 
 /* ===== Section backgrounds ===== */
 .bg-hero-pattern {
-  background-color: #0d1f3c;
+  background-color: #0066cc;
 }
 
 .bg-impact-pattern {
@@ -212,7 +212,7 @@ html {
   transform: translateY(-50%);
   width: 24px;
   height: 2px;
-  background: linear-gradient(90deg, #1a4f8a, #3264cc);
+  background: linear-gradient(90deg, #005dec, #0071bc);
 }
 
 @media (max-width: 767px) {
@@ -224,6 +224,6 @@ html {
 /* ===== Form focus styles ===== */
 .form-input:focus {
   outline: none;
-  border-color: #1a4f8a;
-  box-shadow: 0 0 0 3px rgba(26, 79, 138, 0.15);
+  border-color: #005dec;
+  box-shadow: 0 0 0 3px rgba(0, 93, 236, 0.15);
 }

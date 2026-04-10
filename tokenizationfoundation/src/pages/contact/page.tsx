@@ -266,7 +266,7 @@ export default function Contact() {
       <Navigation />
 
       {/* Hero */}
-      <section className="bg-[#0d1f3c] mt-[72px] border-b border-white/10 pt-16 pb-14 lg:pt-20 lg:pb-16">
+      <section className="bg-[#0071bc] mt-[72px] border-b border-white/10 pt-16 pb-14 lg:pt-20 lg:pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl">
             <h1 className="tf-h1 text-white">Contact</h1>

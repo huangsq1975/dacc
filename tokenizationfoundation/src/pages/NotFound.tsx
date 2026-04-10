@@ -10,14 +10,14 @@ export default function NotFound() {
         <div className="w-16 h-16 rounded-full bg-tfblue/15 flex items-center justify-center mb-6">
           <i className="ri-error-warning-line text-tfblue text-3xl"></i>
         </div>
-        <div className="font-display text-8xl font-bold text-[#3264CC]/20 mb-4 tracking-tighter">404</div>
+        <div className="font-display text-8xl font-bold text-[#0066ff]/20 mb-4 tracking-tighter">404</div>
         <h1 className="tf-headline text-navy-900 mb-4">Page Not Found</h1>
         <p className="tf-body text-navy-900/70 mb-8 max-w-sm">
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <button
           onClick={() => navigate('/')}
-          className="px-7 py-3 bg-[#3264CC] text-white rounded-full tf-body font-semibold hover:bg-[#2857b8] transition-colors"
+          className="px-7 py-3 bg-[#0071bc] text-white rounded-full tf-body font-semibold hover:bg-[#0066cc] transition-colors"
         >
           Back to Home
         </button>

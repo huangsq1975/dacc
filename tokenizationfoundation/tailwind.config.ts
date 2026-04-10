@@ -17,11 +17,11 @@ export default {
           600: '#1a3a6a',
         },
         tfblue: {
-          DEFAULT: '#1a4f8a',
-          medium: '#2d7dc7',
-          light: '#d6e8f5',
-          verylight: '#f0f7fc',
-          bright: '#3264CC',
+          DEFAULT: '#005dec',
+          medium: '#0066ff',
+          light: '#d9e8ff',
+          verylight: '#eef4ff',
+          bright: '#0071bc',
         },
         tfgold: {
           DEFAULT: '#c9a55a',
@@ -30,8 +30,8 @@ export default {
         },
         tfgray: {
           light: '#EBEBEB',
-          medium: '#909090',
-          section: '#8C8C8C',
+          medium: '#669999',
+          section: '#7a898c',
         },
         tfcream: '#EDE8DA',
         /* Aegis-like cool neutrals */
