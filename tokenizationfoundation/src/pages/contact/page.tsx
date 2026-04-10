@@ -88,7 +88,7 @@ function FormField({
   return (
     <div className={className}>
       <label htmlFor={id} className="block text-sm font-inter font-semibold text-navy-900 mb-2">
-        {label} {required && <span className="text-tfgold">*</span>}
+        {label} {required && <span className="text-tfblue">*</span>}
       </label>
       <input
         id={id}
@@ -112,7 +112,7 @@ function TextAreaField({
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-inter font-semibold text-navy-900 mb-2">
-        {label} {required && <span className="text-tfgold">*</span>}
+        {label} {required && <span className="text-tfblue">*</span>}
       </label>
       <textarea
         id={id}
@@ -308,8 +308,8 @@ export default function Contact() {
             {/* Left copy */}
             <div className="lg:sticky lg:top-28">
               <div className="inline-flex items-center gap-2 mb-6">
-                <div className="w-8 h-px bg-tfgold" />
-                <span className="text-tfgold text-sm font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
+                <div className="w-8 h-px bg-tfgray-section" />
+                <span className="text-tfgray-section text-sm font-inter font-semibold tracking-widest uppercase">TF Form Content</span>
               </div>
               <h2 className="tf-headline text-black mb-4">Talk with one of our team members.</h2>
               <p className="tf-body text-navy-900/70 max-w-lg">
@@ -330,7 +330,7 @@ export default function Contact() {
                       info@tokenizationfoundation.org
                     </a>
                     <p className="mt-2 text-sm text-gray-400 font-inter">
-                      Required fields are marked with <span className="text-tfgold font-semibold">*</span>.
+                      Required fields are marked with <span className="text-tfblue font-semibold">*</span>.
                     </p>
                   </div>
                 </div>
@@ -477,7 +477,7 @@ export default function Contact() {
 
                   <div>
                     <label htmlFor="c-explore" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
-                      What would you like to explore? <span className="text-tfgold">*</span>
+                      What would you like to explore? <span className="text-tfblue">*</span>
                     </label>
                     <select
                       id="c-explore"
@@ -517,7 +517,7 @@ export default function Contact() {
                   </button>
 
                   <p className="text-sm text-gray-400 font-inter">
-                    Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
+                    Note: <span className="text-tfblue font-semibold">*</span> fields required to submit.
                   </p>
                 </form>
               )}
@@ -595,7 +595,7 @@ export default function Contact() {
                   </button>
 
                   <p className="text-sm text-gray-400 font-inter">
-                    Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
+                    Note: <span className="text-tfblue font-semibold">*</span> fields required to submit.
                   </p>
                 </form>
               )}
@@ -652,7 +652,7 @@ export default function Contact() {
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label htmlFor="wl-participant-type" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
-                        Participant Type <span className="text-tfgold">*</span>
+                        Participant Type <span className="text-tfblue">*</span>
                       </label>
                       <select
                         id="wl-participant-type"
@@ -671,7 +671,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <label htmlFor="wl-allocation" className="block text-sm font-inter font-semibold text-navy-900 mb-2">
-                        Expected Allocation <span className="text-tfgold">*</span>
+                        Expected Allocation <span className="text-tfblue">*</span>
                       </label>
                       <select
                         id="wl-allocation"
@@ -714,7 +714,7 @@ export default function Contact() {
                   </button>
 
                   <p className="text-sm text-gray-400 font-inter">
-                    Note: <span className="text-tfgold font-semibold">*</span> fields required to submit.
+                    Note: <span className="text-tfblue font-semibold">*</span> fields required to submit.
                   </p>
                 </form>
               )}

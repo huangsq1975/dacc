@@ -56,19 +56,19 @@ const teamMembers: TeamMember[] = [
     name: 'Lynne R. Foster',
     bio: 'Leads product and operations to scale delivery with transparent governance and measurable impact.',
     linkedin: 'https://www.linkedin.com/in/lynne-foster',
-    accent: '#1D4ED8',
+    accent: '#1a4f8a',
   },
   {
     name: 'Anita S. Mehra',
     bio: 'Designs tokenization frameworks that improve traceability and speed disbursement across teams.',
     linkedin: 'https://www.linkedin.com/in/anita-mehra',
-    accent: '#2563EB',
+    accent: '#2d7dc7',
   },
   {
     name: 'Kerstin P. Holm',
     bio: 'Drives AI-powered oversight and analytics for real-time decisions and stronger partner accountability.',
     linkedin: 'https://www.linkedin.com/in/kerstin-holm',
-    accent: '#3B82F6',
+    accent: '#3264CC',
   },
 ]
 

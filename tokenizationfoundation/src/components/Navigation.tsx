@@ -30,6 +30,9 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
     setMobileOpen(false)
   }
 
+  const isHome = location.pathname === '/'
+  const navBarBg = isHome ? 'bg-[#040a14]' : 'bg-[#0d1f3c]'
+
   const goToHomeFirstSection = () => {
     if (location.pathname === '/') return
     setMobileOpen(false)
@@ -39,7 +42,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 overflow-visible bg-[#0d1f3c] transition-shadow duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-50 overflow-visible ${navBarBg} transition-shadow duration-200 ${
           scrolled ? 'shadow-[0_2px_16px_rgba(0,0,0,0.25)]' : 'border-b border-white/10'
         }`}
       >
@@ -96,7 +99,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
         </div>
 
         {mobileOpen && (
-          <div className="lg:hidden bg-[#0d1f3c] border-t border-white/10 mobile-menu-enter relative z-10">
+          <div className={`lg:hidden ${navBarBg} border-t border-white/10 mobile-menu-enter relative z-10`}>
             <nav className="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-1">
               <a
                 href="/approach"

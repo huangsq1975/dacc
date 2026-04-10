@@ -59,12 +59,12 @@ export default function Home() {
       {/* ===== HERO ===== */}
       <section
         id="hero"
-        className="bg-[#0d1f3c] mt-[72px] relative overflow-hidden min-h-[calc(100vh-72px)]"
+        className="bg-[#15365c] mt-[72px] relative overflow-hidden min-h-[calc(100vh-72px)] border-t border-white/5"
       >
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 70% 60% at 70% 50%, rgba(26,79,138,0.35) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 60% at 70% 50%, rgba(26,79,138,0.45) 0%, transparent 70%)',
           }}
         />
 
@@ -88,7 +88,7 @@ export default function Home() {
                   <span className="text-white block sm:whitespace-nowrap">and at scale.</span>
                 </h1>
 
-                <p className="tf-subhead-layer text-white/55 mb-10 tracking-wide">
+                <p className="tf-h3 text-white mb-10 tracking-wide">
                   Turn your capital into impact
                 </p>
 
@@ -147,7 +147,7 @@ export default function Home() {
       </section>
 
       {/* ===== THE SOLUTIONS ===== */}
-      <section id="solutions" className="relative tf-section bg-[#f8fafc]">
+      <section id="solutions" className="relative tf-section bg-[#ecf0f3]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 lg:px-12">
             <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-[#1a4f8a]/40 text-[#1a4f8a] mb-8">
@@ -162,7 +162,7 @@ export default function Home() {
             <div className="max-w-3xl">
               <p className="tf-body text-gray-600 mb-5">
                 The Tokenization Foundation replaces fragmented aid systems with a programmable,
-                time infrastructure:
+                real-time infrastructure:
               </p>
 
               <ul className="space-y-3">
@@ -189,8 +189,8 @@ export default function Home() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
-            <h2 className="tf-headline text-[#0d1f3c] mb-6">
+          <AnimatedSection className="px-8 lg:px-12">
+            <h2 className="tf-headline text-tfblue mb-6">
               Infrastructure Designed To Deliver:
             </h2>
 
@@ -221,30 +221,40 @@ export default function Home() {
       </section>
 
       {/* ===== GOVERNING COUNCIL / PARTNERS ===== */}
-      <section id="council" className="bg-[#f8fafc] pt-16 pb-0 lg:pt-24 lg:pb-0">
+      <section id="council" className="bg-white pt-10 pb-0 lg:pt-16 lg:pb-0">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="px-8 py-10 lg:px-12 lg:py-14">
+          <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
 
-            <h2 className="tf-headline text-[#0d1f3c] mb-12 max-w-4xl">
+            <h2 className="tf-headline text-[#0d1f3c] mb-0 max-w-4xl">
               Building The Infrastructure Ecosystem With Two Founding Governing Council Members
             </h2>
 
-            <div className="flex flex-wrap gap-12 mb-8">
-              <div className="relative h-48 w-48">
+            <div className="flex flex-wrap gap-12 mb-8 -mt-[60px]">
+              <a
+                href="https://www.un.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1a4f8a] focus-visible:ring-offset-2 rounded"
+              >
                 <img
                   src={unLogo}
                   alt="United Nations"
-                  className="absolute left-1/2 bottom-0 w-24 h-24 -translate-x-1/2 translate-y object-contain"
+                  className="absolute left-1/2 bottom-0 w-32 h-32 -translate-x-1/2 translate-y-0 object-contain"
                 />
-              </div>
+              </a>
 
-              <div className="relative h-48 w-48">
+              <a
+                href="https://www.aegiscustody.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1a4f8a] focus-visible:ring-offset-2 rounded"
+              >
                 <img
                   src={aegisLogo}
                   alt="Aegis Trust"
-                  className="absolute left-1/2 bottom-0 w-48 h-48 -translate-x-1/2 translate-y-12 object-contain"
+                  className="absolute left-1/2 bottom-0 w-64 h-64 -translate-x-1/2 translate-y-16 object-contain"
                 />
-              </div>
+              </a>
             </div>
 
             <p className="tf-body text-gray-600 mb-8">
@@ -265,9 +275,9 @@ export default function Home() {
       </section>
 
       {/* ===== JOIN THE MOVEMENT ===== */}
-      <section id="join" className="bg-white pt-0 pb-16 lg:pt-0 lg:pb-24">
+      <section id="join" className="bg-white pt-0 pb-10 lg:pt-0 lg:pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
+          <AnimatedSection className="px-8 py-6 lg:px-12 lg:py-8">
             <h2 className="tf-headline text-[#0d1f3c] mb-7">
               Join The Movement
             </h2>

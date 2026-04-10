@@ -10,14 +10,12 @@ export default function Approach() {
 
       <main className="pt-24 sm:pt-28 pb-16 sm:pb-20 bg-[#f8fafc]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 sm:mb-8">
-            <div className="bg-[#0d1f3c] px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-center rounded-lg">
-              <h1 className="tf-headline text-white leading-snug">
-                Reimagining a fully tokenized ecosystem
-                <br />
-                for humanitarian capital
-              </h1>
-            </div>
+          <div className="mb-6 sm:mb-8 px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-center">
+            <h1 className="tf-headline text-black leading-snug">
+              Reimagining a fully tokenized ecosystem
+              <br />
+              for humanitarian capital
+            </h1>
           </div>
 
           <section className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-6 sm:mb-8">
@@ -34,8 +32,8 @@ export default function Approach() {
                     </div>
                   </div>
 
-                  <div className="hidden md:flex justify-center text-[#7ED9FF] text-4xl font-bold">→</div>
-                  <div className="flex md:hidden justify-center text-[#7ED9FF] text-3xl font-bold">↓</div>
+                  <div className="hidden md:flex justify-center text-tfblue-bright text-4xl font-bold">→</div>
+                  <div className="flex md:hidden justify-center text-tfblue-bright text-3xl font-bold">↓</div>
 
                   <div className="rounded-[2rem] bg-white p-0 flex items-center justify-center aspect-square overflow-hidden w-full max-w-[180px] md:max-w-none mx-auto">
                     <img
@@ -45,8 +43,8 @@ export default function Approach() {
                     />
                   </div>
 
-                  <div className="flex md:hidden justify-center text-[#7ED9FF] text-3xl font-bold">↓</div>
-                  <div className="hidden md:flex justify-center text-[#7ED9FF] text-4xl font-bold">←</div>
+                  <div className="flex md:hidden justify-center text-tfblue-bright text-3xl font-bold">↓</div>
+                  <div className="hidden md:flex justify-center text-tfblue-bright text-4xl font-bold">←</div>
 
                   <div className="rounded-2xl bg-white text-center tf-h3 text-black py-4 px-3 leading-tight">
                     <p>Aegis</p>
@@ -59,14 +57,14 @@ export default function Approach() {
 
               <div className="mt-4 space-y-2 sm:space-y-2.5">
                 {[
-                  { label: 'Blockchain', tone: 'bg-[#DAECFF] text-black' },
-                  { label: 'AI Technology', tone: 'bg-[#BFD9FF] text-black' },
-                  { label: 'Distribution Partners', tone: 'bg-[#8EBCFF] text-black' },
-                  { label: 'Beneficiaries', tone: 'bg-[#3D89F2] text-white' },
+                  { label: 'Blockchain', tone: 'bg-tfblue-verylight text-navy-900' },
+                  { label: 'AI Technology', tone: 'bg-tfblue-light text-navy-900' },
+                  { label: 'Distribution Partners', tone: 'bg-tfblue-medium/25 text-navy-900' },
+                  { label: 'Beneficiaries', tone: 'bg-tfblue text-white' },
                 ].map(item => (
                   <div
                     key={item.label}
-                    className={`-mx-4 sm:-mx-6 lg:-mx-8 border-y border-[#9EB5D7] py-3 text-center tf-h3 ${item.tone}`}
+                    className={`relative left-1/2 w-screen -translate-x-1/2 border-y border-tfslate-200 py-3 text-center tf-h3 ${item.tone}`}
                   >
                     {item.label}
                   </div>
@@ -84,7 +82,7 @@ export default function Approach() {
                   type="button"
                   className="w-full sm:w-auto rounded border border-white/30 bg-white/10 hover:bg-white/15 px-5 py-3 text-left font-inter font-medium text-white transition-colors"
                 >
-                  <span className="text-[#7EC8FF]">Click</span> To Read Our White Paper (pdf)
+                  <span className="text-tfblue-bright">Click</span> To Read Our White Paper (pdf)
                 </button>
               </div>
             </div>

@@ -7,8 +7,8 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-[#F8F9FC] flex flex-col">
       <main className="flex-1 tf-section flex flex-col items-center justify-center px-6 text-center">
-        <div className="w-16 h-16 rounded-full bg-tfgold/20 flex items-center justify-center mb-6">
-          <i className="ri-error-warning-line text-tfgold text-3xl"></i>
+        <div className="w-16 h-16 rounded-full bg-tfblue/15 flex items-center justify-center mb-6">
+          <i className="ri-error-warning-line text-tfblue text-3xl"></i>
         </div>
         <div className="font-display text-8xl font-bold text-[#3264CC]/20 mb-4 tracking-tighter">404</div>
         <h1 className="tf-headline text-navy-900 mb-4">Page Not Found</h1>

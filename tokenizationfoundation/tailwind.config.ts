@@ -8,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        /* TF Style Guide: Primary Blue, Secondary blue (accents), Tertiary grey (tags) — hex from brand implementation */
         navy: {
           950: '#04101e',
           900: '#0a1628',
@@ -41,9 +42,10 @@ export default {
         },
       },
       fontFamily: {
-        /* Institutional fintech headline stack (cf. aegiscustody.com) */
-        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        inter: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        /* legacy utility name — same as approved body font (DM Sans) */
+        inter: ['"DM Sans"', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         base: ['1rem', { lineHeight: '1.6' }],
