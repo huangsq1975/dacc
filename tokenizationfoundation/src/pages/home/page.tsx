@@ -162,7 +162,7 @@ export default function Home() {
             <div className="max-w-3xl">
               <p className="tf-body text-gray-600 mb-5">
                 The Tokenization Foundation replaces fragmented aid systems with a programmable,
-                real-time infrastructure:
+                real-time infrastructure.
               </p>
 
               <ul className="space-y-3">
