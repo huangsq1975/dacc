@@ -190,7 +190,7 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <AnimatedSection className="px-8 lg:px-12">
-            <h2 className="tf-headline text-tfblue-medium mb-6 tracking-[0.01em]">
+            <h2 className="tf-headline text-tfgray-section mb-6 tracking-[0.01em]">
               Infrastructure Designed To Deliver
             </h2>
 
