@@ -22,6 +22,7 @@ export default {
           light: '#d9e8ff',
           verylight: '#eef4ff',
           bright: '#0071bc',
+          deep: '#0066cc',
         },
         tfgold: {
           DEFAULT: '#c9a55a',

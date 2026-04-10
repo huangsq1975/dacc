@@ -30,8 +30,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
     setMobileOpen(false)
   }
 
-  const isHome = location.pathname === '/'
-  const navBarBg = isHome ? 'bg-[#0071bc]' : 'bg-[#0071bc]'
+  const navBarBg = 'bg-[#005dec]'
 
   const goToHomeFirstSection = () => {
     if (location.pathname === '/') return

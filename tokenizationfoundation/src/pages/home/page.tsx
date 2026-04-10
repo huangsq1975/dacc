@@ -123,7 +123,7 @@ export default function Home() {
               The Problem
             </div>
 
-            <h2 className="tf-headline text-[#0066cc] mb-7 w-full max-w-none">
+            <h2 className="tf-headline text-gray-900 mb-7 w-full max-w-none">
               A Broken System In Need Of Reinvention
             </h2>
 
@@ -150,11 +150,11 @@ export default function Home() {
       <section id="solutions" className="relative tf-section bg-[#ecf0f3]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 lg:px-12">
-            <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-[#005dec]/40 text-[#005dec] mb-8">
+            <div className="inline-block font-inter font-bold tracking-[0.08em] uppercase text-sm px-5 py-2 border border-[#005dec]/40 text-gray-700 mb-8">
               The Solutions
             </div>
 
-            <h2 className="tf-headline text-[#0066cc] mb-7 w-full max-w-none">
+            <h2 className="tf-headline text-gray-900 mb-7 w-full max-w-none">
               <span className="block">A reimagined model</span>
               <span className="block">programmable humanitarian infrastructure</span>
             </h2>
@@ -225,7 +225,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
 
-            <h2 className="tf-headline text-[#0066cc] mb-0 max-w-4xl">
+            <h2 className="tf-headline text-gray-900 mb-0 max-w-4xl">
               Building The Infrastructure Ecosystem With Two Founding Governing Council Members
             </h2>
 
@@ -278,7 +278,7 @@ export default function Home() {
       <section id="join" className="bg-white pt-0 pb-10 lg:pt-0 lg:pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-6 lg:px-12 lg:py-8">
-            <h2 className="tf-headline text-[#0066cc] mb-7">
+            <h2 className="tf-headline text-gray-900 mb-7">
               Join The Movement
             </h2>
             <p className="tf-body text-gray-600 mb-8 max-w-2xl">
