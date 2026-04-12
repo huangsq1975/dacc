@@ -1,8 +1,30 @@
 結合 Website_Outline.pptx 文檔和 system_audio_20260407_090103.txt 會議討論記錄使用 Node.js + Vite 框架開發整個網站。Website_Outline.pptx 前 5 頁要放到首頁上下滑動進行顯示。要考慮到電腦端和手機端的顯示。
 
 
-當前網站内容不要動的情況下，參考 https://www.aegiscustody.com 調整架構和風格讓網站顯得更加專業
+當前網站内容不要動的情況下，參考 https://www.aegiscustody.com/ 網站。 調整架構和風格讓網站顯得更加專業，顔色和字體參考當前目錄下的 TF_Style_Guide.pdf 文件。
 
+ Footer部分要參考https://www.aegiscustody.com/
+首頁第一區塊的兩個按鍵沒有顯示到第一頁。
 
+hsq@thetokenizationfoundation.com
+hsq@Token
+2019.2.17f1
 
+tokenizationfoundation.com
+tokenizationfoundation.org
+
+info@thetokenizationfoundation.com
+3;g?-=zOyDhV
+
+serra@thetokenizationfoundation.com 
+pE2~U8Jxcbph
+
+kerstin@thetokenizationfoundation.com 
+8!lcKNT%TR*h
+
+lynne@thetokenizationfoundation.com
+1i.g{nLs&jIB
+
+jan@thetokenizationfoundation.com 
+BkZZ*IAt+ZYm
 

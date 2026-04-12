@@ -25,11 +25,6 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleTeamLink = () => {
-    navigate('/team')
-    setMobileOpen(false)
-  }
-
   const navBarBg = 'bg-[#005dec]'
 
   const goToHomeFirstSection = () => {
@@ -57,26 +52,18 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                 <img
                   src={logoHoriz}
                   alt=""
-                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[8] object-left"
+                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[1.5] object-left"
                 />
               </button>
             </div>
 
             <nav className="hidden lg:flex items-center gap-8">
-              <a
-                href="/approach"
-                onClick={e => { e.preventDefault(); navigate('/approach') }}
-                className="tf-body text-white/75 hover:text-white transition-colors tracking-wide text-[0.9rem]"
-              >
+              <span className="tf-body text-white/60 cursor-default tracking-wide text-[0.9rem]">
                 Approach
-              </a>
-              <button
-                type="button"
-                onClick={handleTeamLink}
-                className="tf-body text-white/75 hover:text-white transition-colors tracking-wide text-[0.9rem]"
-              >
+              </span>
+              <span className="tf-body text-white/60 cursor-default tracking-wide text-[0.9rem]">
                 Team
-              </button>
+              </span>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact') }}
@@ -100,20 +87,12 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
         {mobileOpen && (
           <div className={`lg:hidden ${navBarBg} border-t border-white/10 mobile-menu-enter relative z-10`}>
             <nav className="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-1">
-              <a
-                href="/approach"
-                onClick={e => { e.preventDefault(); navigate('/approach'); setMobileOpen(false) }}
-                className="tf-body text-white/75 hover:text-white py-3 border-b border-white/10 transition-colors"
-              >
+              <span className="tf-body text-white/60 cursor-default py-3 border-b border-white/10 block">
                 Approach
-              </a>
-              <button
-                type="button"
-                onClick={handleTeamLink}
-                className="tf-body text-white/75 hover:text-white py-3 border-b border-white/10 text-left transition-colors"
-              >
+              </span>
+              <span className="tf-body text-white/60 cursor-default py-3 border-b border-white/10 block text-left">
                 Team
-              </button>
+              </span>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact'); setMobileOpen(false) }}
@@ -130,7 +109,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                 }}
                 className="mt-3 px-5 py-3 border border-white/35 text-white/85 tf-body font-medium text-center hover:border-white hover:text-white transition-all rounded"
               >
-                Join dSDR Token Waitlist
+                Join Token Waitlist
               </a>
             </nav>
           </div>

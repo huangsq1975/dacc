@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import icon2 from '../../../icon2.png'
-import unLogo from '../../assets/Logo_of_the_United_Nations.png'
+import unLogo from '../../assets/Logo_of_the_United_Nations.svg'
 import aegisLogo from '../../assets/AEGIS.png'
 
 function AnimatedSection({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -105,7 +105,7 @@ export default function Home() {
                     onClick={() => navigate('/contact#waitlist')}
                     className="px-7 py-3 border border-white/35 text-white font-inter font-semibold text-sm rounded hover:border-white/60 hover:bg-white/5 transition-all"
                   >
-                    Join dSDR Token Waitlist
+                    Join Token Waitlist
                   </button>
                 </div>
               </div>
@@ -155,8 +155,8 @@ export default function Home() {
             </div>
 
             <h2 className="tf-headline text-gray-900 mb-7 w-full max-w-none">
-              <span className="block">A reimagined model</span>
-              <span className="block">programmable humanitarian infrastructure</span>
+              <span className="block">A Reimagined Model:</span>
+              <span className="block">Programmable Humanitarian Infrastructure</span>
             </h2>
 
             <div className="max-w-3xl">
@@ -239,7 +239,7 @@ export default function Home() {
                 <img
                   src={unLogo}
                   alt="United Nations"
-                  className="absolute left-1/2 bottom-0 w-32 h-32 -translate-x-1/2 translate-y-0 object-contain"
+                  className="absolute left-1/2 bottom-0 w-64 h-64 -translate-x-1/2 translate-y-16 object-contain"
                 />
               </a>
 
@@ -298,7 +298,7 @@ export default function Home() {
                 onClick={() => navigate('/contact#waitlist')}
                 className="px-7 py-3 border border-[#0071bc]/30 text-[#0071bc] font-inter font-semibold text-sm rounded hover:border-[#0071bc]/60 hover:bg-[#0071bc]/5 transition-all"
               >
-                Join dSDR Token Waitlist
+                Join Token Waitlist
               </button>
             </div>
           </AnimatedSection>

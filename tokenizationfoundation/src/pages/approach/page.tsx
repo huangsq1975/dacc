@@ -88,15 +88,15 @@ export default function Approach() {
             </div>
             <div className="p-6 sm:p-8 lg:p-10">
               <h2 className="tf-headline text-black mb-4 sm:mb-5">
-                The dSDR Token Explained
+                The Network Token Explained
               </h2>
               <ul className="max-w-5xl space-y-3">
                 {[
                   'The network is designed for stability, participation, and long-term growth, with a fixed total supply of 10 billion tokens.',
                   'Governance is led by a 10-member Governing Council of partners responsible for network oversight, stability, and adoption.',
-                  'Users can stake dSDR with validators to help secure the network and earn rewards, while validators and stakers actively contribute to ecosystem development.',
+                  'Users can stake the network token with validators to help secure the network and earn rewards, while validators and stakers actively contribute to ecosystem development.',
                   'Tokens are gradually released from the treasury to support security and sustainable expansion.',
-                  'dSDR also serves as the network&apos;s governance token, powering services such as token minting, transactions, and reward incentives for adopting AI agents to amplify skills and impacts across stakeholders from donors, social workers to beneficiaries.',
+                  'The token also serves as the network&apos;s governance token, powering services such as token minting, transactions, and reward incentives for adopting AI agents to amplify skills and impacts across stakeholders from donors, social workers to beneficiaries.',
                 ].map(item => (
                   <li key={item} className="tf-body flex items-start gap-3 text-black">
                     <span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />

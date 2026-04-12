@@ -255,7 +255,7 @@ export default function Contact() {
 
   const exploreOptions = [
     { value: 'Institutional investment', label: 'Institutional investment' },
-    { value: 'Easy access to our dSDR Waitlist and/or Whitelist', label: 'Easy access to our dSDR Waitlist and/or Whitelist' },
+    { value: 'Easy access to our Token Waitlist and/or Whitelist', label: 'Easy access to our Token Waitlist and/or Whitelist' },
     { value: 'Interest in our Governing Council', label: 'Interest in our Governing Council' },
     { value: 'Media inquiries', label: 'Media inquiries' },
     { value: 'Other', label: 'Other' },
@@ -279,8 +279,8 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { icon: 'ri-mail-line', label: 'Email', value: 'info@tokenizationfoundation.org', href: 'mailto:info@tokenizationfoundation.org' },
-              { icon: 'ri-linkedin-box-line', label: 'LinkedIn', value: 'Tokenization Foundation', href: 'https://www.linkedin.com' },
+              { icon: 'ri-mail-line', label: 'Email', value: 'info@tokenizationfoundation.com', href: 'mailto:info@tokenizationfoundation.com' },
+              { icon: 'ri-linkedin-box-line', label: 'LinkedIn', value: 'Tokenization Foundation', href: 'https://www.linkedin.com/company/tokenization-foundation' },
               { icon: 'ri-map-pin-line', label: 'Registered', value: 'United States', href: '' },
             ].map(item => (
               <div key={item.label} className="flex items-center gap-3">
@@ -324,10 +324,10 @@ export default function Contact() {
                   <div>
                     <div className="text-sm text-gray-400 font-inter">Email</div>
                     <a
-                      href="mailto:info@tokenizationfoundation.org"
+                      href="mailto:info@tokenizationfoundation.com"
                       className="text-sm font-inter font-medium text-navy-900 hover:text-tfblue transition-colors"
                     >
-                      info@tokenizationfoundation.org
+                      info@tokenizationfoundation.com
                     </a>
                     <p className="mt-2 text-sm text-gray-400 font-inter">
                       Required fields are marked with <span className="text-tfblue font-semibold">*</span>.
@@ -345,7 +345,7 @@ export default function Contact() {
                     <i className="ri-file-list-3-line text-tfblue text-lg"></i>
                   </div>
                   <h3 className="tf-h3 text-black">
-                    {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join the waitlist'}
+                    {activeTab === 'contact' ? 'Contact Us' : activeTab === 'council' ? 'Join the Council' : 'Join Token Waitlist'}
                   </h3>
                 </div>
                 <p className="tf-body text-gray-500">
@@ -353,7 +353,7 @@ export default function Contact() {
                     ? 'Please complete the form below and our team will respond by email.'
                     : activeTab === 'council'
                       ? 'Tell us a bit about you and your organization, and we’ll follow up.'
-                      : 'Add your details below to join the dSDR Token waitlist.'}
+                      : 'Add your details below to join the token waitlist.'}
                 </p>
               </div>
 
@@ -383,7 +383,7 @@ export default function Contact() {
                     navigate('/contact#waitlist')
                   }}
                 >
-                  Join the waitlist
+                  Join Token Waitlist
                 </TabButton>
               </div>
 
@@ -710,7 +710,7 @@ export default function Contact() {
                       <span className="flex items-center justify-center gap-2">
                         <i className="ri-loader-4-line animate-spin"></i> Submitting...
                       </span>
-                    ) : 'Join the waitlist'}
+                    ) : 'Join Token Waitlist'}
                   </button>
 
                   <p className="text-sm text-gray-400 font-inter">

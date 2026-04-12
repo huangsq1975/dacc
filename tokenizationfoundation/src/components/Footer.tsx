@@ -18,7 +18,7 @@ export default function Footer() {
               <img
                 src={logoHoriz}
                 alt="Tokenization Foundation"
-                className="h-8 w-auto object-contain scale-[8] object-left"
+                className="h-8 w-auto object-contain scale-[2] object-left"
               />
             </button>
             <p className="text-sm leading-relaxed max-w-sm text-white/55 mt-8">
@@ -26,11 +26,11 @@ export default function Footer() {
               humanitarian aid is funded instantly, transparently, and at scale.
             </p>
             <a
-              href="mailto:info@tokenizationfoundation.org"
+              href="mailto:info@tokenizationfoundation.com"
               className="mt-5 inline-flex items-center gap-2 text-sm text-white/55 hover:text-white transition-colors"
             >
               <i className="ri-mail-line text-base" />
-              info@tokenizationfoundation.org
+              info@tokenizationfoundation.com
             </a>
           </div>
 
@@ -65,7 +65,7 @@ export default function Footer() {
               {[
                 { label: 'Contact Us', path: '/contact#contact-form' },
                 { label: 'Join the Council', path: '/contact#council' },
-                { label: 'Join dSDR Waitlist', path: '/contact#waitlist' },
+                { label: 'Join Token Waitlist', path: '/contact#waitlist' },
               ].map(item => (
                 <li key={item.path}>
                   <button
