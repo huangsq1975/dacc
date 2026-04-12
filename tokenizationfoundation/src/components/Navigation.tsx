@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import logoHoriz from '../assets/TK_Logo_Horiz_White_Tag.png'
+import logoHoriz from '../assets/TK_Logo_Horiz_White_NoTag.png'
 
 interface NavigationProps {
   sectionIds?: string[]
@@ -52,7 +52,7 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                 <img
                   src={logoHoriz}
                   alt=""
-                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[1.5] object-left"
+                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[2.5] object-left"
                 />
               </button>
             </div>

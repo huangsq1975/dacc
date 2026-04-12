@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import logoHoriz from '../assets/TK_Logo_Horiz_White_Tag.png'
+import logoHoriz from '../assets/TK_Logo_Horiz_White_NoTag.png'
 
 export default function Footer() {
   const navigate = useNavigate()
@@ -18,7 +18,7 @@ export default function Footer() {
               <img
                 src={logoHoriz}
                 alt="Tokenization Foundation"
-                className="h-8 w-auto object-contain scale-[2] object-left"
+                className="h-8 w-auto object-contain scale-[3] object-left -translate-y-[10px]"
               />
             </button>
             <p className="text-sm leading-relaxed max-w-sm text-white/55 mt-8">
