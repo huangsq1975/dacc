@@ -208,7 +208,7 @@ export default function TeamPage() {
                   >
                     {member.oneLiner}
                   </button>
-                  <p className="mt-2 font-inter text-xs text-gray-400">點擊以閱讀完整簡介</p>
+                  <p className="mt-2 font-inter text-xs text-gray-400">Click to read the full biography</p>
                 </div>
 
                 <a
