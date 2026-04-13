@@ -2,6 +2,11 @@ import { useState } from 'react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom'
+import serraLine from '../../assets/Serra_line.png'
+import lynee from '../../assets/Lynee.png'
+import anitaLine from '../../assets/Anita_line.png'
+import kerstinLine from '../../assets/Kerstin_line.png'
+import linkedinIcon from '../../assets/linkedin.png'
 
 type TeamMember = {
   name: string
@@ -10,6 +15,7 @@ type TeamMember = {
   fullBio: string
   linkedin: string
   accent: string
+  imageSrc?: string
 }
 
 function LineAvatar({ seed, accent }: { seed: number; accent: string }) {
@@ -56,6 +62,7 @@ const teamMembers: TeamMember[] = [
     fullBio: "Serra's entrepreneurship journey started in 2017 when she was approached and given millions to start a digital asset custodian by an investor while she was investing at a San Francisco-based venture fund. Before that, she worked at Goldman Sachs and got her MBA from Stanford Business School.\n\nDACC.HK was founded by Serra as an international expansion effort. As a leader, she took a partnership integration strategy to align her vision with customers and investors. By truly listening to perspectives from people in Hong Kong, Chinese mainland and the globe, she navigates a nascent market with openhearted compassion, leading to new cooperation between parties for business growth and that benefits everyone. Several publicly traded companies which commit not only deep capital but strategic resources to DACC.HK now sit on its cap table including Starcoin Group (399.HK), Fosun (656.HK), TTL/Kingdom (600446.SH), Global Infotech (300465.SZ).\n\nAt Tokenization Foundation, Serra integrates human values into technology infrastructure to embrace a more holistic vision of progress that honors the complexities of our shared humanity. Her ability to use resources to heal, uplift, and meet the urgent challenges of our time uncovers new ways to drive systemic change and contribute to the collective good.",
     linkedin: 'https://www.linkedin.com/in/serra-angel-wei-63118216/',
     accent: '#0066ff',
+    imageSrc: serraLine,
   },
   {
     name: 'Lynne Marlor',
@@ -64,6 +71,7 @@ const teamMembers: TeamMember[] = [
     fullBio: "Lynne Marlor is a capital markets, fintech, and asset management expert who transitioned from traditional finance into blockchain and digital assets after completing the Oxford Blockchain Strategy Programme in 2018. She brings deep expertise across digital assets, AI, tokenization, and Web3, and has built leading industry platforms including the Women in Digital Assets® Forum and the Boston Blockchain Association.\n\nCurrently, Lynne serves on the boards of Aegis Trust, South Dakota, and the Digital Asset Clearing Centre, Hong Kong, and leads Transformational Strategies, LLC, advising financial institutions globally. She previously served as a Managing Director at BNY Mellon, overseeing non-bank financial services across capital markets infrastructure.\n\nAt the Tokenization Foundation, Lynne is redesigning the humanitarian aid infrastructure using AI, blockchain, and digital assets to address massive fragmentation, inefficiency, and delays in global crisis funding systems.",
     linkedin: 'https://www.linkedin.com/in/lynne-marlor-23a741a/',
     accent: '#005dec',
+    imageSrc: lynee,
   },
   {
     name: 'Anitha Vadavath',
@@ -72,6 +80,7 @@ const teamMembers: TeamMember[] = [
     fullBio: "Driving AI, biotech, and exponential technologies and tokenization at the intersection of deeptech, capital, and global impact.\n\nAnitha Vadavatha brings over 20+ years of deep and hyphenated career across technology, venture capital, financial services, and global affairs. She is Founder and Managing Partner of AB Plus Ventures and Misu Labs, investing and building at the convergence of AI, biotech, and next-generation markets. She currently serves as Venture Partner at Sync.vc and Republic, Senior Advisor at Popstar Ventures and Kudish Family Office.\n\nFormerly a Partner at Urth Capital Advisors (Fund of Funds), a member of the Strategic advisory council of Shadow Ventures (Proptech VC), Managing Director of Emerging Star Capital, and an early and growth stage operator in two exited tech unicorns (EdCast, acquired, PartyGaming, IPO), her experience includes GE Capital, Big 4 payments/banking consulting, and advisory roles with AI, biotech and deeptech companies.\n\nAn alumna of Singularity University with executive education across global management and emerging markets, she was recognized as a \"Top Ten Frontier Woman\" by the UN–Fifth Element Group in partnership with Thomson Reuters and Morningstar. A global speaker and thought leader at 'Innovation, Science and Technology' forums, she was an invited delegate at the UN SDG, UNGA, IMF and World Bank Annual Meeting, and Davos.\n\nAt the Tokenization Foundation, Anitha is designing groundbreaking AI humanitarian aid infrastructure (Precision and Practitioner Adaptive Intelligence, or PPAI) and accelerating strategic capital and stakeholder development, interfacing with capital, organizations, and participants who are moving capital and capability together.",
     linkedin: 'https://www.linkedin.com/in/anivadavath/',
     accent: '#0071bc',
+    imageSrc: anitaLine,
   },
   {
     name: 'Kerstin Krall Walz',
@@ -80,6 +89,7 @@ const teamMembers: TeamMember[] = [
     fullBio: "Kerstin is a marketing executive with deep experience in brand building and digital assets focusing on building awareness and procuring qualified leads.\n\nShe spent the first part of her career at \"Madison Avenue\" agencies including Saatchi & Saatchi and Young & Rubicam, working across megabrands such as Campbell's Soup Company, International Olympic Committee (IOC), The Star Alliance Network, Lufthansa Airlines, Smirnoff Vodka, and the United States Tennis Association/U.S. Open.\n\nMore recently, as Chief Marketing Officer at Digital Asset Research, Kerstin led global marketing strategy, positioning the firm as a leader in institutional-grade crypto data and driving partnerships with organizations such as FTSE Russell and Bloomberg. She has also contributed to strategic initiatives across the digital asset ecosystem, including work with Vigil Markets and Digital Ascension Group.\n\nShe brings a unique blend of brand strategy and growth execution, while translating complex cryptocurrency concepts into actionable insights for institutional audiences—including asset managers, custodians, index providers, hedge funds, and HNWIs.\n\nAt the Tokenization Foundation, Kerstin leads marketing to scale awareness and engagement for the world's first crisis capital infrastructure—where capital flows automatically fund disaster response and humanitarian relief.",
     linkedin: 'https://www.linkedin.com/in/kerstin-krall-walz-00066415b/',
     accent: '#0066ff',
+    imageSrc: kerstinLine,
   },
 ]
 
@@ -121,7 +131,15 @@ export default function TeamPage() {
                 className="flex flex-col items-center text-center border border-gray-200 bg-white px-5 py-7 rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="w-[160px] h-[160px] mb-5">
-                  <LineAvatar seed={idx + 1} accent={member.accent} />
+                  {member.imageSrc ? (
+                    <img
+                      src={member.imageSrc}
+                      alt={member.name}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <LineAvatar seed={idx + 1} accent={member.accent} />
+                  )}
                 </div>
 
                 <div className="w-px h-6 bg-[#005dec]/30 mb-4" aria-hidden="true" />
@@ -151,16 +169,13 @@ export default function TeamPage() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${member.name} LinkedIn`}
-                  className="inline-flex items-center gap-2 text-sm font-inter font-medium text-[#005dec] hover:text-[#0066cc] transition-colors mt-auto"
+                  className="inline-flex items-center mt-auto opacity-90 hover:opacity-100 transition-opacity"
                 >
-                  <span className="inline-flex items-center rounded border border-[#005dec] overflow-hidden">
-                    <span className="bg-[#005dec] text-white px-2 py-1 text-xs leading-none font-bold">
-                      in
-                    </span>
-                    <span className="px-2 py-1 text-xs leading-none bg-white">
-                      LinkedIn
-                    </span>
-                  </span>
+                  <img
+                    src={linkedinIcon}
+                    alt=""
+                    className="h-8 w-8 shrink-0 rounded-full object-cover"
+                  />
                 </a>
               </article>
             ))}
