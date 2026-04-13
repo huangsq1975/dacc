@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom'
@@ -93,24 +93,73 @@ const teamMembers: TeamMember[] = [
   },
 ]
 
-function BioTooltip({ text }: { text: string }) {
+function FullBioModal({
+  member,
+  onClose,
+}: {
+  member: TeamMember
+  onClose: () => void
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose])
+
   return (
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl p-4 text-left z-50 pointer-events-none">
-      <div className="space-y-2">
-        {text.split('\n\n').map((para, i) => (
-          <p key={i} className="text-xs text-gray-600 leading-relaxed">
-            {para}
-          </p>
-        ))}
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-4"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="team-bio-modal-title"
+        className="flex max-h-[min(32rem,85vh)] w-full max-w-lg flex-col rounded-lg border border-gray-200 bg-white shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-gray-100 px-5 py-4">
+          <div className="min-w-0 text-left">
+            <h2 id="team-bio-modal-title" className="font-inter text-lg font-semibold text-[#0066cc]">
+              {member.name}
+            </h2>
+            <p className="font-inter text-xs uppercase tracking-widest text-gray-400">{member.title}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="shrink-0 rounded-md px-2 py-1 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4 [-webkit-overflow-scrolling:touch]">
+          <div className="space-y-3 text-left">
+            {member.fullBio.split('\n\n').map((para, i) => (
+              <p key={i} className="tf-body text-sm leading-relaxed text-gray-600">
+                {para}
+              </p>
+            ))}
+          </div>
+        </div>
       </div>
-      <div className="absolute top-full left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-gray-200 rotate-45 -mt-1.5" />
     </div>
   )
 }
 
 export default function TeamPage() {
   const navigate = useNavigate()
-  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
+  const [bioModalMember, setBioModalMember] = useState<TeamMember | null>(null)
+  const closeBioModal = useCallback(() => setBioModalMember(null), [])
 
   return (
     <div className="bg-white min-h-screen">
@@ -151,17 +200,15 @@ export default function TeamPage() {
                   {member.title}
                 </p>
 
-                <div
-                  className="relative mb-6"
-                  onMouseEnter={() => setActiveTooltip(member.name)}
-                  onMouseLeave={() => setActiveTooltip(null)}
-                >
-                  {activeTooltip === member.name && (
-                    <BioTooltip text={member.fullBio} />
-                  )}
-                  <p className="tf-body text-gray-500 text-sm leading-relaxed cursor-default underline decoration-dotted decoration-gray-400 underline-offset-2">
+                <div className="mb-6 w-full max-w-sm">
+                  <button
+                    type="button"
+                    onClick={() => setBioModalMember(member)}
+                    className="tf-body w-full text-center text-sm leading-relaxed text-gray-500 underline decoration-dotted decoration-gray-400 underline-offset-2 hover:text-gray-700"
+                  >
                     {member.oneLiner}
-                  </p>
+                  </button>
+                  <p className="mt-2 font-inter text-xs text-gray-400">點擊以閱讀完整簡介</p>
                 </div>
 
                 <a
@@ -192,6 +239,7 @@ export default function TeamPage() {
           </div>
         </section>
       </main>
+      {bioModalMember && <FullBioModal member={bioModalMember} onClose={closeBioModal} />}
       <Footer />
     </div>
   )
