@@ -4,7 +4,7 @@ import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import icon2 from '../../../icon2.png'
 import unLogo from '../../assets/Logo_of_the_United_Nations.svg'
-import aegisLogo from '../../assets/AEGIS.png'
+import aegisLogo from '../../assets/ATC_logo_stacked.png'
 
 function AnimatedSection({ children, className = '' }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
