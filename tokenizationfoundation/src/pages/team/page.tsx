@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom'
 
 type TeamMember = {
   name: string
-  bio: string
+  title: string
+  oneLiner: string
+  fullBio: string
   linkedin: string
   accent: string
 }
@@ -47,33 +50,57 @@ function LineAvatar({ seed, accent }: { seed: number; accent: string }) {
 
 const teamMembers: TeamMember[] = [
   {
-    name: 'Serra M. Kaya',
-    bio: 'Builds humanitarian and digital-finance partnerships to turn pledged capital into faster relief.',
-    linkedin: 'https://www.linkedin.com/in/serra-kaya',
+    name: 'Serena Wei',
+    title: 'Cofounder',
+    oneLiner: 'Bringing vision, strategy, and compassion to lead and scale the business.',
+    fullBio: "Serra's entrepreneurship journey started in 2017 when she was approached and given millions to start a digital asset custodian by an investor while she was investing at a San Francisco-based venture fund. Before that, she worked at Goldman Sachs and got her MBA from Stanford Business School.\n\nDACC.HK was founded by Serra as an international expansion effort. As a leader, she took a partnership integration strategy to align her vision with customers and investors. By truly listening to perspectives from people in Hong Kong, Chinese mainland and the globe, she navigates a nascent market with openhearted compassion, leading to new cooperation between parties for business growth and that benefits everyone. Several publicly traded companies which commit not only deep capital but strategic resources to DACC.HK now sit on its cap table including Starcoin Group (399.HK), Fosun (656.HK), TTL/Kingdom (600446.SH), Global Infotech (300465.SZ).\n\nAt Tokenization Foundation, Serra integrates human values into technology infrastructure to embrace a more holistic vision of progress that honors the complexities of our shared humanity. Her ability to use resources to heal, uplift, and meet the urgent challenges of our time uncovers new ways to drive systemic change and contribute to the collective good.",
+    linkedin: 'https://www.linkedin.com/in/serra-angel-wei-63118216/',
     accent: '#0066ff',
   },
   {
-    name: 'Lynne R. Foster',
-    bio: 'Leads product and operations to scale delivery with transparent governance and measurable impact.',
-    linkedin: 'https://www.linkedin.com/in/lynne-foster',
+    name: 'Lynne Marlor',
+    title: 'Cofounder',
+    oneLiner: 'Driving capital strategy, financial structuring, and investor relationships to create ecosystem value.',
+    fullBio: "Lynne Marlor is a capital markets, fintech, and asset management expert who transitioned from traditional finance into blockchain and digital assets after completing the Oxford Blockchain Strategy Programme in 2018. She brings deep expertise across digital assets, AI, tokenization, and Web3, and has built leading industry platforms including the Women in Digital Assets® Forum and the Boston Blockchain Association.\n\nCurrently, Lynne serves on the boards of Aegis Trust, South Dakota, and the Digital Asset Clearing Centre, Hong Kong, and leads Transformational Strategies, LLC, advising financial institutions globally. She previously served as a Managing Director at BNY Mellon, overseeing non-bank financial services across capital markets infrastructure.\n\nAt the Tokenization Foundation, Lynne is redesigning the humanitarian aid infrastructure using AI, blockchain, and digital assets to address massive fragmentation, inefficiency, and delays in global crisis funding systems.",
+    linkedin: 'https://www.linkedin.com/in/lynne-marlor-23a741a/',
     accent: '#005dec',
   },
   {
-    name: 'Anita S. Mehra',
-    bio: 'Designs tokenization frameworks that improve traceability and speed disbursement across teams.',
-    linkedin: 'https://www.linkedin.com/in/anita-mehra',
+    name: 'Anitha Vadavath',
+    title: 'AI & Investor Relations',
+    oneLiner: 'Driving ground-breaking AI, exceptional technologies, and tokenization.',
+    fullBio: "Driving AI, biotech, and exponential technologies and tokenization at the intersection of deeptech, capital, and global impact.\n\nAnitha Vadavatha brings over 20+ years of deep and hyphenated career across technology, venture capital, financial services, and global affairs. She is Founder and Managing Partner of AB Plus Ventures and Misu Labs, investing and building at the convergence of AI, biotech, and next-generation markets. She currently serves as Venture Partner at Sync.vc and Republic, Senior Advisor at Popstar Ventures and Kudish Family Office.\n\nFormerly a Partner at Urth Capital Advisors (Fund of Funds), a member of the Strategic advisory council of Shadow Ventures (Proptech VC), Managing Director of Emerging Star Capital, and an early and growth stage operator in two exited tech unicorns (EdCast, acquired, PartyGaming, IPO), her experience includes GE Capital, Big 4 payments/banking consulting, and advisory roles with AI, biotech and deeptech companies.\n\nAn alumna of Singularity University with executive education across global management and emerging markets, she was recognized as a \"Top Ten Frontier Woman\" by the UN–Fifth Element Group in partnership with Thomson Reuters and Morningstar. A global speaker and thought leader at 'Innovation, Science and Technology' forums, she was an invited delegate at the UN SDG, UNGA, IMF and World Bank Annual Meeting, and Davos.\n\nAt the Tokenization Foundation, Anitha is designing groundbreaking AI humanitarian aid infrastructure (Precision and Practitioner Adaptive Intelligence, or PPAI) and accelerating strategic capital and stakeholder development, interfacing with capital, organizations, and participants who are moving capital and capability together.",
+    linkedin: 'https://www.linkedin.com/in/anivadavath/',
     accent: '#0071bc',
   },
   {
-    name: 'Kerstin P. Holm',
-    bio: 'Drives AI-powered oversight and analytics for real-time decisions and stronger partner accountability.',
-    linkedin: 'https://www.linkedin.com/in/kerstin-holm',
+    name: 'Kerstin Krall Walz',
+    title: 'Marketing',
+    oneLiner: 'Shaping strategy, building brand, and generating leads to accelerate awareness and engagement.',
+    fullBio: "Kerstin is a marketing executive with deep experience in brand building and digital assets focusing on building awareness and procuring qualified leads.\n\nShe spent the first part of her career at \"Madison Avenue\" agencies including Saatchi & Saatchi and Young & Rubicam, working across megabrands such as Campbell's Soup Company, International Olympic Committee (IOC), The Star Alliance Network, Lufthansa Airlines, Smirnoff Vodka, and the United States Tennis Association/U.S. Open.\n\nMore recently, as Chief Marketing Officer at Digital Asset Research, Kerstin led global marketing strategy, positioning the firm as a leader in institutional-grade crypto data and driving partnerships with organizations such as FTSE Russell and Bloomberg. She has also contributed to strategic initiatives across the digital asset ecosystem, including work with Vigil Markets and Digital Ascension Group.\n\nShe brings a unique blend of brand strategy and growth execution, while translating complex cryptocurrency concepts into actionable insights for institutional audiences—including asset managers, custodians, index providers, hedge funds, and HNWIs.\n\nAt the Tokenization Foundation, Kerstin leads marketing to scale awareness and engagement for the world's first crisis capital infrastructure—where capital flows automatically fund disaster response and humanitarian relief.",
+    linkedin: 'https://www.linkedin.com/in/kerstin-krall-walz-00066415b/',
     accent: '#0066ff',
   },
 ]
 
+function BioTooltip({ text }: { text: string }) {
+  return (
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl p-4 text-left z-50 pointer-events-none">
+      <div className="space-y-2">
+        {text.split('\n\n').map((para, i) => (
+          <p key={i} className="text-xs text-gray-600 leading-relaxed">
+            {para}
+          </p>
+        ))}
+      </div>
+      <div className="absolute top-full left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-gray-200 rotate-45 -mt-1.5" />
+    </div>
+  )
+}
+
 export default function TeamPage() {
   const navigate = useNavigate()
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
   return (
     <div className="bg-white min-h-screen">
@@ -99,20 +126,32 @@ export default function TeamPage() {
 
                 <div className="w-px h-6 bg-[#005dec]/30 mb-4" aria-hidden="true" />
 
-                <h3 className="font-inter font-semibold text-[#0066cc] text-base mb-3">
+                <h3 className="font-inter font-semibold text-[#0066cc] text-base mb-1">
                   {member.name}
                 </h3>
-
-                <p className="tf-body text-gray-500 mb-6 min-h-[108px] text-sm leading-relaxed">
-                  {member.bio}
+                <p className="font-inter text-xs text-gray-400 uppercase tracking-widest mb-4">
+                  {member.title}
                 </p>
+
+                <div
+                  className="relative mb-6"
+                  onMouseEnter={() => setActiveTooltip(member.name)}
+                  onMouseLeave={() => setActiveTooltip(null)}
+                >
+                  {activeTooltip === member.name && (
+                    <BioTooltip text={member.fullBio} />
+                  )}
+                  <p className="tf-body text-gray-500 text-sm leading-relaxed cursor-default underline decoration-dotted decoration-gray-400 underline-offset-2">
+                    {member.oneLiner}
+                  </p>
+                </div>
 
                 <a
                   href={member.linkedin}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${member.name} LinkedIn`}
-                  className="inline-flex items-center gap-2 text-sm font-inter font-medium text-[#005dec] hover:text-[#0066cc] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-inter font-medium text-[#005dec] hover:text-[#0066cc] transition-colors mt-auto"
                 >
                   <span className="inline-flex items-center rounded border border-[#005dec] overflow-hidden">
                     <span className="bg-[#005dec] text-white px-2 py-1 text-xs leading-none font-bold">
