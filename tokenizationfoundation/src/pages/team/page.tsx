@@ -58,7 +58,7 @@ function LineAvatar({ seed, accent }: { seed: number; accent: string }) {
 
 const teamMembers: TeamMember[] = [
   {
-    name: 'Serena Wei',
+    name: 'Serra Wei',
     title: 'Cofounder',
     oneLiner: 'Bringing vision, strategy, and compassion to lead and scale the business.',
     fullBio: [
