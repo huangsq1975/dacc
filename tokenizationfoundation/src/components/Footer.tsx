@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import logoHoriz from '../assets/TK_Logo_Horiz_White_NoTag.png'
+import logoHoriz from '../assets/TK_Logo_Horiz_White_Tag.png'
 
 export default function Footer() {
   const navigate = useNavigate()
@@ -18,7 +18,7 @@ export default function Footer() {
               <img
                 src={logoHoriz}
                 alt="Tokenization Foundation"
-                className="h-8 w-auto object-contain scale-[3] object-left -translate-y-[10px]"
+                className="h-8 w-auto object-contain scale-[3] object-left translate-x-[40px] -translate-y-[10px]"
               />
             </button>
             <p className="text-sm leading-relaxed max-w-sm text-white/55 mt-8">
@@ -26,11 +26,11 @@ export default function Footer() {
               humanitarian aid is funded instantly, transparently, and at scale.
             </p>
             <a
-              href="mailto:info@tokenizationfoundation.com"
+              href="mailto:info@thetokenizationfoundation.com"
               className="mt-5 inline-flex items-center gap-2 text-sm text-white/55 hover:text-white transition-colors"
             >
               <i className="ri-mail-line text-base" />
-              info@tokenizationfoundation.com
+              info@thetokenizationfoundation.com
             </a>
           </div>
 
@@ -40,7 +40,6 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {[
-                { label: 'Approach', path: '/approach' },
                 { label: 'Team', path: '/team' },
                 { label: 'Contact', path: '/contact' },
               ].map(item => (

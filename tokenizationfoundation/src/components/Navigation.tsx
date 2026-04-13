@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import logoHoriz from '../assets/TK_Logo_Horiz_White_NoTag.png'
+import logoHoriz from '../assets/TK_Logo_Horiz_White_Tag.png'
 
 interface NavigationProps {
   sectionIds?: string[]
@@ -52,18 +52,19 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
                 <img
                   src={logoHoriz}
                   alt=""
-                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[2.5] object-left"
+                  className="h-9 sm:h-10 w-auto max-w-[140px] object-contain scale-[2.5] object-left translate-x-[30px]"
                 />
               </button>
             </div>
 
             <nav className="hidden lg:flex items-center gap-8">
-              <span className="tf-body text-white/60 cursor-default tracking-wide text-[0.9rem]">
-                Approach
-              </span>
-              <span className="tf-body text-white/60 cursor-default tracking-wide text-[0.9rem]">
+              <a
+                href="/team"
+                onClick={e => { e.preventDefault(); navigate('/team') }}
+                className="tf-body text-white/85 hover:text-white tracking-wide text-[0.9rem] transition-colors"
+              >
                 Team
-              </span>
+              </a>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact') }}
@@ -87,12 +88,13 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
         {mobileOpen && (
           <div className={`lg:hidden ${navBarBg} border-t border-white/10 mobile-menu-enter relative z-10`}>
             <nav className="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-1">
-              <span className="tf-body text-white/60 cursor-default py-3 border-b border-white/10 block">
-                Approach
-              </span>
-              <span className="tf-body text-white/60 cursor-default py-3 border-b border-white/10 block text-left">
+              <a
+                href="/team"
+                onClick={e => { e.preventDefault(); navigate('/team'); setMobileOpen(false) }}
+                className="tf-body text-white/85 hover:text-white py-3 border-b border-white/10 transition-colors"
+              >
                 Team
-              </span>
+              </a>
               <a
                 href="/contact"
                 onClick={e => { e.preventDefault(); navigate('/contact'); setMobileOpen(false) }}

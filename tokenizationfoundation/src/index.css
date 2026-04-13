@@ -18,6 +18,8 @@
 :root {
   --tf-h1: clamp(2.5rem, 0.75rem + 6vw, 4rem); /* ~40px–64px */
   --tf-h2: clamp(2.25rem, 1.35rem + 2.2vw, 2.625rem); /* ~36px–42px */
+  /* 長篇區塊標題於窄螢幕降階（仍為 DM Sans 階層，見 docs/ai-branding-rules.md §3、§6） */
+  --tf-h2-narrow: clamp(1.5rem, 1rem + 2vw, 1.875rem);
   --tf-h3: clamp(1.5rem, 1.15rem + 1vw, 1.75rem); /* ~24px–28px */
 }
 
@@ -69,6 +71,21 @@
   font-size: var(--tf-h2);
   line-height: 1.15;
   letter-spacing: -0.03em;
+}
+
+/* 與 .tf-headline 併用：<640px 使用 --tf-h2-narrow，sm+ 還原 --tf-h2（字族沿用 .tf-headline / DM Sans） */
+.tf-headline.tf-headline--narrow-sm {
+  font-size: var(--tf-h2-narrow);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .tf-headline.tf-headline--narrow-sm {
+    font-size: var(--tf-h2);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
 }
 
 .tf-subhead-layer {

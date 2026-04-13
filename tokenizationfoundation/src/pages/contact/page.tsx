@@ -279,7 +279,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { icon: 'ri-mail-line', label: 'Email', value: 'info@tokenizationfoundation.com', href: 'mailto:info@tokenizationfoundation.com' },
+              { icon: 'ri-mail-line', label: 'Email', value: 'info@thetokenizationfoundation.com', href: 'mailto:info@thetokenizationfoundation.com' },
               { icon: 'ri-linkedin-box-line', label: 'LinkedIn', value: 'Tokenization Foundation', href: 'https://www.linkedin.com/company/tokenization-foundation' },
               { icon: 'ri-map-pin-line', label: 'Registered', value: 'United States', href: '' },
             ].map(item => (
@@ -324,10 +324,10 @@ export default function Contact() {
                   <div>
                     <div className="text-sm text-gray-400 font-inter">Email</div>
                     <a
-                      href="mailto:info@tokenizationfoundation.com"
+                      href="mailto:info@thetokenizationfoundation.com"
                       className="text-sm font-inter font-medium text-navy-900 hover:text-tfblue transition-colors"
                     >
-                      info@tokenizationfoundation.com
+                      info@thetokenizationfoundation.com
                     </a>
                     <p className="mt-2 text-sm text-gray-400 font-inter">
                       Required fields are marked with <span className="text-tfblue font-semibold">*</span>.

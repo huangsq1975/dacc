@@ -80,12 +80,25 @@ export default function Home() {
 
             <div className="relative z-10 max-w-4xl">
               <div>
-                <h1 className="tf-h1 mb-8">
-                  <span className="text-white block sm:whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
-                  <span className="text-white/60 block sm:whitespace-nowrap">with AI, blockchain, and digital assets -</span>
-                  <span className="text-white block sm:whitespace-nowrap">so that humanitarian aid is funded</span>
-                  <span className="text-white block sm:whitespace-nowrap">instantly, transparently,</span>
-                  <span className="text-white block sm:whitespace-nowrap">and at scale.</span>
+                <h1 className="tf-h1 mb-8 max-sm:mb-7 max-sm:text-[clamp(1.5rem,0.85rem+3.6vw,1.875rem)] max-sm:leading-[1.35] max-sm:tracking-[-0.02em]">
+                  {/* Mobile: 三行分組、移除行尾連字號，閱讀節奏較清楚 */}
+                  <span className="flex flex-col gap-3 sm:hidden">
+                    <span className="text-white">Reimagining crisis capital infrastructure</span>
+                    <span className="text-white/60 font-semibold normal-case">
+                      with AI, blockchain, and digital assets
+                    </span>
+                    <span className="text-white">
+                      so that humanitarian aid is funded instantly, transparently, and at scale.
+                    </span>
+                  </span>
+                  {/* sm+：維持原五行排版 */}
+                  <span className="hidden sm:contents">
+                    <span className="text-white block sm:whitespace-nowrap">Reimagining crisis capital infrastructure -</span>
+                    <span className="text-white/60 block sm:whitespace-nowrap">with AI, blockchain, and digital assets -</span>
+                    <span className="text-white block sm:whitespace-nowrap">so that humanitarian aid is funded</span>
+                    <span className="text-white block sm:whitespace-nowrap">instantly, transparently,</span>
+                    <span className="text-white block sm:whitespace-nowrap">and at scale.</span>
+                  </span>
                 </h1>
 
                 <p className="text-[clamp(1.75rem,1.35rem+1.2vw,2.125rem)] font-semibold leading-[1.3] text-white mb-10 tracking-wide">
@@ -225,11 +238,18 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
 
-            <h2 className="tf-headline text-gray-900 mb-0 max-w-4xl">
-              Building The Infrastructure Ecosystem With Two Founding Governing Council Members
+            <h2 className="tf-headline tf-headline--narrow-sm font-sans text-gray-900 mb-0 max-w-4xl text-balance">
+              {/* 移動版：兩行語意分組，避免長句不自然斷行 */}
+              <span className="flex flex-col gap-2 sm:hidden">
+                <span>Building The Infrastructure Ecosystem</span>
+                <span>With Two Founding Governing Council Members</span>
+              </span>
+              <span className="hidden sm:inline">
+                Building The Infrastructure Ecosystem With Two Founding Governing Council Members
+              </span>
             </h2>
 
-            <div className="flex flex-wrap gap-12 mb-8 -mt-[60px]">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-1 sm:gap-10 lg:gap-12 mb-8 -mt-[60px]">
               <a
                 href="https://www.un.org/"
                 target="_blank"
