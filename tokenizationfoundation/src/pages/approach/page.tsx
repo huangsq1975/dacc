@@ -284,7 +284,6 @@ export default function Approach() {
                     rel="noreferrer"
                     className="inline-block mt-3 px-4 sm:px-5 pb-4 text-tfblue hover:underline tf-body"
                   >
-                    Open demo in a new tab
                   </a>
                 </div>
               </div>
