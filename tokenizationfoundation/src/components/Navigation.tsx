@@ -59,6 +59,13 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
 
             <nav className="hidden lg:flex items-center gap-8">
               <a
+                href="/approach"
+                onClick={e => { e.preventDefault(); navigate('/approach') }}
+                className="tf-body text-white/85 hover:text-white tracking-wide text-[0.9rem] transition-colors"
+              >
+                Approach
+              </a>
+              <a
                 href="/team"
                 onClick={e => { e.preventDefault(); navigate('/team') }}
                 className="tf-body text-white/85 hover:text-white tracking-wide text-[0.9rem] transition-colors"
@@ -88,6 +95,13 @@ export default function Navigation({ sectionIds, activeSection = 0, onDotClick }
         {mobileOpen && (
           <div className={`lg:hidden ${navBarBg} border-t border-white/10 mobile-menu-enter relative z-10`}>
             <nav className="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-1">
+              <a
+                href="/approach"
+                onClick={e => { e.preventDefault(); navigate('/approach'); setMobileOpen(false) }}
+                className="tf-body text-white/85 hover:text-white py-3 border-b border-white/10 transition-colors"
+              >
+                Approach
+              </a>
               <a
                 href="/team"
                 onClick={e => { e.preventDefault(); navigate('/team'); setMobileOpen(false) }}

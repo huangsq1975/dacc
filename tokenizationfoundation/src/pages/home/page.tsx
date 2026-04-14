@@ -287,7 +287,7 @@ export default function Home() {
       </section>
 
       {/* ===== JOIN THE MOVEMENT ===== */}
-      <section id="join" className="bg-white pt-0 pb-10 lg:pt-0 lg:pb-16">
+      <section id="join" className="bg-[#ecf0f3] pt-0 pb-10 lg:pt-0 lg:pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <AnimatedSection className="px-8 py-6 lg:px-12 lg:py-8">
             <h2 className="tf-headline text-gray-900 mb-7">

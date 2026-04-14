@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPAI Demo — Tokenization Foundation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F9FF;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:10px 12px;box-sizing:border-box;overflow:hidden}
+.wrap{width:100%;max-width:860px}
+.tog-bar{display:flex;background:#EEF2FF;border-radius:8px;padding:3px;margin-bottom:1.25rem}
+.tog{flex:1;padding:9px 8px;border-radius:6px;border:none;background:transparent;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:#64748B;transition:all .3s;line-height:1.2;text-align:center}
+.tog.on{background:#1565FF;color:#fff;box-shadow:0 2px 6px rgba(21,101,255,.3)}
+.prog-row{display:flex;align-items:flex-start;gap:0;margin-bottom:1.25rem}
+.ps{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.ps-dot{width:30px;height:30px;border-radius:50%;border:2px solid #CBD5E1;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#94A3B8;transition:all .4s;position:relative;z-index:1}
+.ps.dn .ps-dot{background:#1565FF;border-color:#1565FF;color:#fff}
+.ps.on .ps-dot{background:#fff;border-color:#1565FF;color:#1565FF;box-shadow:0 0 0 4px rgba(21,101,255,.15)}
+.ps-lbl{font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:#94A3B8;text-align:center;line-height:1.3;max-width:72px;font-weight:500;transition:color .3s}
+.ps.dn .ps-lbl,.ps.on .ps-lbl{color:#1565FF}
+.pl{flex:1;height:2px;background:#E2E8F0;margin-top:14px;position:relative}
+.plf{position:absolute;left:0;top:0;height:100%;background:#1565FF;transition:width .5s ease}
+.card{border:1px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card-inner{display:grid;grid-template-columns:1fr 1fr;min-height:300px}
+.cl{padding:24px 22px;border-right:1px solid #F1F5F9;display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#1565FF;display:flex;align-items:center;gap:6px}
+.edot{width:6px;height:6px;border-radius:50%;background:#1565FF;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ctitle{font-size:16px;font-weight:600;color:#0F172A;line-height:1.35;transition:opacity .3s}
+.cbody{font-size:13px;color:#475569;line-height:1.65;flex:1;transition:opacity .3s}
+.cbody strong{color:#0F172A;font-weight:600}
+.timer-row{display:flex;align-items:center;gap:10px}
+.timer-bar-wrap{flex:1;height:3px;background:#E2E8F0;border-radius:2px;overflow:hidden}
+.timer-bar{height:100%;background:#1565FF;width:0%;transition:width linear}
+.timer-lbl{font-size:10px;color:#94A3B8;white-space:nowrap;font-weight:500}
+.ctrl-btn{padding:7px 14px;font-size:11px;font-weight:600;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .15s;border:1.5px solid #E2E8F0;background:#fff;color:#64748B}
+.ctrl-btn:hover{border-color:#1565FF;color:#1565FF}
+.cr{background:#F8FAFF;padding:18px;display:flex;align-items:center;justify-content:center}
+.scr{width:100%;max-width:285px;background:#fff;border-radius:10px;border:1px solid #E2E8F0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.sh{padding:9px 13px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;justify-content:space-between;background:#F8FAFF}
+.sh-dot{width:6px;height:6px;border-radius:50%;background:#1565FF}
+.sh-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#94A3B8;font-weight:500}
+.sb{padding:14px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F8FAFF;font-size:12px}
+.row:last-child{border:none}
+.rl{color:#64748B}.rv{color:#0F172A;font-weight:500}
+.rv-blue{color:#1565FF;font-weight:500}.rv-green{color:#16A34A;font-weight:500}.rv-or{color:#EA580C;font-weight:500}
+.big-num{font-size:28px;font-weight:700;color:#0F172A;margin:6px 0 2px}
+.lbl-sm{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#94A3B8;font-weight:500}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.b-blue{background:#EEF2FF;color:#1565FF}.b-green{background:#DCFCE7;color:#16A34A}.b-or{background:#FFF7ED;color:#EA580C}
+.ent-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.ent{border:1.5px solid #E2E8F0;border-radius:8px;padding:9px}
+.ent-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#94A3B8;margin-bottom:4px}
+.ent-id{font-size:13px;font-weight:700;color:#0F172A;margin-bottom:2px}
+.ent-ty{font-size:10px;color:#1565FF;font-weight:500}
+.claim-btn{width:100%;padding:9px;background:#1565FF;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:default;margin-top:2px}
+.ai-box{background:#EEF2FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px;margin-top:10px}
+.ai-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#1565FF;font-weight:600;margin-bottom:5px}
+.ai-txt{font-size:11px;color:#1E40AF;line-height:1.5}
+.bars{display:flex;align-items:flex-end;gap:3px;height:55px;margin:10px 0}
+.bar{flex:1;border-radius:2px 2px 0 0;background:#E2E8F0}.bar.on{background:#1565FF}
+.flag{border-left:2.5px solid #1565FF;padding:6px 9px;background:#F8FAFF;border-radius:0 6px 6px 0;margin-bottom:6px}
+.flag-id{font-size:10px;font-weight:600;color:#1565FF;letter-spacing:.08em;margin-bottom:2px}
+.flag-desc{font-size:11px;color:#475569;line-height:1.4}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mc{border:1px solid #E2E8F0;border-radius:8px;padding:9px;background:#F8FAFF}
+.pp-bar{display:flex;border-top:1px solid #E2E8F0;background:#F8FAFF}
+.pp{flex:1;padding:9px 6px;text-align:center;border-right:1px solid #E2E8F0;transition:background .35s}
+.pp:last-child{border-right:none}
+.pp.on{background:#EEF2FF}
+.pp-n{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#94A3B8;font-weight:500;transition:color .35s}
+.pp.on .pp-n{color:#1565FF;font-weight:600}
+.pp-s{font-size:9px;color:#CBD5E1;margin-top:1px;transition:color .35s}
+.pp.on .pp-s{color:#64748B}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tog-bar">
+  <button class="tog on" id="t0">Participant — H.O.M.E.</button>
+  <button class="tog" id="t1">Practitioner — PPAI in Action</button>
+  <button class="tog" id="t2">Funder — PPAI Ecosystem</button>
+</div>
+<div class="prog-row" id="pr"></div>
+<div class="card">
+  <div class="card-inner">
+    <div class="cl">
+      <div class="eyebrow"><span class="edot"></span><span id="ey"></span></div>
+      <div class="ctitle" id="ct"></div>
+      <div class="cbody" id="cb"></div>
+      <div class="timer-row">
+        <div class="timer-bar-wrap"><div class="timer-bar" id="tb"></div></div>
+        <span class="timer-lbl" id="tl">Next in 5s</span>
+        <button class="ctrl-btn" id="pb" onclick="togglePause()">Pause</button>
+      </div>
+    </div>
+    <div class="cr" id="scr"></div>
+  </div>
+  <div class="pp-bar">
+    <div class="pp" id="pp0"><div class="pp-n">Sense</div><div class="pp-s">Context</div></div>
+    <div class="pp" id="pp1"><div class="pp-n">Generate</div><div class="pp-s">Skills</div></div>
+    <div class="pp" id="pp2"><div class="pp-n">Orchestrate</div><div class="pp-s">Actions</div></div>
+    <div class="pp" id="pp3"><div class="pp-n">Evolve</div><div class="pp-s">Outcomes</div></div>
+  </div>
+</div>
+</div>
+
+<script>
+const D=[
+ {steps:['Access Support','Claim Benefits','Receive Assistance','Track Wellbeing'],
+  data:[
+   {ey:'H.O.M.E. — Step 01',ct:'Maria connects. AI assesses her needs in real time.',
+    cb:'Maria opens the PAAI app. Within seconds, the AI Guide reads her profile and identifies <strong>3 programs she qualifies for</strong> — medication support, nutrition assistance, and crisis housing. No forms. No waiting room.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">PAAI App — AI Guide Ready</span></div><div class="sb"><div class="lbl-sm">Available Entitlements</div><div class="big-num">3</div><div class="lbl-sm" style="margin-bottom:12px">Programs Matched</div><div class="ai-box"><div class="ai-lbl">AI Guide</div><div class="ai-txt">Based on your profile, I've found 3 programs you qualify for. I recommend starting with medication support.</div></div></div></div>`},
+   {ey:'H.O.M.E. — Step 02',ct:'Entitlements tokenized. One tap to claim.',
+    cb:'AI surfaces two matched entitlements. Each is tokenized for secure, transparent access. No paperwork, no office visit — <strong>Maria claims both in under 60 seconds</strong>.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Claim Benefits</span></div><div class="sb"><div class="lbl-sm" style="margin-bottom:8px">Your Entitlements</div><div class="ent-grid"><div class="ent"><div class="ent-lbl">Entitlement</div><div class="ent-id">#00P42E</div><div class="ent-ty">Tokenized Aid</div></div><div class="ent"><div class="ent-lbl">Entitlement</div><div class="ent-id">#00C48C</div><div class="ent-ty">Tokenized Aid</div></div></div><button class="claim-btn">Quick-Claim Tokenized Aid</button></div></div>`},
+   {ey:'H.O.M.E. — Step 03',ct:'QR scan at the pharmacy. Aid applied instantly.',
+    cb:'Maria presents her QR code at the counter. Tokenized aid is verified and applied in seconds. <strong>$127.50 in medication covered.</strong> No vouchers. No cashier override.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Transaction Complete</span></div><div class="sb"><div class="row"><span class="rl">Status</span><span class="badge b-green">Verified</span></div><div class="row"><span class="rl">Entitlement</span><span class="rv">#00P42E</span></div><div class="row"><span class="rl">Amount Applied</span><span class="rv-blue">$127.50</span></div><div class="row"><span class="rl">Method</span><span class="rv">QR — Instant</span></div><div class="row"><span class="rl">Delays</span><span class="rv-green">Zero</span></div></div></div>`},
+   {ey:'H.O.M.E. — Step 04',ct:'AI tracks wellbeing. Support evolves with Maria.',
+    cb:'The AI Guide checks in weekly. <strong>Support adjusts automatically</strong> as her situation changes — more when she needs it, less as she stabilises. The system learns with her.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Wellbeing Tracker</span></div><div class="sb"><div class="lbl-sm">Progress — Week 3 / 12</div><div class="bars"><div class="bar" style="height:35%"></div><div class="bar" style="height:48%"></div><div class="bar on" style="height:62%"></div><div class="bar" style="height:44%"></div><div class="bar" style="height:56%"></div><div class="bar" style="height:68%"></div><div class="bar on" style="height:78%"></div></div><div class="ai-box"><div class="ai-lbl">AI Guide</div><div class="ai-txt">Aid adjusted: nutrition entitlement increased 20% based on your progress data.</div></div></div></div>`}
+  ]},
+ {steps:['Monitor','Guide','Deliver','Evaluate'],
+  data:[
+   {ey:'PPAI in Action — Step 01',ct:'Predictive signals surface needs before they escalate.',
+    cb:'PPAI continuously analyses fund flows across the entire caseload. <strong>3 cases flagged for urgent follow-up</strong> — no manual review needed.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Caseload Intelligence</span></div><div class="sb"><div class="row"><span class="rl">Active Cases</span><span class="rv">47</span></div><div class="row"><span class="rl">Flagged</span><span class="badge b-or">3 Urgent</span></div><div style="margin-top:10px"><div class="flag"><div class="flag-id">Case #0441</div><div class="flag-desc">Medication gap — 4 days without refill</div></div><div class="flag"><div class="flag-id">Case #0389</div><div class="flag-desc">Nutrition entitlement expiring in 48hrs</div></div></div></div></div>`},
+   {ey:'PPAI in Action — Step 02',ct:'Tailored intervention protocols. Not generic playbooks.',
+    cb:'For every flagged case, PPAI generates a precision protocol matched to that individual. <strong>The practitioner approves — the system does the rest.</strong>',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Case #0441 — AI Protocol</span></div><div class="sb"><div class="row"><span class="rl">Priority</span><span class="badge b-or">Immediate</span></div><div class="row"><span class="rl">Entitlement</span><span class="rv-blue">#00P42E Ready</span></div><div class="row"><span class="rl">Skill Gap</span><span class="rv">Health Protocol</span></div><div class="ai-box"><div class="ai-lbl">AI Guide</div><div class="ai-txt">Medication refill window closing. Deploying now prevents a crisis in 72hrs.</div></div></div></div>`},
+   {ey:'PPAI in Action — Step 03',ct:'Zero manual gatekeeping. Full traceability.',
+    cb:'Tokenized aid distributed to verified recipients in real time. <strong>$2,340 disbursed across 7 participants</strong> — every dollar on-chain, verified, traceable.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Delivery Ledger</span></div><div class="sb"><div class="lbl-sm">Disbursed This Session</div><div class="big-num">$2,340</div><div class="row"><span class="rl">Recipients</span><span class="rv">7 Verified</span></div><div class="row"><span class="rl">Approvals</span><span class="badge b-green">Auto — 0 Delays</span></div><div class="row"><span class="rl">On-Chain</span><span class="rv-green">100%</span></div></div></div>`},
+   {ey:'PPAI in Action — Step 04',ct:'Every transfer paired with capability data.',
+    cb:'Outcomes update continuously. Fund utilisation and capability data build a longitudinal impact record — automatically. <strong>Reporting burden drops 78%.</strong>',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Impact Metrics</span></div><div class="sb"><div class="mg"><div class="mc"><div class="lbl-sm">Utilisation</div><div class="big-num" style="font-size:22px">94%</div></div><div class="mc"><div class="lbl-sm">Capability</div><div class="big-num" style="font-size:22px">3.2×</div></div></div><div class="row" style="margin-top:10px"><span class="rl">Admin Burden</span><span class="rv-green">↓ 78%</span></div><div class="row"><span class="rl">Manual Reports</span><span class="rv-green">Zero</span></div></div></div>`}
+  ]},
+ {steps:['Sense','Generate','Orchestrate','Evolve'],
+  data:[
+   {ey:'PPAI Ecosystem — Step 01',ct:'Need signals read across every dimension, simultaneously.',
+    cb:'PPAI reads geographic, contextual, and temporal signals. <strong>14,000+ signals processed per hour.</strong> The system knows where capital should move before anyone asks.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Need Intelligence — Live</span></div><div class="sb"><div class="row"><span class="rl">Signals / Hour</span><span class="rv-blue">14,203</span></div><div style="margin-top:8px"><div class="flag"><div class="flag-id">Midwest — Zone 4</div><div class="flag-desc">Nutrition gap ↑ 34% vs last cycle</div></div><div class="flag"><div class="flag-id">Urban Core — Zone 2</div><div class="flag-desc">Medication demand spike — 128 households</div></div></div></div></div>`},
+   {ey:'PPAI Ecosystem — Step 02',ct:'Skills created on demand. Not stored in a library.',
+    cb:'PPAI dynamically generates skills matched to each situation. <strong>847 skills deployed this cycle.</strong> Not a catalog. Generated fresh, at scale.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Skill Engine — Active</span></div><div class="sb"><div class="lbl-sm">Skills Deployed This Cycle</div><div class="big-num">847</div><div class="row"><span class="rl">Financial Literacy</span><span class="rv">312</span></div><div class="row"><span class="rl">Health Protocol</span><span class="rv">241</span></div><div class="row"><span class="rl">Legal Understanding</span><span class="rv">187</span></div><div class="row"><span class="rl">Other</span><span class="rv">107</span></div></div></div>`},
+   {ey:'PPAI Ecosystem — Step 03',ct:'Capital and capability move together. Automatically.',
+    cb:'Resources routed to the right participant, at the right moment. <strong>$1.2M routed this cycle.</strong> Zero manual gates. Zero committee delays.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Allocation Engine</span></div><div class="sb"><div class="lbl-sm">Routed This Cycle</div><div class="big-num">$1.2M</div><div class="row"><span class="rl">Routing</span><span class="badge b-green">Real-time</span></div><div class="row"><span class="rl">Manual Gates</span><span class="rv-green">Zero</span></div><div class="row"><span class="rl">Leakage Reduction</span><span class="rv-green">↓ 97%</span></div></div></div>`},
+   {ey:'PPAI Ecosystem — Step 04',ct:'Every outcome teaches the system. Impact compounds.',
+    cb:'Each cycle, PPAI learns. <strong>12% efficiency gain. 4.7× ROI per dollar.</strong> A payment moves once. A skill multiplies.',
+    sc:`<div class="scr"><div class="sh"><span class="sh-dot"></span><span class="sh-lbl">Impact — Longitudinal</span></div><div class="sb"><div class="mg"><div class="mc"><div class="lbl-sm">Cycle Gain</div><div class="big-num" style="font-size:22px">+12%</div></div><div class="mc"><div class="lbl-sm">ROI / $</div><div class="big-num" style="font-size:22px">4.7×</div></div></div><div class="bars" style="margin-top:12px"><div class="bar" style="height:30%"></div><div class="bar" style="height:38%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:54%"></div><div class="bar" style="height:62%"></div><div class="bar" style="height:71%"></div><div class="bar on" style="height:82%"></div></div><div class="lbl-sm">Compounding impact — 7 cycles</div></div></div>`}
+  ]}
+];
+
+let v=0,s=0,paused=false,ticker=null,elapsed=0;
+const STEP_DURATION=5000,TICK=50;
+
+function render(animate){
+  const sd=D[v].data[s];
+  document.getElementById('ey').textContent=sd.ey;
+  document.getElementById('ct').textContent=sd.ct;
+  document.getElementById('cb').innerHTML=sd.cb;
+  if(animate!==false) document.getElementById('scr').innerHTML=sd.sc;
+  [0,1,2].forEach(i=>{
+    const t=document.getElementById('t'+i);
+    t.classList.toggle('on',i===v);
+  });
+  const pr=document.getElementById('pr');
+  let h='';
+  D[v].steps.forEach((lbl,i)=>{
+    let cls='ps';
+    if(i<s)cls+=' dn';
+    if(i===s)cls+=' on';
+    h+=`<div class="${cls}"><div class="ps-dot">${i<s?'✓':i+1}</div><div class="ps-lbl">${lbl}</div></div>`;
+    if(i<3)h+=`<div class="pl"><div class="plf" style="width:${i<s?100:0}%"></div></div>`;
+  });
+  pr.innerHTML=h;
+  for(let i=0;i<4;i++) document.getElementById('pp'+i).classList.toggle('on',i===s);
+}
+
+function advance(){
+  s++;
+  if(s>3){s=0;v=(v+1)%3;}
+  elapsed=0;
+  render();
+}
+
+function startTicker(){
+  clearInterval(ticker);
+  ticker=setInterval(()=>{
+    if(paused)return;
+    elapsed+=TICK;
+    const pct=Math.min(100,(elapsed/STEP_DURATION)*100);
+    document.getElementById('tb').style.width=pct+'%';
+    const rem=Math.max(0,Math.ceil((STEP_DURATION-elapsed)/1000));
+    document.getElementById('tl').textContent=rem>0?`Next in ${rem}s`:'Advancing...';
+    if(elapsed>=STEP_DURATION) advance();
+  },TICK);
+}
+
+function togglePause(){
+  paused=!paused;
+  document.getElementById('pb').textContent=paused?'Play':'Pause';
+}
+
+document.getElementById('t0').onclick=()=>{v=0;s=0;elapsed=0;render();};
+document.getElementById('t1').onclick=()=>{v=1;s=0;elapsed=0;render();};
+document.getElementById('t2').onclick=()=>{v=2;s=0;elapsed=0;render();};
+
+function notifyParentHeight(){
+  if(window.parent===window)return;
+  const h=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
+  window.parent.postMessage({type:'ppai-demo-height',height:Math.ceil(h)},'*');
+}
+
+function scheduleNotify(){
+  requestAnimationFrame(()=>{requestAnimationFrame(notifyParentHeight);});
+}
+
+const _render=render;
+render=function(animate){
+  _render(animate);
+  scheduleNotify();
+};
+
+window.addEventListener('resize',scheduleNotify);
+window.addEventListener('load',scheduleNotify);
+if(typeof ResizeObserver!=='undefined'){
+  new ResizeObserver(scheduleNotify).observe(document.documentElement);
+}
+
+render();
+startTicker();
+scheduleNotify();
+</script>
+</body>
+</html>
