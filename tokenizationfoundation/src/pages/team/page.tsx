@@ -232,7 +232,7 @@ const teamMembers: TeamMember[] = [
         { text: 'At the ', bold: false },
         { text: 'Tokenization Foundation', bold: true },
         {
-          text: ", Kerstin leads marketing to scale awareness and engagement for the world's first crisis capital infrastructure—where capital flows automatically fund disaster response and humanitarian relief.",
+          text: ", Kerstin leads marketing to scale awareness and engagement for the world’s first tokenized crisis capital infrastructure—where capital flows automatically fund disaster response and humanitarian relief.",
           bold: false,
         },
       ],
