@@ -24,10 +24,11 @@ function PpaiDemoIframe() {
     <iframe
       title="PPAI demo autoplay"
       src="/ppai_demo_autoplay.html"
-      className="block w-full max-w-full border-0 outline-none ring-0"
+      className="block w-full min-w-0 max-w-full border-0 outline-none ring-0"
       scrolling="no"
       style={{
-        overflow: 'hidden',
+        overflow: 'auto',
+        WebkitOverflowScrolling: 'touch',
         height: heightPx != null ? `${heightPx}px` : 'min(70vh, 640px)',
       }}
     />
@@ -196,7 +197,7 @@ export default function Approach() {
                 />
 
                 <div className="rounded-lg bg-white">
-                  <div className="w-full overflow-hidden">
+                  <div className="w-full min-w-0">
                     <PpaiDemoIframe />
                   </div>
                   <a
