@@ -2,9 +2,7 @@ import { useRef, useState, useEffect, type ReactNode } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
-import icon2 from '../../../icon2.png'
-import unLogo from '../../assets/Logo_of_the_United_Nations.svg'
-import aegisLogo from '../../assets/ATC_logo_stacked.png'
+import icon2 from '../../assets/icon2.png'
 
 function AnimatedSection({ children, className = '' }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -231,59 +229,6 @@ export default function Home() {
           </AnimatedSection>
         </div>
 
-      </section>
-
-      {/* ===== GOVERNING COUNCIL / PARTNERS ===== */}
-      <section id="council" className="bg-white pt-10 pb-0 lg:pt-16 lg:pb-0">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="px-8 py-8 lg:px-12 lg:py-10">
-
-            <h2 className="tf-headline tf-headline--narrow-sm font-sans text-gray-900 mb-6 max-w-4xl text-balance">
-              Collaborating To Build The Infrastructure
-            </h2>
-
-            <div className="max-w-3xl mb-8">
-              <p className="tf-body text-gray-600">
-                The Tokenization Foundation started as a collaboration when the United Nations approached
-                Aegis Trust Company, a South Dakota public trust company, to address long-standing
-                inefficiencies in crisis relief infrastructure. Together with the UN, the Tokenization
-                Foundation has applied for the Melinda Gates WIN Grant to fulfill the mission of crisis
-                relief/aid delivered swiftly and accurately.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center sm:justify-start gap-1 sm:gap-10 lg:gap-12 mb-8">
-              <a
-                href="https://www.un.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005dec] focus-visible:ring-offset-2 rounded"
-              >
-                <img
-                  src={unLogo}
-                  alt="United Nations"
-                  className="absolute left-1/2 bottom-0 w-64 h-64 -translate-x-1/2 translate-y+26 object-contain"
-                />
-              </a>
-
-              <a
-                href="https://www.aegiscustody.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative block h-64 w-64 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005dec] focus-visible:ring-offset-2 rounded"
-              >
-                <img
-                  src={aegisLogo}
-                  alt="Aegis Trust"
-                  className="absolute left-1/2 bottom-0 w-64 h-64 -translate-x-1/2 translate-y+26 object-contain"
-                />
-              </a>
-            </div>
-
-            <hr className="border-0 h-px bg-gray-200 mb-0" />
-
-          </AnimatedSection>
-        </div>
       </section>
 
       {/* ===== JOIN THE MOVEMENT ===== */}
