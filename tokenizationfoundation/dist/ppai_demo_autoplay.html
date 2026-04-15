@@ -273,6 +273,27 @@ if(typeof ResizeObserver!=='undefined'){
   if(w) new ResizeObserver(scheduleNotify).observe(w);
 }
 
+function applyWidth(w){
+  const ci=document.querySelector('.card-inner');
+  const cl=document.querySelector('.cl');
+  const cr=document.querySelector('.cr');
+  const scr=document.querySelector('.scr');
+  if(!ci)return;
+  const narrow=w>0&&w<560;
+  ci.style.gridTemplateColumns=narrow?'1fr':'';
+  ci.style.minHeight=narrow?'0':'';
+  if(cl){cl.style.borderRight=narrow?'none':'';cl.style.borderBottom=narrow?'1px solid #F1F5F9':'';}
+  if(cr){cr.style.padding=narrow?'14px 12px':'';cr.style.alignItems=narrow?'stretch':'';}
+  if(scr){scr.style.maxWidth=narrow?'100%':'';scr.style.width=narrow?'100%':'';}
+  scheduleNotify();
+}
+
+window.addEventListener('message',function(e){
+  if(e.data&&e.data.type==='ppai-iframe-width'&&typeof e.data.width==='number'){
+    applyWidth(e.data.width);
+  }
+});
+
 render();
 startTicker();
 scheduleNotify();

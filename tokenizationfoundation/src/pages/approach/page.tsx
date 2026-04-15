@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import humanFlowPng from '../../assets/927f947e-905b-4115-ad60-377fb49ee898.png'
@@ -7,6 +7,14 @@ const PPAI_HEIGHT_MSG = 'ppai-demo-height'
 
 function PpaiDemoIframe() {
   const [heightPx, setHeightPx] = useState<number | null>(null)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  const sendWidth = () => {
+    const el = iframeRef.current
+    if (!el) return
+    const w = el.getBoundingClientRect().width
+    el.contentWindow?.postMessage({ type: 'ppai-iframe-width', width: w }, '*')
+  }
 
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
@@ -17,15 +25,21 @@ function PpaiDemoIframe() {
       setHeightPx(Math.max(120, Math.min(8000, Math.ceil(data.height))))
     }
     window.addEventListener('message', onMessage)
-    return () => window.removeEventListener('message', onMessage)
+    window.addEventListener('resize', sendWidth)
+    return () => {
+      window.removeEventListener('message', onMessage)
+      window.removeEventListener('resize', sendWidth)
+    }
   }, [])
 
   return (
     <iframe
+      ref={iframeRef}
       title="PPAI demo autoplay"
       src="/ppai_demo_autoplay.html"
       className="block w-full min-w-0 max-w-full border-0 outline-none ring-0"
       scrolling="no"
+      onLoad={sendWidth}
       style={{
         overflow: 'auto',
         WebkitOverflowScrolling: 'touch',
