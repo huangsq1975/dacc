@@ -21,8 +21,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ps.dn .ps-lbl,.ps.on .ps-lbl{color:#1565FF}
 .pl{flex:1;height:2px;background:#E2E8F0;margin-top:14px;position:relative}
 .plf{position:absolute;left:0;top:0;height:100%;background:#1565FF;transition:width .5s ease}
-.card{border:1px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.card-inner{display:grid;grid-template-columns:1fr 1fr;min-height:300px}
+.card{border:1px solid #E2E8F0;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden}
+.card-inner{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));min-height:300px}
 .card-inner>.cl,.card-inner>.cr{min-width:0}
 .cl{padding:24px 22px;border-right:1px solid #F1F5F9;display:flex;flex-direction:column;gap:14px}
 .eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#1565FF;display:flex;align-items:center;gap:6px}
@@ -77,7 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pp-s{font-size:9px;color:#CBD5E1;margin-top:1px;transition:color .35s}
 .pp.on .pp-s{color:#64748B}
 @media (max-width:900px){
-.card-inner{grid-template-columns:1fr;min-height:0}
+.card-inner{min-height:0}
 .cl{border-right:none;border-bottom:1px solid #F1F5F9;padding:18px 16px}
 .cr{padding:14px 12px;align-items:stretch}
 .scr{max-width:100%;width:100%}
@@ -91,6 +91,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ent-grid,.mg{grid-template-columns:1fr}
 .timer-row{gap:8px}
 .timer-lbl{white-space:normal;text-align:right}
+}
+@media (max-width:600px){
+.card-inner{grid-template-columns:1fr}
+.cl{border-right:none;border-bottom:1px solid #F1F5F9}
+.scr{max-width:100%;width:100%}
 }
 </style>
 </head>
