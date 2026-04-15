@@ -41,7 +41,7 @@ export default function Approach() {
 
       <main className="pt-24 sm:pt-28 pb-16 sm:pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 sm:mb-8 px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-center">
+          <div className="mb-3 sm:mb-4 px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-center">
             <h1 className="tf-headline text-black leading-snug">
               <span className="block">Reimagining A Fully Tokenized Ecosystem For</span>
               <span className="block">Humanitarian Aid Capital</span>
@@ -49,14 +49,14 @@ export default function Approach() {
           </div>
         </div>
 
-        <section className="relative tf-section bg-[#ecf0f3]">
+        <section className="relative w-full bg-[#ecf0f3] pt-3 sm:pt-4 lg:pt-6 pb-10 lg:pb-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="p-4 sm:p-6 lg:p-8">
+            <div className="px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 lg:pt-5 pb-4 sm:pb-6 lg:pb-8">
               <div className="w-full overflow-hidden rounded-xl bg-[#F0F4FF] ring-1 ring-black/5">
                 <iframe
                   title="Tokenized ecosystem diagram"
                   src="/Tokens.html"
-                  className="block w-full min-h-[920px] border-0"
+                  className="block w-full min-h-[920px] border-0 -translate-y-[30px]"
                   scrolling="no"
                 />
               </div>

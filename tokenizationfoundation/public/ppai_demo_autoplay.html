@@ -23,6 +23,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .plf{position:absolute;left:0;top:0;height:100%;background:#1565FF;transition:width .5s ease}
 .card{border:1px solid #E2E8F0;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .card-inner{display:grid;grid-template-columns:1fr 1fr;min-height:300px}
+.card-inner>.cl,.card-inner>.cr{min-width:0}
 .cl{padding:24px 22px;border-right:1px solid #F1F5F9;display:flex;flex-direction:column;gap:14px}
 .eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#1565FF;display:flex;align-items:center;gap:6px}
 .edot{width:6px;height:6px;border-radius:50%;background:#1565FF;animation:pulse 2s infinite}
@@ -75,6 +76,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pp.on .pp-n{color:#1565FF;font-weight:600}
 .pp-s{font-size:9px;color:#CBD5E1;margin-top:1px;transition:color .35s}
 .pp.on .pp-s{color:#64748B}
+@media (max-width:640px){
+html,body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card-inner{grid-template-columns:1fr;min-height:0}
+.cl{border-right:none;border-bottom:1px solid #F1F5F9;padding:18px 16px}
+.cr{padding:14px 12px;align-items:stretch}
+.scr{max-width:100%;width:100%}
+.cbody{word-break:break-word;overflow-wrap:anywhere}
+.tog{font-size:11px;padding:8px 6px}
+.prog-row{flex-wrap:wrap;gap:6px 4px}
+.ps-lbl{max-width:none;font-size:9px}
+.pl{min-width:24px}
+.pp-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;justify-content:flex-start}
+.pp{flex:1 0 auto;min-width:70px}
+}
 </style>
 </head>
 <body>
