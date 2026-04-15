@@ -92,7 +92,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .timer-row{gap:8px}
 .timer-lbl{white-space:normal;text-align:right}
 }
-@media (max-width:600px){
+@media (max-width:900px){
 .card-inner{grid-template-columns:1fr}
 .cl{border-right:none;border-bottom:1px solid #F1F5F9}
 .scr{max-width:100%;width:100%}
@@ -282,7 +282,7 @@ function applyWidth(w){
   const cr=document.querySelector('.cr');
   const scr=document.querySelector('.scr');
   if(!ci)return;
-  const narrow=w>0&&w<560;
+  const narrow=w>0&&w<900;
   ci.style.gridTemplateColumns=narrow?'1fr':'';
   ci.style.minHeight=narrow?'0':'';
   if(cl){cl.style.borderRight=narrow?'none':'';cl.style.borderBottom=narrow?'1px solid #F1F5F9':'';}
