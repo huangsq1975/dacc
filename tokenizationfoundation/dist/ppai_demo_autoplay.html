@@ -273,6 +273,9 @@ if(typeof ResizeObserver!=='undefined'){
   if(w) new ResizeObserver(scheduleNotify).observe(w);
 }
 
+// Apply responsive layout based on actual physical iframe width sent from parent.
+// This bypasses iOS Safari's iframe viewport issue where the iframe content
+// renders at 980px regardless of the iframe's actual CSS width.
 function applyWidth(w){
   const ci=document.querySelector('.card-inner');
   const cl=document.querySelector('.cl');
