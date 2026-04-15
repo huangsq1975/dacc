@@ -57,7 +57,7 @@ export default function Approach() {
                 <iframe
                   title="Tokenized ecosystem diagram"
                   src="/Tokens.html"
-                  className="block w-full min-h-[920px] border-0 -translate-y-[30px]"
+                  className="block w-full min-h-[920px] border-0"
                   scrolling="no"
                 />
               </div>
