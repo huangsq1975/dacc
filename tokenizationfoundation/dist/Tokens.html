@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokenized Ecosystem</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4FF;padding:20px 16px 32px}
+.eco{max-width:640px;margin:0 auto}
+
+/* Page title */
+.eco-title{text-align:center;margin-bottom:6px}
+.eco-title h2{font-size:22px;font-weight:700;color:#0F172A;letter-spacing:-.02em}
+.eco-title p{font-size:12px;color:#64748B;margin-top:3px}
+
+.ai-banner{display:flex;align-items:center;justify-content:center;gap:7px;background:#EEF2FF;border:1px solid #BFDBFE;border-radius:20px;padding:6px 16px;margin:14px 0}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#1565FF;flex-shrink:0;animation:pdot 1.4s infinite}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.6)}}
+.ai-label{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1565FF;line-height:1.4;text-align:center}
+
+.circle-wrap{display:flex;justify-content:center;margin-bottom:8px}
+.circle-wrap canvas{width:min(340px,90vw);height:min(340px,90vw)}
+
+.stage-bar{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:20px;min-height:36px}
+.stage-dot-row{display:flex;align-items:center;gap:7px}
+.stage-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .3s}
+.stage-lbl{font-size:13px;font-weight:700;text-align:center;transition:color .3s}
+.stage-sub{font-size:11px;color:#64748B;text-align:center}
+
+.section-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#94A3B8;font-weight:600;text-align:center;margin-bottom:10px}
+
+/* Standard cards */
+.cards-top{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.card{border:1.5px solid #E2E8F0;border-radius:10px;padding:12px 8px;background:#fff;transition:border-color .35s,background .35s,box-shadow .35s;text-align:center}
+.card-icon{font-size:18px;margin-bottom:5px;display:block;line-height:1}
+.card-name{font-size:11px;font-weight:600;color:#0F172A;line-height:1.3;margin-bottom:2px;transition:color .3s}
+.card-sub{font-size:9px;color:#94A3B8;line-height:1.35;transition:color .3s}
+.card-aegis-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1565FF;margin-bottom:4px;transition:color .3s}
+
+/* INFRASTRUCTURE ROW — dark, powerful */
+.infra-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+
+/* Blockchain — always on, dark indigo rail */
+.infra-card{border-radius:10px;padding:13px 8px;text-align:center;position:relative;overflow:hidden}
+.infra-card .card-icon{font-size:20px;margin-bottom:6px;display:block;line-height:1}
+.infra-card .card-name{font-size:11px;font-weight:700;line-height:1.3;margin-bottom:3px}
+.infra-card .card-sub{font-size:9px;line-height:1.4}
+
+#c-bc{
+background:linear-gradient(135deg,#1E1B4B 0%,#312E81 100%);
+border:1.5px solid #4338CA;
+box-shadow:0 0 0 3px rgba(99,102,241,.15);
+animation:bc-breathe 3s ease-in-out infinite;
+}
+#c-bc .card-name{color:#C7D2FE}
+#c-bc .card-sub{color:#818CF8}
+@keyframes bc-breathe{
+0%,100%{box-shadow:0 0 0 3px rgba(99,102,241,.15),0 4px 14px rgba(99,102,241,.12)}
+50%{box-shadow:0 0 0 5px rgba(99,102,241,.25),0 6px 22px rgba(99,102,241,.2)}
+}
+#c-bc.rail-surge{
+animation:bc-surge 1.2s ease-in-out infinite;
+}
+@keyframes bc-surge{
+0%,100%{box-shadow:0 0 0 4px rgba(99,102,241,.3),0 6px 24px rgba(99,102,241,.25)}
+50%{box-shadow:0 0 0 8px rgba(99,102,241,.15),0 8px 32px rgba(99,102,241,.35)}
+}
+
+/* AI — always on, deep blue with living glow */
+#c-ai{
+background:linear-gradient(135deg,#0C1A4A 0%,#1565FF 100%);
+border:1.5px solid #3B82F6;
+box-shadow:0 0 0 3px rgba(21,101,255,.2),0 4px 20px rgba(21,101,255,.18);
+animation:ai-breathe 2s ease-in-out infinite;
+}
+#c-ai .card-name{color:#BFDBFE}
+#c-ai .card-sub{color:#93C5FD}
+@keyframes ai-breathe{
+0%,100%{box-shadow:0 0 0 3px rgba(21,101,255,.2),0 4px 18px rgba(21,101,255,.18)}
+50%{box-shadow:0 0 0 7px rgba(21,101,255,.1),0 6px 28px rgba(21,101,255,.3)}
+}
+
+/* AI inner shimmer bar */
+#c-ai::after{
+content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+animation:shimmer 2.4s ease-in-out infinite;
+}
+@keyframes shimmer{0%{left:-60%}100%{left:120%}}
+
+/* Distribution partner — standard but lights up */
+#c-dp{background:#fff;border:1.5px solid #E2E8F0}
+
+.arrow-down{text-align:center;font-size:14px;color:#CBD5E1;font-weight:700;margin:6px 0;line-height:1;transition:color .3s}
+
+/* Bene card */
+.bene-card{border:1.5px solid #E2E8F0;border-radius:10px;padding:13px 20px;background:#fff;display:flex;align-items:center;justify-content:center;gap:12px;transition:border-color .35s,background .35s,box-shadow .35s}
+.bene-icon{font-size:22px;flex-shrink:0}
+.bene-card .card-name{font-size:13px;text-align:left;margin-bottom:2px;transition:color .3s}
+.bene-card .card-sub{font-size:10px;text-align:left;color:#94A3B8}
+</style>
+
+</head>
+<body>
+<div class="eco">
+
+<div class="eco-title">
+<h2>Tokenized Ecosystem</h2>
+<p>A fully tokenized, AI-powered capital loop for humanitarian aid</p>
+</div>
+
+<div class="ai-banner">
+<span class="ai-dot"></span>
+<span class="ai-label">AI Intelligence Flows Through Every Layer &nbsp;·&nbsp; Perpetual Capital Loop</span>
+</div>
+
+<div class="circle-wrap"><canvas id="cvs" width="340" height="340"></canvas></div>
+
+<div class="stage-bar">
+<div class="stage-dot-row">
+<div class="stage-dot" id="sdot"></div>
+<div class="stage-lbl" id="slbl">Donate Capital</div>
+</div>
+<div class="stage-sub" id="ssub">Capital enters the loop</div>
+</div>
+
+<div class="section-label">Capital Sources &amp; Trust Layer</div>
+<div class="cards-top">
+<div class="card" id="c-mmf"><span class="card-icon">💰</span><div class="card-name">Money Market Fund</div><div class="card-sub">Liquid capital</div></div>
+<div class="card" id="c-tok"><span class="card-icon">🪙</span><div class="card-name">Tokens</div><div class="card-sub">Pre-minted assets</div></div>
+<div class="card" id="c-aegis"><div class="card-aegis-lbl">Aegis Trust</div><div class="card-sub" style="text-align:center;line-height:1.6">Mint · Custody<br>Convert Tokens</div></div>
+</div>
+
+<div class="arrow-down" id="arr1">↓</div>
+
+<div class="section-label">Always-On Infrastructure</div>
+<div class="infra-row">
+<div class="infra-card" id="c-bc"><span class="card-icon">⛓️</span><div class="card-name">Blockchain</div><div class="card-sub">Every transfer on-chain</div></div>
+<div class="infra-card" id="c-ai"><span class="card-icon">🧠</span><div class="card-name">AI Technology</div><div class="card-sub">Runs through every layer</div></div>
+<div class="infra-card" id="c-dp" style="background:#fff;border:1.5px solid #E2E8F0"><span class="card-icon">🌐</span><div class="card-name" style="color:#0F172A">Distribution Partners</div><div class="card-sub">Last-mile networks</div></div>
+</div>
+
+<div class="arrow-down" id="arr2">↓</div>
+
+<div class="bene-card" id="c-bene">
+<span class="bene-icon">❤️</span>
+<div><div class="card-name">Beneficiaries</div><div class="card-sub">Crisis-affected communities</div></div>
+</div>
+
+</div>
+<script>
+const cvs=document.getElementById('cvs');
+const ctx=cvs.getContext('2d');
+const W=340,H=340,cx=W/2,cy=H/2,R=116,SW=22;
+
+const SEG=[
+{color:'#F97316',s:-20,e:52, label:'Donate Capital', sub:'Capital enters the loop', cards:['c-mmf','c-tok'], arrs:['arr1'], bcActive:false},
+{color:'#A855F7',s:52, e:142,label:'Tokenize Capital', sub:'Aegis Trust mints & custodies tokens', cards:['c-aegis'], arrs:[], bcActive:false},
+{color:'#1565FF',s:142,e:222,label:'Allocate Via Blockchain', sub:'On-chain rails carry tokens to all recipients', cards:[], arrs:['arr1'], bcActive:true},
+{color:'#22C55E',s:222,e:294,label:'Measure Impact', sub:'AI tracks outcomes — continuously, everywhere', cards:[], arrs:['arr1'], bcActive:false},
+{color:'#EAB308',s:294,e:340,label:'Distribute Token Rewards',sub:'Rewards flow to participants & partners', cards:['c-dp','c-bene'], arrs:['arr1','arr2'], bcActive:true},
+];
+
+const SL=[
+{lines:['START HERE','Donate Capital'],angle:16, color:'#F97316'},
+{lines:['Tokenize','Capital'], angle:97, color:'#A855F7'},
+{lines:['Allocate Via','Blockchain'], angle:182, color:'#1565FF'},
+{lines:['Measure','Impact'], angle:258, color:'#22C55E'},
+{lines:['Distribute','Rewards'], angle:317, color:'#EAB308'},
+];
+
+const LOOP=10000;
+let lastSeg=-1,pulses=[],prevBcActive=false;
+
+function toRad(d){return(d-90)*Math.PI/180;}
+
+function drawArc(s,e,color,alpha){
+ctx.beginPath();ctx.arc(cx,cy,R,toRad(s),toRad(e));
+ctx.strokeStyle=color;ctx.lineWidth=SW;ctx.lineCap='round';
+ctx.globalAlpha=alpha;ctx.stroke();ctx.globalAlpha=1;
+}
+
+function drawDot(a,color,size){
+const rad=toRad(a),x=cx+R*Math.cos(rad),y=cy+R*Math.sin(rad);
+const g=ctx.createRadialGradient(x,y,0,x,y,size*3);
+g.addColorStop(0,color+'CC');g.addColorStop(1,color+'00');
+ctx.beginPath();ctx.arc(x,y,size*3,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+ctx.beginPath();ctx.arc(x,y,size+2,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+ctx.beginPath();ctx.arc(x,y,size,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+}
+
+function getSeg(t){const a=-20+t*360;for(let i=0;i<SEG.length;i++)if(a>=SEG[i].s&&a<SEG[i].e)return i;return SEG.length-1;}
+
+function cardLit(id,color,on){
+const el=document.getElementById(id);if(!el)return;
+if(id==='c-ai'||id==='c-bc')return;
+if(on){
+el.style.borderColor=color;el.style.background=color+'12';el.style.boxShadow=`0 0 0 3px ${color}22`;
+const n=el.querySelector('.card-name');if(n)n.style.color=color;
+const a=el.querySelector('.card-aegis-lbl');if(a)a.style.color=color;
+} else {
+el.style.borderColor='';el.style.background='';el.style.boxShadow='';
+const n=el.querySelector('.card-name');if(n)n.style.color='';
+const a=el.querySelector('.card-aegis-lbl');if(a)a.style.color='#1565FF';
+}
+}
+function arrLit(id,color,on){const el=document.getElementById(id);if(el)el.style.color=on?color:'#CBD5E1';}
+
+function frame(){
+const now=Date.now();
+const t0=(now%LOOP)/LOOP,t1=((now+LOOP*0.44)%LOOP)/LOOP;
+const a0=-20+t0*360,a1=-20+t1*360;
+const si0=getSeg(t0),si1=getSeg(t1);
+
+ctx.clearRect(0,0,W,H);
+
+// Track
+ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.strokeStyle='#DDE4F0';ctx.lineWidth=SW+4;ctx.globalAlpha=.8;ctx.stroke();ctx.globalAlpha=1;
+
+// Dim all segs
+SEG.forEach(s=>drawArc(s.s,s.e,s.color,.13));
+
+// Active segments
+drawArc(SEG[si0].s,SEG[si0].e,SEG[si0].color,1);
+if(si1!==si0)drawArc(SEG[si1].s,SEG[si1].e,SEG[si1].color,.4);
+
+// AI always-on faint trace — a soft blue shimmer on the full ring
+const aiAlpha=0.18+0.07*Math.sin(now*0.003);
+ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);
+ctx.strokeStyle='#1565FF';ctx.lineWidth=2;ctx.globalAlpha=aiAlpha;ctx.stroke();ctx.globalAlpha=1;
+
+// Pulse rings
+pulses=pulses.filter(p=>p.alpha>.01);
+pulses.forEach(p=>{
+ctx.beginPath();ctx.arc(cx,cy,p.r,0,Math.PI*2);
+ctx.strokeStyle=p.color;ctx.lineWidth=1.5;ctx.globalAlpha=p.alpha;ctx.stroke();ctx.globalAlpha=1;
+p.r+=1.4;p.alpha*=.92;
+});
+
+// Outer labels
+const lr=R+SW/2+28;
+SL.forEach((sl,i)=>{
+const rad=toRad(sl.angle),lx=cx+lr*Math.cos(rad),ly=cy+lr*Math.sin(rad);
+const active=i===si0;
+ctx.globalAlpha=active?1:.25;ctx.fillStyle=sl.color;ctx.textAlign='center';ctx.textBaseline='middle';
+sl.lines.forEach((line,li)=>{
+ctx.font=`${active&&li===0?'bold ':'' }${active?(li===0?10:9):8.5}px -apple-system,sans-serif`;
+ctx.fillText(line,lx,ly+(li-(sl.lines.length-1)/2)*12);
+});ctx.globalAlpha=1;
+});
+
+// Center circle
+ctx.beginPath();ctx.arc(cx,cy,62,0,Math.PI*2);ctx.fillStyle='#EEF2FF';ctx.fill();
+ctx.beginPath();ctx.arc(cx,cy,62,0,Math.PI*2);ctx.strokeStyle='#C7D7FB';ctx.lineWidth=1.5;ctx.stroke();
+// Inner AI shimmer ring
+const innerGlow=0.12+0.08*Math.sin(now*0.003);
+ctx.beginPath();ctx.arc(cx,cy,55,0,Math.PI*2);ctx.strokeStyle='#1565FF';ctx.lineWidth=1;ctx.globalAlpha=innerGlow;ctx.stroke();ctx.globalAlpha=1;
+
+ctx.fillStyle='#1565FF';ctx.font='bold 28px -apple-system,sans-serif';ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillText('TF',cx,cy+8);
+ctx.fillStyle='#94A3B8';ctx.font='9px -apple-system,sans-serif';ctx.fillText('Capital Loop',cx,cy+22);
+
+// Primary travelling dots
+drawDot(a0,SEG[si0].color,5.5);
+drawDot(a1,SEG[si1].color,3.5);
+// AI ghost dot — always tracing, smaller, blue
+const aiA=-20+(((now*0.55)%LOOP)/LOOP)*360;
+drawDot(aiA,'#1565FF',2);
+
+// Segment change
+if(si0!==lastSeg){
+if(lastSeg>=0){
+SEG[lastSeg].cards.forEach(id=>cardLit(id,SEG[lastSeg].color,false));
+SEG[lastSeg].arrs.forEach(id=>arrLit(id,SEG[lastSeg].color,false));
+}
+SEG[si0].cards.forEach(id=>cardLit(id,SEG[si0].color,true));
+SEG[si0].arrs.forEach(id=>arrLit(id,SEG[si0].color,true));
+document.getElementById('slbl').textContent=SEG[si0].label;
+document.getElementById('slbl').style.color=SEG[si0].color;
+document.getElementById('ssub').textContent=SEG[si0].sub;
+document.getElementById('sdot').style.background=SEG[si0].color;
+pulses.push({r:64,alpha:.65,color:SEG[si0].color});
+lastSeg=si0;
+}
+
+// Blockchain surge on allocation segments
+const bcNow=SEG[si0].bcActive;
+if(bcNow!==prevBcActive){
+document.getElementById('c-bc').classList.toggle('rail-surge',bcNow);
+prevBcActive=bcNow;
+}
+
+requestAnimationFrame(frame);
+}
+frame();
+</script>
+
+</body>
+</html>

@@ -47,4 +47,14 @@ anitha@thetokenizationfoundation.com
 
 APPROACH Page 頁面更改。
 
-“Please remove the word "mint" under Aegis Trust in the diagram. Thanks,”
+
+
+Hello Kerstin
+I have completed the following work and updated it on the test server (http://210.209.100.165:8000/). 
+
+1，Remove the "!" on this headline.
+2，Break the sentence so it reads:Line 1: Reimagining A Fully Tokenized Ecosystem For Line 2: Humanitarian Aid Capital
+3，Make the gray background extend to the edges -- just like you did on the homepage
+4，Connect the AI Section into one subsection under header Inside The Ecosystem
+5，On the Flow Chart: The PAAI System In Action - remove the incorrect TF logo in the upper left
+6，update ppai_demo_autoplay.html

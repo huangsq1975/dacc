@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
-import centerVerticalLogo from '../../assets/TK_Logo_Vert_Blk_NoTag.png'
-import arrowRight from '../../assets/arrow_right.png'
 import humanFlowPng from '../../assets/927f947e-905b-4115-ad60-377fb49ee898.png'
 
 const PPAI_HEIGHT_MSG = 'ppai-demo-height'
@@ -54,89 +52,13 @@ export default function Approach() {
         <section className="relative tf-section bg-[#ecf0f3]">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="p-4 sm:p-6 lg:p-8">
-              <div className="rounded-xl bg-[#0071bc] p-4 sm:p-6">
-                <div className="grid grid-cols-1 md:grid-cols-[0.85fr_auto_minmax(0,0.375fr)_auto_0.85fr] items-center gap-4">
-                  <div className="space-y-3">
-                    <div className="rounded-2xl bg-white text-center tf-h3 text-black py-3 px-2">
-                      Money Market Fund
-                    </div>
-                    <div className="rounded-2xl bg-white text-center tf-h3 text-black py-3 px-2">
-                      Tokens
-                    </div>
-                  </div>
-
-                  <div className="hidden md:flex flex-col items-center gap-[40px] -translate-y-1">
-                    <img
-                      src={arrowRight}
-                      alt="Right arrow"
-                      className="h-8 w-auto object-contain"
-                    />
-                    <img
-                      src={arrowRight}
-                      alt="Right arrow"
-                      className="h-8 w-auto object-contain"
-                    />
-                  </div>
-                  <div className="flex md:hidden justify-center text-tfblue-bright text-3xl font-bold">↓</div>
-
-                  <div className="rounded-[2rem] bg-white p-0 flex items-center justify-center aspect-square overflow-hidden w-full max-w-[180px] md:max-w-none mx-auto">
-                    <img
-                      src={centerVerticalLogo}
-                      alt="Tokenization Foundation logo"
-                      className="w-full h-full object-contain scale-[4]"
-                    />
-                  </div>
-
-                  <div className="flex md:hidden justify-center text-tfblue-bright text-3xl font-bold">↓</div>
-                  <div className="hidden md:flex justify-center">
-                    <img
-                      src={arrowRight}
-                      alt="Left arrow"
-                      className="h-8 w-auto object-contain rotate-180"
-                    />
-                  </div>
-
-                  <div className="rounded-2xl bg-white text-center tf-h3 text-black py-4 px-3 leading-tight">
-                    <p>Aegis</p>
-                    <p>Trust</p>
-                    <p className="mt-2 font-semibold">Custody,</p>
-                    <p className="font-semibold">Convert Tokens</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 flex justify-center">
-                <img
-                  src={arrowRight}
-                  alt="Down arrow"
-                  className="h-3 w-auto -translate-y-1 object-contain rotate-90 scale-y-[2]"
+              <div className="w-full overflow-hidden rounded-xl bg-[#F0F4FF] ring-1 ring-black/5">
+                <iframe
+                  title="Tokenized ecosystem diagram"
+                  src="/Tokens.html"
+                  className="block w-full min-h-[920px] border-0"
+                  scrolling="no"
                 />
-              </div>
-
-              <div className="mt-2 space-y-2 sm:space-y-2.5">
-                {[
-                  { label: 'Blockchain', tone: 'bg-tfblue-verylight text-navy-900' },
-                  { label: 'AI Technology', tone: 'bg-tfblue-light text-navy-900' },
-                  { label: 'Distribution Partners', tone: 'bg-tfblue-medium/25 text-navy-900' },
-                  { label: 'Beneficiaries', tone: 'bg-tfblue text-white' },
-                ].map((item, index) => (
-                  <div key={item.label}>
-                    {index > 0 && (
-                      <div className="flex justify-center py-1">
-                        <img
-                          src={arrowRight}
-                          alt="Down arrow"
-                          className={`h-3 w-auto -translate-y-1 object-contain rotate-90 scale-y-[2] ${item.label === 'Beneficiaries' ? 'brightness-0' : ''}`}
-                        />
-                      </div>
-                    )}
-                    <div
-                      className={`w-full border-y border-tfslate-200 py-3 text-center tf-h3 ${item.tone}`}
-                    >
-                      {item.label}
-                    </div>
-                  </div>
-                ))}
               </div>
 
               <h2 className="tf-headline text-black mt-8 sm:mt-10 mb-4 sm:mb-5">
