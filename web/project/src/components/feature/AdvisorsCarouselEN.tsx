@@ -75,9 +75,8 @@ export default function AdvisorsCarouselEN() {
 
   // Auto-scroll logic with pause on hover
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (!isHovered) {
-      interval = setInterval(() => {
+    const interval = !isHovered
+      ? setInterval(() => {
         if (scrollRef.current) {
           const nextIndex = (currentIndex + 1) % advisors.length;
           const itemWidth = scrollRef.current.children[0]?.clientWidth || 0;
@@ -89,9 +88,14 @@ export default function AdvisorsCarouselEN() {
           }
           setCurrentIndex(nextIndex);
         }
-      }, 5000); // 5 seconds per slide
-    }
-    return () => clearInterval(interval);
+      }, 5000) // 5 seconds per slide
+      : undefined;
+
+    return () => {
+      if (interval !== undefined) {
+        clearInterval(interval);
+      }
+    };
   }, [isHovered, currentIndex]);
 
   const scrollLeft = () => {
