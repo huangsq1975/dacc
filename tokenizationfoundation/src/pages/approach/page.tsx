@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 import humanFlowPng from '../../assets/927f947e-905b-4115-ad60-377fb49ee898.png'
+import atcLogoStacked from '../../assets/ATC_logo_stacked_app.png'
 
 const PPAI_HEIGHT_MSG = 'ppai-demo-height'
+const TOKENS_IFRAME_HEIGHT_MSG = 'tf-tokens-iframe-height'
 
 function PpaiDemoIframe() {
   const [heightPx, setHeightPx] = useState<number | null>(null)
@@ -50,6 +52,20 @@ function PpaiDemoIframe() {
 }
 
 export default function Approach() {
+  const [tokensIframeHeight, setTokensIframeHeight] = useState<number | null>(null)
+
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      const data = e.data as { type?: string; height?: unknown }
+      if (data?.type !== TOKENS_IFRAME_HEIGHT_MSG) return
+      if (typeof data.height !== 'number' || !Number.isFinite(data.height)) return
+      if (e.origin !== window.location.origin) return
+      setTokensIframeHeight(Math.max(400, Math.min(8000, Math.ceil(data.height))))
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
+
   return (
     <div className="bg-white min-h-screen">
       <Navigation />
@@ -70,9 +86,13 @@ export default function Approach() {
               <div className="w-full overflow-hidden rounded-xl bg-[#F0F4FF] ring-1 ring-black/5">
                 <iframe
                   title="Tokenized ecosystem diagram"
-                  src="/Tokens.html"
-                  className="block w-full min-h-[920px] border-0"
+                  src={`/Tokens.html?atc=${encodeURIComponent(atcLogoStacked)}`}
+                  className="block w-full border-0"
                   scrolling="no"
+                  style={{
+                    minHeight: tokensIframeHeight == null ? 1000 : undefined,
+                    height: tokensIframeHeight != null ? `${tokensIframeHeight}px` : undefined,
+                  }}
                 />
               </div>
 

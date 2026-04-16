@@ -21,7 +21,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ai-label{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1565FF;line-height:1.4;text-align:center}
 
 .circle-wrap{display:flex;justify-content:center;margin-bottom:8px}
-.circle-wrap canvas{width:min(340px,90vw);height:min(340px,90vw)}
+.circle-wrap canvas{width:min(420px,92vw);height:min(420px,92vw)}
 
 .stage-bar{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:20px;min-height:36px}
 .stage-dot-row{display:flex;align-items:center;gap:7px}
@@ -38,6 +38,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .card-name{font-size:11px;font-weight:600;color:#0F172A;line-height:1.3;margin-bottom:2px;transition:color .3s}
 .card-sub{font-size:9px;color:#94A3B8;line-height:1.35;transition:color .3s}
 .card-aegis-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1565FF;margin-bottom:4px;transition:color .3s}
+.card-aegis-logo{display:block;width:auto;max-width:100%;max-height:20px;margin:0 auto 6px;object-fit:contain}
 
 /* INFRASTRUCTURE ROW — dark, powerful */
 .infra-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
@@ -116,7 +117,7 @@ animation:shimmer 2.4s ease-in-out infinite;
 <span class="ai-label">AI Intelligence Flows Through Every Layer &nbsp;·&nbsp; Perpetual Capital Loop</span>
 </div>
 
-<div class="circle-wrap"><canvas id="cvs" width="340" height="340"></canvas></div>
+<div class="circle-wrap"><canvas id="cvs" width="420" height="420"></canvas></div>
 
 <div class="stage-bar">
 <div class="stage-dot-row">
@@ -130,7 +131,7 @@ animation:shimmer 2.4s ease-in-out infinite;
 <div class="cards-top">
 <div class="card" id="c-mmf"><span class="card-icon">💰</span><div class="card-name">Money Market Fund</div><div class="card-sub">Liquid capital</div></div>
 <div class="card" id="c-tok"><span class="card-icon">🪙</span><div class="card-name">Tokens</div><div class="card-sub">Pre-minted assets</div></div>
-<div class="card" id="c-aegis"><div class="card-aegis-lbl">Aegis Trust</div><div class="card-sub" style="text-align:center;line-height:1.6">Custody<br>Convert Tokens</div></div>
+<div class="card" id="c-aegis"><img class="card-aegis-logo" src="/ATC_logo_stacked_app.png" alt="ATC" width="60" height="20" /><div class="card-aegis-lbl">Aegis Trust</div><div class="card-sub" style="text-align:center;line-height:1.6">Custody Convert Tokens</div></div>
 </div>
 
 <div class="arrow-down" id="arr1">↓</div>
@@ -153,11 +154,11 @@ animation:shimmer 2.4s ease-in-out infinite;
 <script>
 const cvs=document.getElementById('cvs');
 const ctx=cvs.getContext('2d');
-const W=340,H=340,cx=W/2,cy=H/2,R=116,SW=22;
+const W=420,H=420,cx=W/2,cy=H/2,R=116,SW=22;
 
 const SEG=[
 {color:'#F97316',s:-20,e:52, label:'Donate Capital', sub:'Capital enters the loop', cards:['c-mmf','c-tok'], arrs:['arr1'], bcActive:false},
-{color:'#A855F7',s:52, e:142,label:'Tokenize Capital', sub:'Aegis Trust mints & custodies tokens', cards:['c-aegis'], arrs:[], bcActive:false},
+{color:'#A855F7',s:52, e:142,label:'A Tokenize Capital', sub:'Aegis Trust mints & custodies tokens', cards:['c-aegis'], arrs:[], bcActive:false},
 {color:'#1565FF',s:142,e:222,label:'Allocate Via Blockchain', sub:'On-chain rails carry tokens to all recipients', cards:[], arrs:['arr1'], bcActive:true},
 {color:'#22C55E',s:222,e:294,label:'Measure Impact', sub:'AI tracks outcomes — continuously, everywhere', cards:[], arrs:['arr1'], bcActive:false},
 {color:'#EAB308',s:294,e:340,label:'Distribute Token Rewards',sub:'Rewards flow to participants & partners', cards:['c-dp','c-bene'], arrs:['arr1','arr2'], bcActive:true},
@@ -165,7 +166,7 @@ const SEG=[
 
 const SL=[
 {lines:['START HERE','Donate Capital'],angle:16, color:'#F97316'},
-{lines:['Tokenize','Capital'], angle:97, color:'#A855F7'},
+{lines:['A Tokenize','Capital'], angle:97, color:'#A855F7'},
 {lines:['Allocate Via','Blockchain'], angle:182, color:'#1565FF'},
 {lines:['Measure','Impact'], angle:258, color:'#22C55E'},
 {lines:['Distribute','Rewards'], angle:317, color:'#EAB308'},
@@ -240,14 +241,15 @@ p.r+=1.4;p.alpha*=.92;
 });
 
 // Outer labels
-const lr=R+SW/2+28;
+const lr=R+SW/2+34;
+const lineGap=15;
 SL.forEach((sl,i)=>{
 const rad=toRad(sl.angle),lx=cx+lr*Math.cos(rad),ly=cy+lr*Math.sin(rad);
 const active=i===si0;
 ctx.globalAlpha=active?1:.25;ctx.fillStyle=sl.color;ctx.textAlign='center';ctx.textBaseline='middle';
 sl.lines.forEach((line,li)=>{
-ctx.font=`${active&&li===0?'bold ':'' }${active?(li===0?10:9):8.5}px -apple-system,sans-serif`;
-ctx.fillText(line,lx,ly+(li-(sl.lines.length-1)/2)*12);
+ctx.font=`${active&&li===0?'bold ':'' }${active?(li===0?12:11):10}px -apple-system,sans-serif`;
+ctx.fillText(line,lx,ly+(li-(sl.lines.length-1)/2)*lineGap);
 });ctx.globalAlpha=1;
 });
 
@@ -294,6 +296,30 @@ prevBcActive=bcNow;
 requestAnimationFrame(frame);
 }
 frame();
+</script>
+<script>
+(function(){
+function postHeight(){
+try{
+var d=document.documentElement,b=document.body;
+var h=Math.max(d.scrollHeight,d.offsetHeight,b.scrollHeight,b.offsetHeight);
+if(window.parent!==window){
+window.parent.postMessage({type:'tf-tokens-iframe-height',height:h},'*');
+}
+}catch(_){}
+}
+window.addEventListener('load',function(){
+postHeight();
+requestAnimationFrame(postHeight);
+setTimeout(postHeight,50);
+setTimeout(postHeight,300);
+});
+window.addEventListener('resize',postHeight);
+if(typeof ResizeObserver!=='undefined'){
+var ro=new ResizeObserver(function(){postHeight();});
+ro.observe(document.documentElement);
+}
+})();
 </script>
 
 </body>

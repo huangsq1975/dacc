@@ -60,34 +60,36 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Serra Wei',
     title: 'Cofounder',
-    oneLiner: 'Bringing vision, strategy, and compassion to lead and scale the business.',
+    oneLiner: 'Bringing vision, strategy, and compassion to lead and scale the foundation.',
     fullBio: [
-      [
-        {
-          text: "Serra's entrepreneurship journey started when she was approached by a VC and given millions to start ",
-        },
-        { text: 'Aegis Trust', bold: true },
-        {
-          text: ', a SEC qualified custodian while she was investing at a San Francisco-based fund. Before that, she worked at ',
-        },
-        { text: 'Goldman Sachs', bold: true },
-        { text: ' and got her MBA from ', bold: false },
-        { text: 'Stanford Business School', bold: true },
-        { text: '.', bold: false },
-      ],
-      [
-        { text: 'Serra founded ', bold: false },
-        { text: 'Digital Asset Clearing Center', bold: true },
-        {
-          text: ", which provides seamless connections to the world's leading payment systems, blockchain networks, and compliance infrastructure delivering end-to-end Clearing-as-a-Service (CaaS) for financial institutions. To align her vision, she took a partnership integration strategy and brought several publicly traded companies on the cap table. By truly listening to perspectives from people in Hong Kong, Chinese mainland and the globe, she navigates a nascent market with openhearted compassion, leading to new cooperation between parties for business growth and that benefits everyone. ",
-          bold: false,
-        },
-      ],
       [
         { text: 'At ', bold: false },
         { text: 'Tokenization Foundation', bold: true },
         {
           text: ', Serra integrates human values into technology infrastructure to embrace a more holistic vision of progress that honors the complexities of our shared humanity. Her ability to use resources to heal, uplift, and meet the urgent challenges of our time uncovers new ways to drive systemic change and contribute to the collective good.',
+          bold: false,
+        },
+      ],
+      [
+        {
+          text: "Serra's entrepreneurship journey started when she was approached by a venture capitalist and received millions to start ",
+        },
+        { text: 'Aegis Trust', bold: true },
+        {
+          text: ', a licensed and insured digital and traditional asset custodian. Before that, she worked at ',
+        },
+        { text: 'Goldman Sachs', bold: true },
+        {
+          text: ' and a San Francisco-based investment firm and received her MBA from the ',
+        },
+        { text: 'Stanford Graduate School of Business', bold: true },
+        { text: '.', bold: false },
+      ],
+      [
+        { text: 'Serra also founded ', bold: false },
+        { text: 'Digital Asset Clearing Center', bold: true },
+        {
+          text: ", which provides seamless connections to the world's leading payment systems, blockchain networks, and compliance infrastructure delivering end-to-end Clearing-as-a-Service (CaaS) for financial institutions in Hong Kong.",
           bold: false,
         },
       ],
