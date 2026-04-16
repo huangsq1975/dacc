@@ -254,7 +254,7 @@ export default function ContactZH() {
       <section className="pt-32 pb-16 px-6 bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-5xl lg:text-6xl font-bold text-[#1e6b8a] mb-6">联系我们</h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-6">联系我们</h1>
             <p className="text-xl text-[#4a5568] max-w-3xl mx-auto">
               对我们的产品或服务有疑问？我们很乐意听取您的意见。请给我们留言，我们会尽快回复。
             </p>

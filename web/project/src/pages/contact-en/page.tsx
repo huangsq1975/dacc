@@ -355,7 +355,7 @@ export default function ContactEN() {
       <section className="pt-32 pb-16 px-6 bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-5xl lg:text-6xl font-bold text-[#1e6b8a] mb-6">
+            <h1 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-6">
               Contact Us
             </h1>
             <p className="text-xl text-[#4a5568] max-w-3xl mx-auto">

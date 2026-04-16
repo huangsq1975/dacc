@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const advisors = [
   {
@@ -44,9 +44,78 @@ const advisors = [
   },
 ];
 
-const GAP = 24;
-
 export default function AdvisorsCarouselEN() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+      
+      // Calculate current index based on scroll position
+      const itemWidth = scrollRef.current.children[0]?.clientWidth || 0;
+      if (itemWidth > 0) {
+        const newIndex = Math.round(scrollLeft / itemWidth);
+        setCurrentIndex(newIndex);
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
+
+  // Auto-scroll logic with pause on hover
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (!isHovered) {
+      interval = setInterval(() => {
+        if (scrollRef.current) {
+          const nextIndex = (currentIndex + 1) % advisors.length;
+          const itemWidth = scrollRef.current.children[0]?.clientWidth || 0;
+          
+          if (nextIndex === 0) {
+            scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            scrollRef.current.scrollTo({ left: nextIndex * itemWidth, behavior: 'smooth' });
+          }
+          setCurrentIndex(nextIndex);
+        }
+      }, 5000); // 5 seconds per slide
+    }
+    return () => clearInterval(interval);
+  }, [isHovered, currentIndex]);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      const itemWidth = scrollRef.current.children[0]?.clientWidth || 0;
+      scrollRef.current.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      const itemWidth = scrollRef.current.children[0]?.clientWidth || 0;
+      scrollRef.current.scrollBy({ left: itemWidth, behavior: 'smooth' });
+    }
+  };
+
+  const goToSlide = (index: number) => {
+    if (scrollRef.current) {
+      const itemWidth = scrollRef.current.children[0]?.clientWidth || 0;
+      scrollRef.current.scrollTo({ left: index * itemWidth, behavior: 'smooth' });
+      setCurrentIndex(index);
+    }
+  };
+
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
@@ -56,24 +125,81 @@ export default function AdvisorsCarouselEN() {
   };
 
   return (
-    <div className="relative">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-        {advisors.map((advisor) => (
-          <div key={advisor.name} className="flex-shrink-0 bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-[#b8d9ed] hover:border-[#1e6b8a] hover:shadow-lg transition-all duration-300">
-            <div className="relative w-full h-72 sm:h-64 mb-4 overflow-hidden rounded-lg">
+    <div 
+      className="relative w-full max-w-5xl mx-auto px-4 py-8 group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Navigation Buttons (Left & Right Chevrons) */}
+      <div className="absolute top-1/2 -translate-y-1/2 left-0 md:-left-8 z-10">
+        <button 
+          onClick={scrollLeft}
+          disabled={!canScrollLeft}
+          className={`w-12 h-12 flex items-center justify-center transition-all duration-300 ${!canScrollLeft ? 'opacity-30 cursor-not-allowed' : 'hover:scale-110 text-gray-800'}`}
+        >
+          <i className="ri-arrow-left-s-line text-5xl font-light"></i>
+        </button>
+      </div>
+
+      <div className="absolute top-1/2 -translate-y-1/2 right-0 md:-right-8 z-10">
+        <button 
+          onClick={scrollRight}
+          disabled={!canScrollRight}
+          className={`w-12 h-12 flex items-center justify-center transition-all duration-300 ${!canScrollRight ? 'opacity-30 cursor-not-allowed' : 'hover:scale-110 text-gray-800'}`}
+        >
+          <i className="ri-arrow-right-s-line text-5xl font-light"></i>
+        </button>
+      </div>
+
+      {/* Scrollable Container (Single Item View) */}
+      <div 
+        ref={scrollRef}
+        onScroll={checkScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {advisors.map((advisor, index) => (
+          <div 
+            key={index} 
+            className="snap-center flex-shrink-0 w-full flex flex-col items-center justify-center px-8 md:px-16"
+          >
+            {/* Avatar */}
+            <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 shadow-md border border-gray-100">
               <img
                 src={advisor.image}
                 alt={advisor.name}
                 onError={handleImageError}
-                className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover object-top"
               />
             </div>
-            <h3 className="text-lg font-bold text-[#1e6b8a] mb-1">{advisor.name}</h3>
-            <p className="text-[#1e6b8a] text-sm mb-3 font-medium">{advisor.title}</p>
-            <p className="text-[#4a5568] text-xs leading-relaxed break-words whitespace-normal">
+            
+            {/* Name & Title */}
+            <div className="text-center mb-6">
+              <h3 className="text-xl md:text-2xl font-bold text-[#1e6b8a] mb-1">{advisor.name}</h3>
+              <p className="text-gray-500 text-sm font-medium">{advisor.title}</p>
+            </div>
+            
+            {/* Description / Quote */}
+            <p className="text-gray-600 text-center text-sm md:text-base leading-relaxed max-w-3xl">
               {advisor.description}
             </p>
           </div>
+        ))}
+      </div>
+      
+      {/* Pagination Indicator (Green hollow circles) */}
+      <div className="flex justify-center mt-12 space-x-4">
+        {advisors.map((_, idx) => (
+          <button 
+            key={idx} 
+            onClick={() => goToSlide(idx)}
+            className={`w-3.5 h-3.5 rounded-full transition-all duration-300 border-2 ${
+              currentIndex === idx 
+                ? 'bg-[#1e6b8a] border-[#1e6b8a]' 
+                : 'bg-transparent border-[#1e6b8a] hover:bg-[#1e6b8a]/20'
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
         ))}
       </div>
     </div>

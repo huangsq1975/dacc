@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
 import AdvisorsCarouselZH from '../../components/feature/AdvisorsCarouselZH';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 // Prism Component
 const Prism = ({
@@ -33,7 +34,7 @@ const Prism = ({
     const NOISE = Math.max(0.0, noise);
     const offX = offset?.x ?? 0;
     const offY = offset?.y ?? 0;
-    const SAT = transparent ? 1.5 : 1;
+    const SAT = transparent ? 0.95 : 0.9;
     const SCALE = Math.max(0.001, scale);
     const HUE = hueShift || 0;
     const CFREQ = Math.max(0.0, colorFrequency || 1);
@@ -45,7 +46,9 @@ const Prism = ({
     const HOVSTR = Math.max(0, hoverStrength || 1);
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    // Clamp DPR to reduce fragment shader workload on high-density screens.
+    const maxDpr = window.innerWidth < 1024 ? 1.25 : 1.5;
+    const dpr = Math.min(maxDpr, window.devicePixelRatio || 1);
     
     let renderer;
     let gl;
@@ -446,31 +449,37 @@ const Prism = ({
     suspendWhenOffscreen
   ]);
 
-  return <div className="absolute inset-0 w-full h-full" ref={containerRef} />;
+  return <div className="absolute inset-0 w-full h-full opacity-78" ref={containerRef} />;
 };
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [useCasesDropdownOpen, setUseCasesDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
 
+  const [whyItMattersRef, isWhyItMattersVisible] = useIntersectionObserver({ threshold: 0.2 });
+
   useEffect(() => {
     let rafId = 0;
+
+    const updateScrolled = () => {
+      rafId = 0;
+      const next = window.scrollY > 50;
+      setScrolled(prev => (prev === next ? prev : next));
+    };
+
     const handleScroll = () => {
       if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        const y = window.scrollY;
-        setScrolled(y > 50);
-        setShowBackToTop(y > 300);
-        rafId = 0;
-      });
+      rafId = window.requestAnimationFrame(updateScrolled);
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    updateScrolled();
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafId) window.cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -481,12 +490,16 @@ export default function Home() {
     }
   };
 
+  const navTextClass = 'text-[#0b2742]/90 hover:text-[#0f6f8f]';
+
+  const navOutlineClass = 'border-[#0b2742]/25 bg-white/40 text-[#0b2742]/85 hover:text-[#0f6f8f] hover:border-[#0f6f8f]/50';
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#e8f4fb] via-[#b8d9ed] to-[#1e6b8a] text-gray-900">
+    <div className="min-h-screen bg-[var(--color-bg-deep)] text-white">
       {/* Floating Navigation - Desktop */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden lg:block">
-        <nav className={`${scrolled ? 'bg-white/90' : 'bg-white/70'} backdrop-blur-md border border-[#b8d9ed] rounded-full px-6 py-3 transition-all duration-300 shadow-lg`}>
-          <div className="flex items-center justify-center space-x-8">
+      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden lg:block">
+        <nav className={`bg-[#d8f0ff]/90 backdrop-blur-md w-[92vw] max-w-[1240px] border border-[#0b2742]/25 rounded-2xl px-6 xl:px-8 py-3 transition-all duration-300 shadow-[0_14px_40px_rgba(0,0,0,0.2)]`}>
+          <div className="flex items-center justify-between gap-4 xl:gap-6">
             <a href="/" className="cursor-pointer flex-shrink-0">
               <img 
                 src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png" 
@@ -494,82 +507,41 @@ export default function Home() {
                 className="h-6 w-auto object-contain"
               />
             </a>
-            <a href="#Services" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium">
-              服务
-            </a>
-
-            {/* Solutions Dropdown - group-hover CSS */}
-            <div className="relative group">
-              <button className="flex items-center gap-1 text-[#1e6b8a] hover:text-[#f5b942] transition-colors text-sm whitespace-nowrap font-montserrat font-medium">
-                解决方案
-                <i className="ri-arrow-down-s-line"></i>
-              </button>
-              <div className="absolute left-0 top-full pt-2 w-56 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                  <a href="/hot-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                    热钱包集成
-                  </a>
-                  <a href="/cold-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                    冷钱包
-                  </a>
-                  <a href="/rwa-platform" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                    RWA 代币化平台
-                  </a>
-                  <a href="/chain-fusion" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                    ChainFusion
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Use Cases Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setUseCasesDropdownOpen(true)}
-              onMouseLeave={() => setUseCasesDropdownOpen(false)}
-            >
-              <button
-                className="flex items-center gap-1 text-[#1e6b8a] hover:text-[#f5b942] transition-colors text-sm whitespace-nowrap font-montserrat font-medium"
+            <div className="ml-auto flex items-center gap-4 xl:gap-6">
+              <a href="#why-it-matters" className={`${navTextClass} transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium`}>
+                公司
+              </a>
+              <a href="#solutions" className={`${navTextClass} transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium`}>
+                合规托管
+              </a>
+              <a href="#Services" className={`${navTextClass} transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium`}>
+                服务
+              </a>
+              <a href="#investors" className={`${navTextClass} transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium`}>
+                客户
+              </a>
+              <a href="/blog" className={`${navTextClass} transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium`}>
+                新闻
+              </a>
+              <a href="/contact" className="inline-flex items-center rounded-xl bg-[#12b7d6] px-4 py-2 text-sm font-semibold text-[#031122] hover:bg-[#67e8f9] transition-colors whitespace-nowrap">
+                联系我们
+                <i className="ri-arrow-right-up-line ml-1 text-sm"></i>
+              </a>
+              <a
+                href="/en"
+                aria-label="切換到英文"
+                title="Switch to English"
+                className={`inline-flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 ${navOutlineClass}`}
               >
-                应用案例
-                <i className={`ri-arrow-down-s-line transition-transform duration-200 ${useCasesDropdownOpen ? 'rotate-180' : ''}`}></i>
-              </button>
-              {useCasesDropdownOpen && (
-                <div className="absolute left-0 top-full pt-2 w-64 z-50">
-                  <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/use-case" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                      全球商户 x DACC
-                    </a>
-                    <a href="/use-case-ttl" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                      TTL × DACC
-                    </a>
-                    <a href="/use-case-conflux" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                      Conflux x DACC
-                    </a>
-                    <a href="/use-case-vatp" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">
-                      加密交易所 x DACC
-                    </a>
-                  </div>
-                </div>
-              )}
+                <i className="ri-global-line text-lg"></i>
+              </a>
             </div>
-
-            <a href="#ecosystem" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium">
-              投资者
-            </a>
-            <a href="/blog" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium">
-              新闻
-            </a>
-            <a href="/contact" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat font-medium">
-              联系我们
-              <i className="ri-arrow-right-up-line ml-1 text-xs"></i>
-            </a>
           </div>
         </nav>
       </div>
 
       {/* Mobile Top Bar - Logo + Menu + Language */}
-      <div className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-white/90 backdrop-blur-md border-b border-[#b8d9ed] shadow-md">
+      <div className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[var(--color-bg-deep)]/90 backdrop-blur-xl border-b border-white/10 shadow-xl">
         <div className="flex items-center justify-between px-6 py-4">
           <a href="/" className="block cursor-pointer">
             <img 
@@ -581,11 +553,11 @@ export default function Home() {
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="bg-[#e8f4fb] backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 text-sm"
+              className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-4 py-2 text-white hover:text-[#67e8f9] transition-all duration-300 text-sm"
             >
               <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-xl`}></i>
             </button>
-            <a href="/home-en" className="bg-[#e8f4fb] backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap font-medium">
+            <a href="/en" className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-4 py-2 text-sm text-white hover:text-[#67e8f9] transition-all duration-300 cursor-pointer whitespace-nowrap font-medium">
               English
             </a>
           </div>
@@ -607,21 +579,21 @@ export default function Home() {
                     }
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full flex items-center justify-between py-4 text-xl text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                  className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
                   <span>服务</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <button
                   onClick={() => setMobileSubmenu('solutions')}
-                  className="w-full flex items-center justify-between py-4 text-xl text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                  className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
                   <span>解决方案</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <button
                   onClick={() => setMobileSubmenu('useCasesZH')}
-                  className="w-full flex items-center justify-between py-4 text-xl text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                  className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
                   <span>应用案例</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
@@ -634,7 +606,7 @@ export default function Home() {
                     }
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full flex items-center justify-between py-4 text-xl text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                  className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
                   <span>投资者</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
@@ -642,7 +614,7 @@ export default function Home() {
                 <a
                   href="/blog"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full flex items-center justify-between py-4 text-xl text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                  className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
                   <span>新闻</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
@@ -650,7 +622,7 @@ export default function Home() {
                 <a
                   href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full flex items-center justify-between py-4 text-xl text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                  className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
                   <span>联系我们</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
@@ -665,11 +637,11 @@ export default function Home() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-[#b8d9ed]/20">
                 <button
                   onClick={() => setMobileSubmenu(null)}
-                  className="w-10 h-10 flex items-center justify-center text-[#1e6b8a] hover:text-[#f5b942] transition-colors"
+                  className="w-10 h-10 flex items-center justify-center text-white hover:text-[#f5b942] transition-colors"
                 >
                   <i className="ri-arrow-left-line text-2xl"></i>
                 </button>
-                <span className="text-lg font-semibold text-[#1e6b8a]">解决方案</span>
+                <span className="text-lg font-semibold text-white">解决方案</span>
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6">
@@ -677,28 +649,28 @@ export default function Home() {
                   <a
                     href="/hot-wallet"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     热钱包集成
                   </a>
                   <a
                     href="/cold-wallet"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     冷钱包
                   </a>
                   <a
                     href="/rwa-platform"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     RWA 代币化平台
                   </a>
                   <a
                     href="/chain-fusion"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     ChainFusion
                   </a>
@@ -713,41 +685,41 @@ export default function Home() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-[#b8d9ed]/20">
                 <button
                   onClick={() => setMobileSubmenu(null)}
-                  className="w-10 h-10 flex items-center justify-center text-[#1e6b8a] hover:text-[#f5b942] transition-colors"
+                  className="w-10 h-10 flex items-center justify-center text-white hover:text-[#f5b942] transition-colors"
                 >
                   <i className="ri-arrow-left-line text-2xl"></i>
                 </button>
-                <span className="text-lg font-semibold text-[#1e6b8a]">应用案例</span>
+                <span className="text-lg font-semibold text-white">应用案例</span>
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6">
-                <p className="text-[#1e6b8a]/80 text-sm mb-6">探索我们的应用案例</p>
+                <p className="text-white/80 text-sm mb-6">探索我们的应用案例</p>
                 <div className="space-y-2">
                   <a
                     href="/use-case"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     全球商户 x DACC
                   </a>
                   <a
                     href="/use-case-ttl"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     TTL × DACC
                   </a>
                   <a
                     href="/use-case-conflux"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     Conflux x DACC
                   </a>
                   <a
                     href="/use-case-vatp"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-[#1e6b8a] hover:text-[#f5b942] transition-colors border-b border-[#b8d9ed]/20"
+                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                   >
                     加密交易所 x DACC
                   </a>
@@ -758,119 +730,134 @@ export default function Home() {
         </div>
       )}
 
-      {/* Language Switcher - Desktop Only */}
-      <div className="fixed top-6 right-6 z-50 hidden lg:block">
-        <a href="/home-en" className="bg-white/80 backdrop-blur-md border border-[#b8d9ed] rounded-full px-3 md:px-4 py-2 text-xs md:text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap font-medium shadow-md">
-          English
-        </a>
-      </div>
-
       {/* Hero Section */}
-      <header className="relative min-h-screen flex flex-col pt-20 md:pt-0">
+      <header className="relative min-h-screen flex flex-col pt-24 md:pt-0 bg-[radial-gradient(circle_at_20%_20%,rgba(103,232,249,0.16),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(186,230,253,0.14),transparent_52%),linear-gradient(180deg,#ffffff_0%,#fcfeff_46%,#f5fbff_100%)]">
         <div className="flex-1 flex items-center justify-center px-4 md:px-6 relative">
           {/* Prism Background */}
           <Prism
             animationType="3drotate"
-            glow={1}
-            scale={3.6}
-            hueShift={0}
-            colorFrequency={1}
-            timeScale={0.5}
+            glow={0.38}
+            scale={4}
+            hueShift={0.08}
+            colorFrequency={0.58}
+            timeScale={0.4}
             transparent={true}
-            bloom={1}
-            hoverStrength={2}
+            bloom={0.5}
+            hoverStrength={0.9}
             inertia={0.05}
             noise={0}
             suspendWhenOffscreen={true}
           />
 
-          <div className="text-center max-w-5xl mx-auto relative z-10">
-            <div className="flex justify-center mb-6 md:mb-8">
-              <img
-                src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/602277a182bd33f8fff2388a9311342f.png"
-                alt="DACC"
-                className="h-20 md:h-28 w-auto object-contain"
-              />
+          <div className="w-full max-w-5xl mx-auto relative z-10 text-left">
+            <div className="absolute -inset-x-2 md:-inset-x-8 inset-y-4 md:inset-y-2 -z-10 rounded-[2.5rem] bg-[#031226]/62 backdrop-blur-[4px]"></div>
+            <div className="inline-flex items-center rounded-full border border-[#34d5f4]/45 bg-[#0b1b31]/65 px-4 py-1.5 text-xs md:text-sm tracking-wide text-[#c6f6ff] mb-6 md:mb-8">
+              Licensed & Insured Custody
             </div>
-            <h2 className="text-3xl md:text-5xl lg:text-7xl font-normal leading-tight mb-6 md:mb-8 font-montserrat max-w-6xl mx-auto px-4 text-[#1e6b8a]">
-              Where CIPS meets<br />
-              <span className="text-[#f5b942]">Tokenization</span>
-            </h2>
-            <p className="text-base md:text-xl text-[#1e6b8a]/80 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-montserrat px-4">
-              引领数字清算与结算的下一个十年
+            <h1 className="text-3xl md:text-5xl lg:text-[4rem] font-bold leading-[1.1] mb-5 md:mb-7 font-montserrat max-w-5xl text-[#f8fdff] drop-shadow-[0_4px_18px_rgba(2,12,24,0.45)]">
+              守护您的<br />
+              <span className="text-[#67e8f9]">数字资产</span>
+            </h1>
+            <p className="text-base md:text-xl text-white/90 mb-9 md:mb-12 max-w-3xl leading-relaxed font-montserrat font-medium drop-shadow-[0_2px_10px_rgba(2,12,24,0.35)]">
+              提供机构级合规托管，助力企业安全开展数字资产业务。
             </p>
-            <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start gap-4">
+              <a
+                href="#why-it-matters"
+                className="inline-flex items-center justify-center rounded-xl bg-[#12b7d6] px-7 py-3 text-sm md:text-base font-semibold text-[#031122] hover:bg-[#67e8f9] transition-colors min-w-[170px]"
+              >
+                了解更多
+              </a>
+              <a
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-xl border border-white/35 bg-white/5 px-7 py-3 text-sm md:text-base font-semibold text-white hover:border-[#67e8f9] hover:text-[#67e8f9] transition-colors min-w-[170px]"
+              >
+                立即开始
+              </a>
             </div>
           </div>
         </div>
 
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#f5b942]/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#1e6b8a]/5 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/3 w-32 h-32 bg-[#c97a2f]/20 rounded-full blur-2xl"></div>
+          <div className="absolute inset-0 opacity-16" style={{ backgroundImage: 'linear-gradient(rgba(102,153,153,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(102,153,153,0.12) 1px, transparent 1px)', backgroundSize: '72px 72px' }}></div>
+          <div className="absolute inset-y-0 left-0 w-[22%] bg-gradient-to-r from-[#7dd3fc]/22 via-[#7dd3fc]/10 to-transparent"></div>
+          <div className="absolute inset-y-0 right-0 w-[22%] bg-gradient-to-l from-[#7dd3fc]/22 via-[#7dd3fc]/10 to-transparent"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,113,188,0.1),transparent_56%)]"></div>
+          <div className="absolute top-[16%] left-[12%] w-80 h-80 bg-[#0071bc]/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-[14%] right-[10%] w-[28rem] h-[28rem] bg-[#005dec]/8 rounded-full blur-3xl"></div>
+          <div className="absolute top-[44%] left-[46%] w-56 h-56 bg-[#7a898c]/7 rounded-full blur-2xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0066cc]/3 to-[#031a46]/9"></div>
         </div>
       </header>
 
 
       {/* Why It Matters */}
-      <section id="why-it-matters" className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-white/40">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+      <section id="why-it-matters" ref={whyItMattersRef} className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-[var(--color-bg-sky-light)] relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#f5b942]/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#c97a2f]/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+        
+        <div className={`max-w-7xl mx-auto relative z-10 transition-all duration-1000 ${isWhyItMattersVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
             {/* Left Column */}
-            <div>
-              <div className="flex items-start space-x-4 mb-8">
-                <div className="w-8 h-8 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded flex items-center justify-center flex-shrink-0 mt-1 transform hover:rotate-90 transition-transform duration-500">
-                  <i className="ri-play-fill text-white rotate-90"></i>
+            <div className={`transition-all duration-1000 delay-300 h-full flex flex-col ${isWhyItMattersVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+              <div className="flex items-center space-x-3 mb-6 group cursor-default h-[48px]">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+                  <i className="ri-shield-keyhole-line text-white text-2xl animate-pulse"></i>
                 </div>
-                <h3 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a]">为什么重要</h3>
+                <h3 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-[#1e6b8a] transition-all duration-500">为什么重要</h3>
               </div>
 
-              <div className="bg-white/70 rounded-2xl p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 shadow-lg">
-                <p className="text-[#1e6b8a]/80 leading-relaxed mb-6">
-                  代币化在基础设施支持以下条件时才能规模化
-                </p>
+              <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 lg:p-10 border border-[#b8d9ed]/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(245,185,66,0.15)] hover:border-[#f5b942]/50 transition-all duration-500 group relative overflow-hidden flex-grow flex flex-col justify-between">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#f5b942]/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div>
+                  <p className="text-lg font-medium text-[#1e6b8a] leading-relaxed mb-8 border-l-4 border-[#e84a4a] pl-4 group-hover:border-[#f5b942] transition-colors duration-500 relative z-10">
+                    代币化在基础设施支持以下条件时才能规模化：
+                  </p>
 
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                    <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                      <i className="ri-shield-check-line text-[#1e6b8a] text-xl"></i>
+                  <div className="grid sm:grid-cols-2 gap-6 relative z-10">
+                    <div className="flex items-start space-x-4 group/item cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-[#f5b942]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover/item:bg-gradient-to-br group-hover/item:from-[#f5b942] group-hover/item:to-[#c97a2f] group-hover/item:shadow-lg transition-all duration-300">
+                        <i className="ri-shield-check-line text-[#c97a2f] group-hover/item:text-white text-2xl group-hover/item:scale-110 transition-all duration-300"></i>
+                      </div>
+                      <div className="pt-2">
+                        <h4 className="font-bold text-[#1e6b8a] transition-colors duration-300 mb-1 text-base">安全的托管和结算</h4>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-[#1e6b8a] mb-1">安全的托管和结算</h4>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                    <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                      <i className="ri-settings-3-line text-[#1e6b8a] text-xl"></i>
+                    <div className="flex items-start space-x-4 group/item cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-[#f5b942]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover/item:bg-gradient-to-br group-hover/item:from-[#f5b942] group-hover/item:to-[#c97a2f] group-hover/item:shadow-lg transition-all duration-300">
+                        <i className="ri-settings-3-line text-[#c97a2f] group-hover/item:text-white text-2xl group-hover/item:rotate-180 transition-all duration-500"></i>
+                      </div>
+                      <div className="pt-2">
+                        <h4 className="font-bold text-[#1e6b8a] transition-colors duration-300 mb-1 text-base">运营弹性</h4>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-[#1e6b8a] mb-1">运营弹性</h4>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                    <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                      <i className="ri-file-list-3-line text-[#1e6b8a] text-xl"></i>
+                    <div className="flex items-start space-x-4 group/item cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-[#f5b942]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover/item:bg-gradient-to-br group-hover/item:from-[#f5b942] group-hover/item:to-[#c97a2f] group-hover/item:shadow-lg transition-all duration-300">
+                        <i className="ri-file-list-3-line text-[#c97a2f] group-hover/item:text-white text-2xl group-hover/item:scale-110 transition-all duration-300"></i>
+                      </div>
+                      <div className="pt-2">
+                        <h4 className="font-bold text-[#1e6b8a] transition-colors duration-300 mb-1 text-base">监管一致性</h4>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-[#1e6b8a] mb-1">监管一致性</h4>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                    <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                      <i className="ri-global-line text-[#1e6b8a] text-xl"></i>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-[#1e6b8a] mb-1">跨境效率</h4>
+                    <div className="flex items-start space-x-4 group/item cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+                      <div className="w-12 h-12 bg-[#f5b942]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover/item:bg-gradient-to-br group-hover/item:from-[#f5b942] group-hover/item:to-[#c97a2f] group-hover/item:shadow-lg transition-all duration-300">
+                        <i className="ri-global-line text-[#c97a2f] group-hover/item:text-white text-2xl group-hover/item:scale-110 transition-all duration-300"></i>
+                      </div>
+                      <div className="pt-2">
+                        <h4 className="font-bold text-[#1e6b8a] transition-colors duration-300 mb-1 text-base">跨境效率</h4>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 p-4 bg-gradient-to-r from-[#f5b942]/20 to-[#c97a2f]/20 rounded-xl border border-[#f5b942]/50">
-                  <p className="text-center font-bold text-[#1e6b8a]">
+                <div className="mt-8 p-4 bg-[#e84a4a]/5 rounded-xl border border-[#e84a4a]/20 group-hover:border-[#e84a4a]/40 transition-colors duration-500">
+                  <p className="text-center font-bold text-[#1e6b8a] text-lg group-hover:scale-105 transition-transform duration-500">
                     DACC 旨在满足这些要求。
                   </p>
                 </div>
@@ -878,50 +865,34 @@ export default function Home() {
             </div>
 
             {/* Right Column - What We Enable */}
-            <div>
-              <div className="flex items-start space-x-4 mb-6 md:mb-8">
-                <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded flex items-center justify-center flex-shrink-0 mt-1 transform hover:rotate-90 transition-transform duration-500">
-                  <i className="ri-play-fill text-white rotate-90 text-sm md:text-base"></i>
+            <div className={`transition-all duration-1000 delay-500 h-full flex flex-col ${isWhyItMattersVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+              <div className="flex items-center space-x-3 mb-6 group cursor-default h-[48px]">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+                  <i className="ri-rocket-line text-white text-2xl group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform duration-500"></i>
                 </div>
-                <h3 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a]">我们实现的功能</h3>
+                <h3 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-[#1e6b8a]">我们实现的功能</h3>
               </div>
 
-              <div className="space-y-3 md:space-y-4">
-                <div className="flex items-start space-x-3 bg-white/70 rounded-xl p-3 md:p-4 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:translate-x-2 shadow-md">
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-exchange-line text-[#1e6b8a] text-2xl md:text-2xl"></i>
+              <div className="space-y-4 perspective-1000 flex-grow flex flex-col justify-between">
+                {[
+                  { icon: 'ri-exchange-line', title: '跨境支付通道', desc: '支持人民币与多币种清算，提升资金流转效率' },
+                  { icon: 'ri-bank-line', title: 'RMB Fast Lane', desc: '面向跨境人民币业务，优化结算路径与时效' },
+                  { icon: 'ri-coin-line', title: 'Tokenization 基础设施', desc: '覆盖资产上链、发行、托管与交易衔接' },
+                  { icon: 'ri-shield-check-line', title: '合规与治理框架', desc: '以机构级风控与监管对齐为默认能力' },
+                ].map((item, index) => (
+                  <div key={index} 
+                    className={`flex items-center space-x-5 bg-white/80 backdrop-blur-md rounded-2xl p-5 border-2 border-[#b8d9ed]/50 group-hover:border-[#1e6b8a] group-hover:shadow-[0_10px_20px_rgba(30,107,138,0.15)] transition-all duration-500 hover:-translate-y-2 hover:translate-x-2 cursor-pointer group`}
+                    style={{ transitionDelay: isWhyItMattersVisible ? `${index * 150}ms` : '0ms' }}
+                  >
+                    <div className={`w-14 h-14 bg-[#e8f4fb] group-hover:bg-[#1e6b8a] rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-500 shadow-inner group-hover:scale-110 group-hover:rotate-6`}>
+                      <i className={`${item.icon} text-[#1e6b8a] group-hover:text-white text-3xl transition-colors duration-500`}></i>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-[#1e6b8a] text-lg transition-all duration-300">{item.title}</h4>
+                      <p className="text-sm text-[#1e6b8a]/75 mt-1 leading-relaxed">{item.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">秒级跨境结算</h4>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-white/70 rounded-xl p-3 md:p-4 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:translate-x-2 shadow-md">
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-link text-[#1e6b8a] text-2xl md:text-2xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">无缝的链上/链下集成</h4>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-white/70 rounded-xl p-3 md:p-4 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:translate-x-2 shadow-md">
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-shield-check-line text-[#1e6b8a] text-2xl md:text-2xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">强大的治理和合规性</h4>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 bg-white/70 rounded-xl p-3 md:p-4 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:translate-x-2 shadow-md">
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-building-line text-[#1e6b8a] text-2xl md:text-2xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a] text-sm md:text-base">为机构采用准备的基础设施</h4>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -929,53 +900,69 @@ export default function Home() {
       </section>
 
 
-      {/* Why Hong Kong */}
-      <section className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#e8f4fb]">
+      {/* Why Hong Kong? */}
+      <section id="why-hong-kong" className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#e8f4fb]">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
-            <div>
-              <div className="flex items-start space-x-4 mb-6 md:mb-8">
-                <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded flex items-center justify-center flex-shrink-0 mt-1 transform hover:rotate-90 transition-transform duration-500">
-                  <i className="ri-play-fill text-white rotate-90 text-sm md:text-base"></i>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border border-[#b8d9ed]/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(30,107,138,0.15)] hover:border-[#1e6b8a]/50 transition-all duration-500 group relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#f5b942]/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
+              {/* Left Column: Why Hong Kong Content */}
+              <div className="flex flex-col h-full justify-center lg:pr-10 lg:border-r border-[#b8d9ed]/50 pb-8 lg:pb-0">
+                <div className="flex items-center space-x-3 mb-8 group/title cursor-default">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform group-hover/title:-rotate-12 group-hover/title:scale-110 transition-all duration-500">
+                    <i className="ri-play-fill text-white text-2xl animate-pulse rotate-90 group-hover/title:rotate-0 transition-transform duration-500"></i>
+                  </div>
+                  <h3 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-[#1e6b8a] transition-all duration-500">为什么选择香港？</h3>
                 </div>
-                <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#1e6b8a]">为什么选择香港？</h3>
+
+                <div className="relative mt-2">
+                  <div className="absolute left-0 top-1 bottom-1 w-1.5 bg-[#f5b942] rounded-full opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <p className="text-lg md:text-xl font-medium text-[#1e6b8a]/80 leading-relaxed pl-6 py-1">
+                    DACC 总部位于香港，处于全球金融与中国门户的交汇处。香港的监管成熟度、金融深度和国际连通性，使其成为旨在全球扩展的基础设施的理想基地。
+                  </p>
+                </div>
               </div>
 
-              <div className="bg-white/70 rounded-2xl p-6 md:p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 shadow-lg">
-                <p className="text-sm md:text-base text-[#1e6b8a]/80 leading-relaxed">
-                  DACC 总部位于香港,立足于全球金融中心和中国大陆的门户。香港的监管成熟度、金融深度和国际连通性使其成为旨在全球扩展的基础设施的理想基地。
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column - Infographic */}
-            <div>
-              <div className="bg-white/70 rounded-2xl p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 shadow-lg">
+              {/* Right Column: Next-gen FMI Content */}
+              <div className="flex flex-col h-full justify-center pt-8 lg:pt-0 border-t lg:border-t-0 border-[#b8d9ed]/50 lg:pl-4">
                 <div className="text-center mb-8">
-                  <h4 className="text-2xl font-bold text-[#1e6b8a] mb-2">我们的下一代金融市场基础设施，致力于解决</h4>
-                  <div className="mt-4">
-                    <div className="text-5xl font-bold text-[#f5b942]">$214 万亿跨境支付</div>
-                    <p className="text-sm text-[#1e6b8a]/70 mt-2">中的低效问题</p>
+                  <h4 className="text-2xl font-bold text-[#1e6b8a] mb-2 transition-all duration-300">
+                    我们的下一代 FMI 解决了
+                  </h4>
+                  <div className="mt-4 transform group-hover:scale-105 transition-transform duration-500">
+                    <div className="text-5xl font-bold text-[#f5b942] drop-shadow-sm">214万亿美元</div>
+                    <p className="text-lg font-medium text-[#1e6b8a]/80 mt-2">跨境支付市场的低效问题</p>
                   </div>
                 </div>
 
-                <div className="border-t border-[#b8d9ed] pt-6">
-                  <div className="text-center mb-4">
-                    <p className="text-sm font-semibold text-[#1e6b8a]">来自中国资本的离岸需求</p>
+                <div className="border-t border-[#b8d9ed]/50 pt-8">
+                  <div className="text-center mb-6">
+                    <p className="text-base font-bold text-[#1e6b8a] inline-block px-4 py-1 bg-[#e8f4fb] rounded-full">中国资本离岸需求</p>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/50 rounded-xl p-4 border border-[#1e6b8a]/30 hover:border-[#1e6b8a] transition-all duration-300">
-                      <div className="text-3xl font-bold text-[#1e6b8a] mb-2">$2.4T</div>
-                      <p className="text-[#1e6b8a]/80 text-sm leading-relaxed">
-                        通过 CIPS 的年度跨境支付
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/30 rounded-2xl p-6 border border-[#1e6b8a]/20 hover:border-[#1e6b8a] hover:shadow-md transition-all duration-300 group/item">
+                      <div className="text-3xl font-bold text-[#1e6b8a] mb-2 group-hover/item:text-[#c97a2f] transition-colors duration-300">2.4万亿美元</div>
+                      <p className="text-[#1e6b8a]/80 text-sm font-medium leading-relaxed">
+                        CIPS 年度跨境支付额
                       </p>
                     </div>
-
-                    <div className="bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/50 rounded-xl p-4 border border-[#1e6b8a]/30 hover:border-[#1e6b8a] transition-all duration-300">
-                      <div className="text-3xl font-bold text-[#1e6b8a]">193</div>
-                      <p className="text-[#1e6b8a]/80 text-sm leading-relaxed">
-                        个国家和地区支持 CIPS
+                    <div className="bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/30 rounded-2xl p-6 border border-[#1e6b8a]/20 hover:border-[#1e6b8a] hover:shadow-md transition-all duration-300 group/item">
+                      <div className="text-3xl font-bold text-[#1e6b8a] mb-2 group-hover/item:text-[#c97a2f] transition-colors duration-300">193</div>
+                      <p className="text-[#1e6b8a]/80 text-sm font-medium leading-relaxed">
+                        CIPS 支持的国家和地区
+                      </p>
+                    </div>
+                    <div className="bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/30 rounded-2xl p-6 border border-[#1e6b8a]/20 hover:border-[#1e6b8a] hover:shadow-md transition-all duration-300 group/item">
+                      <div className="text-3xl font-bold text-[#1e6b8a] mb-2 group-hover/item:text-[#c97a2f] transition-colors duration-300">214万亿美元</div>
+                      <p className="text-[#1e6b8a]/80 text-sm font-medium leading-relaxed">
+                        全球跨境支付市场规模
+                      </p>
+                    </div>
+                    <div className="bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/30 rounded-2xl p-6 border border-[#1e6b8a]/20 hover:border-[#1e6b8a] hover:shadow-md transition-all duration-300 group/item">
+                      <div className="text-3xl font-bold text-[#1e6b8a] mb-2 group-hover/item:text-[#c97a2f] transition-colors duration-300">3-5天 → 秒级</div>
+                      <p className="text-[#1e6b8a]/80 text-sm font-medium leading-relaxed">
+                        跨境清算时效优化目标
                       </p>
                     </div>
                   </div>
@@ -987,165 +974,128 @@ export default function Home() {
       </section>
 
       {/* Built for Institutions */}
-      <section id="solutions" className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-white/40">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-start space-x-4 mb-12">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded flex items-center justify-center flex-shrink-0 mt-1 transform hover:rotate-90 transition-transform duration-500">
-              <i className="ri-play-fill text-white rotate-90"></i>
+      <section id="solutions" className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-[var(--color-bg-sky-light)] relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center space-x-3 mb-12 justify-center group cursor-default">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-lg flex items-center justify-center flex-shrink-0 shadow-md transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+              <i className="ri-building-4-line text-white text-xl group-hover:animate-pulse"></i>
             </div>
-            <div>
-              <h3 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-2">为机构打造，实现零售交易</h3>
-            </div>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1e6b8a] text-center transition-all duration-500">为机构打造，实现零售交易</h3>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-12">
-            <div className="bg-white/70 rounded-2xl p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 shadow-lg">
-              <p className="text-[#1e6b8a]/80 leading-relaxed mb-6">
-                DACC 专为受监管的市场参与者而构建，支持：
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            {/* Main Statement */}
+            <div className="lg:col-span-1 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-2xl p-8 shadow-xl text-white relative overflow-hidden flex flex-col justify-center">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#f5b942]/20 rounded-full blur-2xl"></div>
+              <p className="text-xl leading-relaxed mb-6 relative z-10 font-medium">
+                DACC 专为受监管的市场参与者而构建。
               </p>
-
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                  <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-building-2-line text-[#1e6b8a] text-xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">机构级运营</h4>
-                  </div>
+              <div className="space-y-4 relative z-10">
+                <div className="flex items-center space-x-3">
+                  <i className="ri-checkbox-circle-fill text-[#f5b942] text-xl"></i>
+                  <span className="font-semibold">机构级运营</span>
                 </div>
-
-                <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                  <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-shield-check-line text-[#1e6b8a] text-xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">合规优先设计</h4>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <i className="ri-checkbox-circle-fill text-[#f5b942] text-xl"></i>
+                  <span className="font-semibold">合规优先设计</span>
                 </div>
-
-                <div className="flex items-start space-x-3 hover:translate-x-2 transition-transform duration-300">
-                  <div className="w-10 h-10 bg-[#e8f4fb] rounded-lg flex items-center justify-center flex-shrink-0 transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-line-chart-line text-[#1e6b8a] text-xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">长期可扩展性</h4>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <i className="ri-checkbox-circle-fill text-[#f5b942] text-xl"></i>
+                  <span className="font-semibold">长期可扩展性</span>
                 </div>
               </div>
-
-              <div className="mt-8 p-4 bg-gradient-to-r from-[#f5b942]/20 to-[#c97a2f]/20 rounded-xl border border-[#f5b942]/50">
-                <p className="text-center font-bold text-[#1e6b8a]">
+              <div className="mt-8 pt-6 border-t border-white/20 relative z-10">
+                <p className="text-lg font-bold text-[#f5b942]">
                   我们专注于基础设施，而非投机。
                 </p>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="bg-white/70 rounded-xl p-6 border-2 border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 cursor-pointer transform hover:-translate-y-2 shadow-md">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/50 rounded-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-bank-line text-[#1e6b8a] text-2xl"></i>
+            {/* Features Grid */}
+            <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
+              {[
+                { icon: 'ri-bank-line', title: '跨境人民币快速通道' },
+                { icon: 'ri-file-chart-line', title: '数字贸易金融通道' },
+                { icon: 'ri-coin-line', title: 'RWA 代币化与交易通道' },
+                { icon: 'ri-exchange-dollar-line', title: '多币种与数字人民币通道' },
+              ].map((item, index) => (
+                <div key={index} className="bg-white rounded-2xl p-6 border border-[#b8d9ed]/50 hover:border-[#1e6b8a] hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] transition-all duration-300 transform hover:-translate-y-1 group">
+                  <div className="w-14 h-14 bg-[#e8f4fb] group-hover:bg-[#1e6b8a] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-colors duration-500 shadow-inner">
+                    <i className={`${item.icon} text-[#1e6b8a] group-hover:text-white text-3xl transition-colors duration-500`}></i>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">跨境人民币快速通道</h4>
-                  </div>
+                  <h4 className="font-bold text-[#1e6b8a] text-lg">{item.title}</h4>
                 </div>
-              </div>
-
-              <div className="bg-white/70 rounded-xl p-6 border-2 border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 cursor-pointer transform hover:-translate-y-2 shadow-md">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/50 rounded-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-file-chart-line text-[#1e6b8a] text-2xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">数字贸易金融通道</h4>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/70 rounded-xl p-6 border-2 border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 cursor-pointer transform hover:-translate-y-2 shadow-md">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/50 rounded-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-coin-line text-[#1e6b8a] text-2xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">RWA 代币化与交易通道</h4>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/70 rounded-xl p-6 border-2 border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 cursor-pointer transform hover:-translate-y-2 shadow-md">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#e8f4fb] to-[#b8d9ed]/50 rounded-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                    <i className="ri-exchange-dollar-line text-[#1e6b8a] text-2xl"></i>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[#1e6b8a]">多币种与数字人民币通道</h4>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Comparison Section */}
-      <section className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#e8f4fb]">
+      <section className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#e8f4fb]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Traditional Infrastructure */}
-            <div className="bg-white/60 rounded-3xl p-8 lg:p-10 border border-[#b8d9ed]">
-              <div className="flex items-center space-x-3 mb-8">
-                <div className="w-12 h-12 bg-[#e8f4fb] rounded-full flex items-center justify-center flex-shrink-0">
-                  <i className="ri-time-line text-[#1e6b8a]/60 text-xl"></i>
+          <div className="grid lg:grid-cols-2 gap-8 relative">
+            
+            {/* Center VS Badge */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full border-4 border-[#e8f4fb] shadow-[0_0_20px_rgba(30,107,138,0.2)] hidden lg:flex items-center justify-center z-20">
+              <span className="text-[#1e6b8a] font-bold text-xl italic">VS</span>
+            </div>
+
+            {/* Left Column: Traditional Infrastructure */}
+            <div className="bg-white/40 backdrop-blur-md rounded-3xl p-8 lg:p-12 border border-gray-200 relative group overflow-hidden opacity-90 hover:opacity-100 transition-opacity duration-300 grayscale-[20%]">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gray-200/50 rounded-full blur-2xl"></div>
+              
+              <div className="flex items-center space-x-4 mb-10 relative z-10">
+                <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner border border-gray-200">
+                  <i className="ri-building-line text-gray-500 text-2xl"></i>
                 </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-[#1e6b8a]">传统基础设施</h3>
+                <h3 className="text-2xl lg:text-3xl font-bold text-gray-600">传统基础设施</h3>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-8 relative z-10">
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#e8614a]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <i className="ri-close-line text-[#e8614a] text-lg"></i>
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm border border-gray-200 text-gray-400">
+                    <i className="ri-time-line text-xl"></i>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-[#1e6b8a] mb-2">3-5 天结算</h4>
-                    <p className="text-[#1e6b8a]/70 text-sm leading-relaxed">
+                    <h4 className="text-lg font-bold text-gray-700 mb-2">3-5 天结算</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">
                       跨境交易需要数天时间通过代理银行网络进行清算。
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#e8614a]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <i className="ri-close-line text-[#e8614a] text-lg"></i>
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm border border-gray-200 text-gray-400">
+                    <i className="ri-money-dollar-circle-line text-xl"></i>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-[#1e6b8a] mb-2">高额费用</h4>
-                    <p className="text-[#1e6b8a]/70 text-sm leading-relaxed">
+                    <h4 className="text-lg font-bold text-gray-700 mb-2">高额费用</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">
                       多个中介机构在每个步骤都收取费用，每笔交易成本高达 6%。
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#e8614a]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <i className="ri-close-line text-[#e8614a] text-lg"></i>
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm border border-gray-200 text-gray-400">
+                    <i className="ri-eye-off-line text-xl"></i>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-[#1e6b8a] mb-2">透明度有限</h4>
-                    <p className="text-[#1e6b8a]/70 text-sm leading-relaxed">
+                    <h4 className="text-lg font-bold text-gray-700 mb-2">透明度有限</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">
                       无法实时查看交易状态或资金位置。
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#e8614a]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <i className="ri-close-line text-[#e8614a] text-lg"></i>
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-sm border border-gray-200 text-gray-400">
+                    <i className="ri-error-warning-line text-xl"></i>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-[#1e6b8a] mb-2">合规复杂性</h4>
-                    <p className="text-[#1e6b8a]/70 text-sm leading-relaxed">
+                    <h4 className="text-lg font-bold text-gray-700 mb-2">合规复杂性</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">
                       跨司法管辖区的碎片化监管要求造成摩擦和风险。
                     </p>
                   </div>
@@ -1153,180 +1103,167 @@ export default function Home() {
               </div>
             </div>
 
-            {/* DACC Infrastructure */}
-            <div className="bg-gradient-to-br from-[#1e6b8a] to-[#1e6b8a]/90 rounded-3xl p-8 lg:p-10 border-2 border-[#f5b942] relative overflow-hidden shadow-xl">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
+            {/* Right Column: DACC Infrastructure */}
+            <div className="bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-3xl p-8 lg:p-12 border-2 border-[#f5b942] relative group overflow-hidden shadow-[0_20px_50px_rgba(30,107,138,0.3)] transform lg:scale-105 z-10 transition-transform duration-500 hover:scale-[1.07]">
+              {/* Dynamic Background Effects */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#f5b942]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+              
+              <div className="flex items-center space-x-4 mb-10 relative z-10">
+                <div className="w-14 h-14 bg-gradient-to-br from-[#f5b942] to-[#c97a2f] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg transform group-hover:rotate-12 transition-transform duration-500">
+                  <i className="ri-flashlight-fill text-white text-2xl group-hover:animate-pulse"></i>
+                </div>
+                <h3 className="text-2xl lg:text-3xl font-bold text-white drop-shadow-md">DACC 基础设施</h3>
+              </div>
 
-              <div className="relative z-10">
-                <div className="flex items-center space-x-3 mb-8">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i className="ri-flashlight-fill text-white text-xl"></i>
+              <div className="space-y-8 relative z-10">
+                <div className="flex items-start space-x-4 transform transition-all duration-300 hover:translate-x-2">
+                  <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0 mt-1 border border-white/20 text-[#f5b942]">
+                    <i className="ri-check-double-line text-xl"></i>
                   </div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-white">DACC 基础设施</h3>
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-2 tracking-wide">秒级结算</h4>
+                    <p className="text-white/80 text-sm leading-relaxed font-medium">
+                      通过 ChainFusion™ 多链架构实现近乎即时的最终性。
+                    </p>
+                  </div>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <i className="ri-check-line text-white text-lg font-bold"></i>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-white mb-2">秒级结算</h4>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        通过 ChainFusion™ 多链架构实现近乎即时的最终性。
-                      </p>
-                    </div>
+                <div className="flex items-start space-x-4 transform transition-all duration-300 hover:translate-x-2">
+                  <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0 mt-1 border border-white/20 text-[#f5b942]">
+                    <i className="ri-arrow-down-line text-xl"></i>
                   </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <i className="ri-check-line text-white text-lg font-bold"></i>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-white mb-2">显著低于传统渠道的成本</h4>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        直接结算消除了中介机构及其费用。
-                      </p>
-                    </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-2 tracking-wide">显著降低成本</h4>
+                    <p className="text-white/80 text-sm leading-relaxed font-medium">
+                      直接结算消除了中介机构及其产生的高昂费用。
+                    </p>
                   </div>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <i className="ri-check-line text-white text-lg font-bold"></i>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-white mb-2">完全透明</h4>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        每笔交易的实时跟踪和不可篡改的审计跟踪。
-                      </p>
-                    </div>
+                <div className="flex items-start space-x-4 transform transition-all duration-300 hover:translate-x-2">
+                  <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0 mt-1 border border-white/20 text-[#f5b942]">
+                    <i className="ri-eye-line text-xl"></i>
                   </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-2 tracking-wide">完全透明</h4>
+                    <p className="text-white/80 text-sm leading-relaxed font-medium">
+                      每笔交易的实时跟踪和不可篡改的审计跟踪。
+                    </p>
+                  </div>
+                </div>
 
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-white/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <i className="ri-check-line text-white text-lg font-bold"></i>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-white mb-2">内置合规</h4>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        覆盖全球主要司法管辖区的监管级 KYC/AML 与合规报告。
-                      </p>
-                    </div>
+                <div className="flex items-start space-x-4 transform transition-all duration-300 hover:translate-x-2">
+                  <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0 mt-1 border border-white/20 text-[#f5b942]">
+                    <i className="ri-shield-check-line text-xl"></i>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-2 tracking-wide">内置合规</h4>
+                    <p className="text-white/80 text-sm leading-relaxed font-medium">
+                      覆盖 197 个司法管辖区的监管级 KYC/AML 和报告。
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="Services" className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-white/40">
+      <section id="Services" className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-[var(--color-bg-sky-light)]">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-12 md:mb-16 text-center">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 px-4 text-[#1e6b8a]">我们的&nbsp;<span className="text-[#f5b942]">服务</span></h2>
+          <div className="mb-12 md:mb-16 text-center flex flex-col items-center group cursor-default">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-lg flex items-center justify-center shadow-md mb-4 transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+              <i className="ri-service-line text-white text-xl group-hover:animate-pulse"></i>
+            </div>
+            <h2 className="text-3xl md:text-4xl lg:text-[2.5rem] font-bold mb-4 px-4 text-[#1e6b8a] transition-all duration-500">
+              我们的<span className="text-[#f5b942]">服务</span>
+            </h2>
           </div>
 
-          {/* Four Product Cards Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-16 md:mb-20">
-            {/* ChainFusion - Featured Product */}
-            <div className="md:col-span-2 bg-gradient-to-br from-[#1e6b8a] to-[#1e6b8a]/90 rounded-3xl p-6 md:p-8 border-2 border-[#f5b942] hover:shadow-[0_0_40px_rgba(245,185,66,0.5)] transition-all duration-300 transform hover:-translate-y-2 relative overflow-hidden">
+          {/* Top Hero Card (Full Width) */}
+          <div className="mb-8 md:mb-12">
+            <div className="w-full bg-gradient-to-br from-[#1e6b8a] to-[#1e6b8a]/90 rounded-3xl p-8 md:p-12 border-2 border-[#f5b942] hover:shadow-[0_0_40px_rgba(245,185,66,0.5)] transition-all duration-300 transform hover:-translate-y-2 relative overflow-hidden">
               <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 left-0 w-full h-full" style={{
-                  backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-                  backgroundSize: '30px 30px'
-                }}></div>
+                <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
               </div>
-
-              <div className="relative z-10">
-                <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-3 md:px-4 py-2 mb-4 md:mb-6">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  <span className="text-xs md:text-sm text-white font-semibold">现已上线：ChainFusion™</span>
+              
+              <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-8">
+                <div className="flex-1">
+                  <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-3 md:px-4 py-2 mb-4 md:mb-6">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <span className="text-xs md:text-sm text-white font-semibold">现已上线：ChainFusion™</span>
+                  </div>
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+                    实现<span className="text-white drop-shadow-lg">秒级</span>跨境结算
+                  </h3>
+                  <p className="text-white/95 text-base md:text-lg leading-relaxed max-w-2xl">
+                    DACC 利用 CIPS（跨境银行间支付系统）实现代币化经济，该系统参与者遍布 193 个国家和地区，覆盖超过 1,500 家银行机构。
+                  </p>
                 </div>
-
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 md:mb-4 leading-tight">
-                  跨境结算仅需<span className="text-white drop-shadow-lg">数秒</span>
-                </h3>
-
-                <p className="text-white/95 text-sm md:text-base leading-relaxed mb-4 md:mb-6">
-                  DACC 使用 CIPS（跨境银行间支付系统）支持代币化经济，该系统的参与者遍布 193 个国家和地区，业务覆盖超过 1500 家银行机构
-                </p>
-
-                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
-                  <button className="bg-[#f5b942] hover:bg-[#c97a2f] text-white px-6 md:px-8 py-2 md:py-2.5 rounded-full font-semibold hover:shadow-[0_0_20px_rgba(245,185,66,0.5)] transition-all duration-300 whitespace-nowrap cursor-pointer transform hover:scale-105 text-sm md:text-base">
+                
+                <div className="flex-shrink-0">
+                  <button className="bg-[#f5b942] hover:bg-[#c97a2f] text-white px-8 md:px-10 py-3 md:py-4 rounded-xl font-bold text-lg hover:shadow-[0_0_20px_rgba(245,185,66,0.5)] transition-all duration-300 whitespace-nowrap cursor-pointer transform hover:scale-105">
                     探索 ChainFusion™
                   </button>
                 </div>
               </div>
             </div>
-
-            {/* Hot Wallet Integration */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 transform hover:-translate-y-2 shadow-md">
-              <div className="flex justify-center mb-4">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-[#e8f4fb] rounded-xl flex items-center justify-center">
-                  <i className="ri-links-line text-[#1e6b8a] text-2xl md:text-3xl"></i>
-                </div>
-              </div>
-
-              <h3 className="text-lg md:text-xl font-bold text-[#1e6b8a] text-center mb-2 md:mb-3">热钱包集成</h3>
-
-              <p className="text-[#1e6b8a]/70 text-center leading-relaxed mb-3 md:mb-4 text-xs md:text-sm">
-                灵活的、API 驱动的热钱包解决方案，专为规模化和轻松集成而构建。
-              </p>
-
-              <div className="flex justify-center">
-                <a href="/hot-wallet" className="inline-flex items-center space-x-2 text-[#1e6b8a] hover:text-[#f5b942] font-semibold cursor-pointer transition-all duration-300 text-xs md:text-sm">
-                  <span>查看详情</span>
-                  <i className="ri-arrow-right-line"></i>
-                </a>
-              </div>
-            </div>
-
-            {/* Cold Wallet Infrastructure */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 transform hover:-translate-y-2 shadow-md">
-              <div className="flex justify-center mb-4">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-[#e8f4fb] rounded-xl flex items-center justify-center">
-                  <i className="ri-database-2-line text-[#1e6b8a] text-2xl md:text-3xl"></i>
-                </div>
-              </div>
-
-              <h3 className="text-lg md:text-xl font-bold text-[#1e6b8a] text-center mb-2 md:mb-3">冷钱包基础设施</h3>
-
-              <p className="text-[#1e6b8a]/70 text-center leading-relaxed mb-3 md:mb-4 text-xs md:text-sm">
-                安全的、基于 HSM 的冷存储，具有用户友好的界面和完全的本地控制。
-              </p>
-
-              <div className="flex justify-center">
-                <a 
-                  href="/cold-wallet"
-                  className="inline-flex items-center space-x-2 text-[#1e6b8a] hover:text-[#f5b942] font-semibold cursor-pointer transition-all duration-300 text-xs md:text-sm"
-                >
-                  <span>查看详情</span>
-                  <i className="ri-arrow-right-line"></i>
-                </a>
-              </div>
-            </div>
           </div>
 
-          {/* RWA Tokenization Platform - Full Width */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 transform hover:-translate-y-2 shadow-md">
-            <div className="flex flex-col lg:flex-row items-center gap-6 md:gap-8">
-              <div className="flex justify-center lg:justify-start">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-[#e8f4fb] rounded-xl flex items-center justify-center">
-                  <i className="ri-coin-line text-[#1e6b8a] text-3xl md:text-4xl"></i>
+          {/* Bottom Grid for Other Services */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 transform hover:-translate-y-2 shadow-md flex flex-col h-full group">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-[#e8f4fb] rounded-xl flex items-center justify-center group-hover:bg-[#1e6b8a] transition-colors duration-500 shadow-inner">
+                  <i className="ri-links-line text-[#1e6b8a] text-3xl group-hover:text-white transition-colors duration-500"></i>
                 </div>
               </div>
+              <h3 className="text-xl font-bold text-[#1e6b8a] text-center mb-4">热钱包集成</h3>
+              <p className="text-[#1e6b8a]/70 text-center leading-relaxed mb-6 flex-grow">
+                灵活、API 驱动的热钱包解决方案，专为规模化和轻松集成而构建。
+              </p>
+              <div className="flex justify-center mt-auto">
+                <a href="/hot-wallet" className="inline-flex items-center space-x-2 text-[#1e6b8a] hover:text-[#f5b942] font-semibold cursor-pointer transition-all duration-300">
+                  <span>了解更多</span>
+                  <i className="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
 
-              <div className="flex-1 text-center lg:text-left">
-                <h3 className="text-xl md:text-2xl font-bold text-[#1e6b8a] mb-2 md:mb-3">RWA 代币化平台</h3>
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 transform hover:-translate-y-2 shadow-md flex flex-col h-full group">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-[#e8f4fb] rounded-xl flex items-center justify-center group-hover:bg-[#1e6b8a] transition-colors duration-500 shadow-inner">
+                  <i className="ri-database-2-line text-[#1e6b8a] text-3xl group-hover:text-white transition-colors duration-500"></i>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-[#1e6b8a] text-center mb-4">冷钱包基础设施</h3>
+              <p className="text-[#1e6b8a]/70 text-center leading-relaxed mb-6 flex-grow">
+                安全、基于 HSM 的冷存储，具有用户友好的界面和完全的本地控制。
+              </p>
+              <div className="flex justify-center mt-auto">
+                <a href="/cold-wallet" className="inline-flex items-center space-x-2 text-[#1e6b8a] hover:text-[#f5b942] font-semibold cursor-pointer transition-all duration-300">
+                  <span>了解更多</span>
+                  <i className="ri-arrow-right-line"></i>
+                </a>
+              </div>
+            </div>
 
-                <p className="text-[#1e6b8a]/70 leading-relaxed mb-3 md:mb-4 text-sm md:text-base">
-                  基于 UI 的平台，具有结构化元数据和多方授权，用于可信的 RWA 发行。
-                </p>
-
-                <a href="/rwa-platform" className="inline-flex items-center space-x-2 text-[#1e6b8a] hover:text-[#f5b942] font-semibold cursor-pointer transition-all duration-300 text-sm md:text-base">
-                  <span>查看详情</span>
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 transform hover:-translate-y-2 shadow-md flex flex-col h-full group">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-[#e8f4fb] rounded-xl flex items-center justify-center group-hover:bg-[#1e6b8a] transition-colors duration-500 shadow-inner">
+                  <i className="ri-coin-line text-[#1e6b8a] text-3xl group-hover:text-white transition-colors duration-500"></i>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-[#1e6b8a] text-center mb-4">RWA 代币化平台</h3>
+              <p className="text-[#1e6b8a]/70 text-center leading-relaxed mb-6 flex-grow">
+                基于 UI 的平台，具有结构化元数据和多方授权，用于可信 RWA 发行。
+              </p>
+              <div className="flex justify-center mt-auto">
+                <a href="/rwa-platform" className="inline-flex items-center space-x-2 text-[#1e6b8a] hover:text-[#f5b942] font-semibold cursor-pointer transition-all duration-300">
+                  <span>了解更多</span>
                   <i className="ri-arrow-right-line"></i>
                 </a>
               </div>
@@ -1336,11 +1273,16 @@ export default function Home() {
       </section>
 
       {/* Use Cases Section */}
-      <section id="use-cases" className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#e8f4fb]">
+      <section id="use-cases" className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#e8f4fb]">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-12 md:mb-16 text-center">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 px-4 text-[#1e6b8a]">应用 <span className="text-[#f5b942]">案例</span></h2>
-            <p className="text-lg md:text-xl text-[#1e6b8a]/70 max-w-3xl mx-auto px-4">
+          <div className="mb-12 md:mb-16 text-center flex flex-col items-center group cursor-default">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-lg flex items-center justify-center shadow-md mb-4 transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+              <i className="ri-briefcase-line text-white text-xl group-hover:animate-pulse"></i>
+            </div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 px-4 text-[#1e6b8a] transition-all duration-500">
+              应用<span className="text-[#1e6b8a]">案例</span>
+            </h2>
+            <p className="text-lg md:text-xl text-[#1e6b8a]/70 max-w-3xl mx-auto px-4 font-medium transition-all duration-500">
               DACC 基础设施的实际应用
             </p>
           </div>
@@ -1505,7 +1447,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-start space-x-2">
                   <i className="ri-checkbox-circle-fill text-[#1e6b8a] mt-1 flex-shrink-0 text-sm"></i>
-                  <span className="text-xs md:text-sm text-[#1e6b8a]/70">支持加密平台与电商生态的互联互通，触达广泛加密用户群</span>
+                  <span className="text-xs md:text-sm text-[#1e6b8a]/70">通过 12 家加密交易所集成，接触数亿加密用户</span>
                 </div>
               </div>
 
@@ -1522,11 +1464,14 @@ export default function Home() {
       </section>
 
       {/* Our Advisors Section */}
-      <section id="advisors" className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-white/40">
+      <section id="advisors" className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-[var(--color-bg-sky-light)]">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12 md:mb-16 text-center">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 px-4 text-[#1e6b8a]">
-              我们 <span className="text-[#f5b942]">董事</span>
+          <div className="mb-12 md:mb-16 text-center flex flex-col items-center group cursor-default">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-lg flex items-center justify-center shadow-md mb-4 transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+              <i className="ri-team-line text-white text-xl group-hover:animate-pulse"></i>
+            </div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 px-4 text-[#1e6b8a] transition-all duration-500">
+              我们<span className="text-[#1e6b8a]">董事</span>
             </h2>
           </div>
 
@@ -1535,84 +1480,76 @@ export default function Home() {
       </section>
 
       {/* Our Investors Section */}
-      <section id="ecosystem" className="px-4 md:px-6 py-16 md:py-20 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#1e6b8a]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 px-4 text-[#1e6b8a]">
-              我们 <span className="text-[#f5b942]">投资者</span>
+      <section id="investors" className="px-4 md:px-6 py-16 md:py-24 lg:px-12 bg-gradient-to-b from-[#b8d9ed] to-[#1e6b8a] relative overflow-hidden">
+        {/* Abstract Background Pattern to match image */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `linear-gradient(to right, #1e6b8a 1px, transparent 1px), linear-gradient(to bottom, #1e6b8a 1px, transparent 1px)`,
+            backgroundSize: '100px 100px'
+          }}></div>
+          {/* Subtle diagonal lines */}
+          <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="0" x2="100%" y2="100%" stroke="#1e6b8a" strokeWidth="0.5" />
+            <line x1="100%" y1="0" x2="0" y2="100%" stroke="#1e6b8a" strokeWidth="0.5" />
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="mb-12 md:mb-16 text-center flex flex-col items-center group cursor-default">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1e6b8a] to-[#1e3a4a] rounded-lg flex items-center justify-center shadow-md mb-4 transform group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500">
+              <i className="ri-hand-coin-line text-white text-xl group-hover:animate-pulse"></i>
+            </div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 px-4 text-[#1e6b8a] transition-all duration-500">
+              我们的<span className="text-[#1e6b8a]">投资方</span>
             </h2>
-            <p className="text-lg md:text-xl text-[#1e6b8a]/80 max-w-3xl mx-auto px-4">
-              获得香港及中国大陆上市公司与领先国际投资者的强力支持
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Conflux/Starcoin</p>
-              <p className="text-center text-xs md:text-sm text-[#1e6b8a]/70 mt-1">(HKEX: 399)</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Conflux/Starcoin</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">HKEX: 399</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">TTL/ Kingdom</p>
-              <p className="text-center text-xs md:text-sm text-[#1e6b8a]/70 mt-1">(SZSE: 600446)</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">TTL/Kingdom</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">SZSE: 600446</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Global Infotech</p>
-              <p className="text-center text-xs md:text-sm text-[#1e6b8a]/70 mt-1">(SZSE: 300465)</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Global Infotech</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">SZSE: 300465</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Fosun International</p>
-              <p className="text-center text-xs md:text-sm text-[#1e6b8a]/70 mt-1">(HKEX: 0656)</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Fosun International</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">HKEX: 0656</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Avior Capital</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Avior Capital</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">投资者</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Blockstone</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Blockstone</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">投资者</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">BridgeTower Capital</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">BridgeTower Capital</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">投资者</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Fintech World</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Fintech World</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">投资者</p>
             </div>
-
-            <div className="bg-white/70 rounded-xl p-4 md:p-6 border-2 border-[#b8d9ed] hover:border-[#f5b942] transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,185,66,0.3)] cursor-pointer transform hover:-translate-y-2">
-              <p className="text-center font-semibold text-[#1e6b8a] text-sm md:text-base">Satoshi Ventures</p>
+            <div className="bg-white rounded-lg p-6 md:p-8 border border-[#1e6b8a] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(30,107,138,0.15)] cursor-pointer flex flex-col items-center justify-center min-h-[120px]">
+              <p className="text-center font-bold text-[#1e6b8a] text-lg tracking-wide">Satoshi Ventures</p>
+              <p className="text-center text-sm text-[#1e6b8a] font-semibold mt-2 tracking-wider">投资者</p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Back to Top Button */}
-      {showBackToTop && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-[#1e6b8a] hover:bg-[#f5b942] text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-          aria-label="回到顶部"
-        >
-          <i className="ri-arrow-up-line text-xl"></i>
-        </button>
-      )}
 
       {/* Footer */}
       <footer id="contact" className="bg-[#1e6b8a] text-white py-8 md:py-12 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
             <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <img 
-                  src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/86e6f5c087b2b68763a98a978a16381f.png" 
-                  alt="DACC Logo" 
-                  className="h-20 w-auto object-contain"
-                />
-              </div>
               <p className="text-white/80 text-xs md:text-sm leading-relaxed">
                 引领数字清算与结算的下一个十年
               </p>
@@ -1638,7 +1575,7 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">关注我们</h4>
               <div className="flex space-x-4">
-                <a href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-[#f5b942] transition-colors cursor-pointer">
+                <a href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center hover:bg-[#f5b942] transition-colors cursor-pointer">
                   <i className="ri-linkedin-fill text-lg"></i>
                 </a>
               </div>

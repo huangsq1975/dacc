@@ -3,6 +3,25 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary-blue: #005dec;
+  --color-primary-blue-alt: #0066ff;
+  --color-secondary-blue: #0071bc;
+  --color-secondary-blue-alt: #0066cc;
+  --color-tertiary-grey: #7a898c;
+  --color-tertiary-grey-alt: #669999;
+  --color-bg-deep: #031a46;
+  --color-bg-sky-light: #e8f4fb;
+}
+
+body {
+  font-family: "Montserrat", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
 /* Horizontal scrolling animation for testimonials */
 @keyframes scroll-horizontal {
   0% {
@@ -14,7 +33,7 @@
 }
 
 .animate-scroll-horizontal {
-  animation: scroll-horizontal 60s linear infinite;
+  animation: scroll-horizontal 40s linear infinite;
   will-change: transform;
 }
 
