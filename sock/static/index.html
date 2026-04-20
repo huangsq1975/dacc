@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>A股K線圖</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0d0d0d;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;-webkit-tap-highlight-color:transparent}
+
+    /* ── 頂部搜索 ── */
+    #header{position:fixed;top:0;left:0;right:0;z-index:100;background:#161616;border-bottom:1px solid #222;padding:8px 10px;display:flex;align-items:center;gap:8px}
+    #search-wrap{flex:1;display:flex;gap:6px}
+    #search-input{flex:1;background:#222;border:1px solid #333;border-radius:6px;color:#fff;padding:7px 10px;font-size:14px;outline:none}
+    #search-input::placeholder{color:#555}
+    #search-btn{background:#c0392b;border:none;border-radius:6px;color:#fff;padding:7px 14px;font-size:13px;cursor:pointer}
+    #stock-name{font-size:13px;color:#aaa;white-space:nowrap;max-width:70px;overflow:hidden;text-overflow:ellipsis}
+
+    /* ── 搜索下拉 ── */
+    #dropdown{position:fixed;top:52px;left:10px;right:10px;z-index:200;background:#1a1a1a;border:1px solid #333;border-radius:8px;max-height:50vh;overflow-y:auto;display:none}
+    .d-item{padding:10px 14px;border-bottom:1px solid #222;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+    .d-item:last-child{border-bottom:none}
+    .d-item:active{background:#2a2a2a}
+    .d-code{color:#e67e22;font-weight:bold;font-size:13px}
+    .d-name{color:#bbb;font-size:13px}
+
+    /* ── 行情欄 ── */
+    #quote-bar{margin-top:52px;padding:8px 10px;background:#111;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:flex-end;border-bottom:1px solid #1e1e1e}
+    #q-price{font-size:24px;font-weight:bold;line-height:1}
+    #q-pct{font-size:13px;margin-top:2px}
+    .qi{display:flex;flex-direction:column;font-size:11px}
+    .qi span:first-child{color:#555;margin-bottom:2px}
+    .qi span:last-child{color:#ccc}
+    .up{color:#e84040}.dn{color:#2ecc71}.flat{color:#aaa}
+
+    /* ── 週期欄 ── */
+    #period-bar{background:#111;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid #1a1a1a}
+    #period-bar::-webkit-scrollbar{display:none}
+    .pb{flex:0 0 auto;padding:8px 14px;font-size:13px;color:#666;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+    .pb.active{color:#e84040;border-bottom-color:#e84040}
+
+    /* ── 圖表 ── */
+    #kline-chart{width:100%;height:55vw;min-height:260px;max-height:420px}
+    #vol-chart{width:100%;height:20vw;min-height:90px;max-height:160px}
+
+    /* ── 遮罩/錯誤 ── */
+    #mask{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999;color:#fff;font-size:16px}
+    #err{color:#e84040;padding:14px;text-align:center;display:none;font-size:13px}
+  </style>
+</head>
+<body>
+
+<div id="mask">加載中…</div>
+
+<div id="header">
+  <div id="search-wrap">
+    <input id="search-input" type="text" placeholder="代碼 / 名稱"/>
+    <button id="search-btn">搜索</button>
+  </div>
+  <div id="stock-name"></div>
+</div>
+
+<div id="dropdown"></div>
+
+<div id="quote-bar">
+  <div style="display:flex;flex-direction:column">
+    <div id="q-price" class="flat">--</div>
+    <div id="q-pct"   class="flat">--</div>
+  </div>
+  <div class="qi"><span>今開</span><span id="qi-open">--</span></div>
+  <div class="qi"><span>最高</span><span id="qi-high">--</span></div>
+  <div class="qi"><span>最低</span><span id="qi-low">--</span></div>
+  <div class="qi"><span>昨收</span><span id="qi-prev">--</span></div>
+  <div class="qi"><span>成交量(手)</span><span id="qi-vol">--</span></div>
+</div>
+
+<div id="period-bar">
+  <button class="pb" data-mode="minute">分時</button>
+  <button class="pb active" data-mode="m5">5分</button>
+  <button class="pb" data-mode="m15">15分</button>
+  <button class="pb" data-mode="m30">30分</button>
+  <button class="pb" data-mode="m60">60分</button>
+  <button class="pb" data-mode="day">日K</button>
+  <button class="pb" data-mode="week">周K</button>
+  <button class="pb" data-mode="month">月K</button>
+</div>
+
+<div id="err"></div>
+<div id="kline-chart"></div>
+<div id="vol-chart"></div>
+
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════
+   騰訊財經 API 工具函數
+═══════════════════════════════════════ */
+
+/** 根據代碼推斷市場前綴，返回 "sh600519" 形式 */
+function toFullCode(code) {
+  code = code.trim();
+  if (/^(sh|sz)/i.test(code)) return code.toLowerCase();
+  if (/^6/.test(code)) return 'sh' + code;
+  if (/^(11|50|51)/.test(code)) return 'sh' + code; // 上交所 ETF/轉債
+  return 'sz' + code;
+}
+
+/** 動態注入 <script> 並讀取其設置的全局變量 */
+function loadVar(url, varName) {
+  return new Promise((resolve, reject) => {
+    delete window[varName];
+    const s = document.createElement('script');
+    s.src = url + (url.includes('?') ? '&' : '?') + '_t=' + Date.now();
+    s.onload = () => { resolve(window[varName]); s.remove(); };
+    s.onerror = () => { s.remove(); reject(new Error('加載失敗')); };
+    const t = setTimeout(() => { s.remove(); reject(new Error('請求超時')); }, 8000);
+    s.addEventListener('load',  () => clearTimeout(t), { once: true });
+    s.addEventListener('error', () => clearTimeout(t), { once: true });
+    document.head.appendChild(s);
+  });
+}
+
+/** 騰訊 SmartBox 搜索（固定回調 smartboxJsonp） */
+function searchTencent(q) {
+  return new Promise((resolve) => {
+    window.smartboxJsonp = (data) => {
+      delete window.smartboxJsonp;
+      const list = data?.data?.rqba ?? [];
+      resolve(list.map(i => ({ fullCode: i.id, name: i.name })));
+    };
+    const s = document.createElement('script');
+    s.src = `https://smartbox.gtimg.cn/s3/?v=2&q=${encodeURIComponent(q)}&type=rqba&token=`;
+    s.onload  = () => s.remove();
+    s.onerror = () => { s.remove(); resolve([]); };
+    setTimeout(() => resolve([]), 5000);
+    document.head.appendChild(s);
+  });
+}
+
+/** 實時行情 qt.gtimg.cn */
+async function fetchQuote(fullCode) {
+  const varName = 'v_' + fullCode;
+  const url = `https://qt.gtimg.cn/q=${fullCode}`;
+  await loadVar(url, varName);
+  const raw = (window[varName] || '').split('~');
+  if (raw.length < 7) return null;
+  return {
+    name:       raw[1]  || '',
+    price:      +raw[3] || 0,
+    prevClose:  +raw[4] || 0,
+    open:       +raw[5] || 0,
+    volume:     +raw[6] || 0,   // 手
+    change:     +raw[31] || 0,
+    pctChg:     +raw[32] || 0,
+    high:       +raw[33] || 0,
+    low:        +raw[34] || 0,
+  };
+}
+
+/**
+ * 日/周/月 K（前復權）
+ * 返回數組：[date, open, close, high, low, volume, amount]
+ */
+async function fetchDayK(fullCode, period = 'day', count = 320) {
+  const varName = 'kline_' + period + 'k_' + fullCode;
+  const url = `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=${varName}&param=${fullCode},${period},,,${count},qfq`;
+  const data = await loadVar(url, varName);
+  const stock = data?.data?.[fullCode] ?? {};
+  // 前復權時 key 可能是 qfqday / qfqweek / qfqmonth，也可能是 day / week / month
+  return stock['qfq' + period] ?? stock[period] ?? [];
+}
+
+/**
+ * 分鐘 K（5/15/30/60）
+ * 返回數組：[datetime, open, close, high, low, volume]
+ */
+async function fetchMinK(fullCode, minutes = 5, count = 320) {
+  const varName = 'm' + minutes + '_' + fullCode;
+  const url = `https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=${fullCode},m${minutes},,${count}&_var=${varName}`;
+  const data = await loadVar(url, varName);
+  return data?.data?.[fullCode]?.['m' + minutes] ?? [];
+}
+
+/**
+ * 分時數據（當日逐分鐘）
+ * 返回數組：[HHMMSS, price, avg_price, volume, amount]
+ */
+async function fetchMinute(fullCode) {
+  const varName = 'min_' + fullCode;
+  const url = `https://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=${varName}&param=${fullCode}`;
+  const data = await loadVar(url, varName);
+  return data?.data?.[fullCode]?.data?.time ?? [];
+}
+
+/* ═══════════════════════════════════════
+   MA 計算
+═══════════════════════════════════════ */
+function calcMA(closes, n) {
+  return closes.map((_, i) => {
+    if (i < n - 1) return null;
+    const s = closes.slice(i - n + 1, i + 1).reduce((a, b) => a + b, 0);
+    return +(s / n).toFixed(3);
+  });
+}
+
+/* ═══════════════════════════════════════
+   ECharts 初始化
+═══════════════════════════════════════ */
+let kChart, vChart;
+
+function initCharts() {
+  kChart = echarts.init(document.getElementById('kline-chart'), 'dark');
+  vChart = echarts.init(document.getElementById('vol-chart'), 'dark');
+
+  function syncZoom(from, to, e) {
+    const ev = e.batch?.[0] ?? e;
+    to.dispatchAction({ type: 'dataZoom', start: ev.start, end: ev.end });
+  }
+  kChart.on('dataZoom', e => syncZoom(kChart, vChart, e));
+  vChart.on('dataZoom', e => syncZoom(vChart, kChart, e));
+
+  window.addEventListener('resize', () => { kChart.resize(); vChart.resize(); });
+}
+
+/* ═══════════════════════════════════════
+   渲染 K 線（蠟燭圖）
+═══════════════════════════════════════ */
+function renderKline(rows) {
+  // rows: {date, open, close, high, low, volume}[]
+  const dates  = rows.map(r => r.date);
+  const ohlc   = rows.map(r => [r.open, r.close, r.low, r.high]);
+  const vols   = rows.map(r => ({ value: r.volume, itemStyle: { color: r.close >= r.open ? '#e84040' : '#2ecc71' } }));
+  const closes = rows.map(r => r.close);
+  const ma5  = calcMA(closes, 5);
+  const ma10 = calcMA(closes, 10);
+  const ma20 = calcMA(closes, 20);
+  const ma30 = calcMA(closes, 30);
+
+  const zs = Math.max(0, ((dates.length - 80) / dates.length) * 100);
+
+  const dzConfig = [
+    { type: 'inside', start: zs, end: 100, minValueSpan: 6 },
+    { type: 'slider', show: false },
+  ];
+
+  kChart.setOption({
+    backgroundColor: '#0d0d0d',
+    animation: false,
+    legend: {
+      data: ['MA5','MA10','MA20','MA30'], top: 4, left: 4,
+      textStyle: { color: '#666', fontSize: 10 }, itemWidth: 12, itemHeight: 6,
+    },
+    grid: { left: 2, right: '9%', top: 28, bottom: 40 },
+    xAxis: {
+      type: 'category', data: dates, boundaryGap: true, scale: true,
+      axisLabel: { color: '#555', fontSize: 10 },
+      axisLine: { lineStyle: { color: '#2a2a2a' } }, splitLine: { show: false },
+    },
+    yAxis: {
+      scale: true, splitNumber: 4, position: 'right',
+      axisLabel: { color: '#777', fontSize: 10 },
+      axisLine: { lineStyle: { color: '#2a2a2a' } },
+      splitLine: { lineStyle: { color: '#181818' } },
+    },
+    dataZoom: dzConfig,
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'cross' },
+      backgroundColor: 'rgba(18,18,18,.95)', borderColor: '#333',
+      textStyle: { color: '#ddd', fontSize: 11 },
+      formatter(params) {
+        const k = params.find(p => p.seriesName === 'K');
+        if (!k) return '';
+        const [o, c, l, h] = k.value;
+        const clr = c >= o ? '#e84040' : '#2ecc71';
+        let s = `<div style="color:#888;margin-bottom:3px">${k.axisValue}</div>`;
+        s += `<div>開<b style="color:${clr};margin-left:4px">${o}</b>　收<b style="color:${clr};margin-left:4px">${c}</b></div>`;
+        s += `<div>高<b style="color:#e84040;margin-left:4px">${h}</b>　低<b style="color:#2ecc71;margin-left:4px">${l}</b></div>`;
+        params.filter(p => p.seriesName.startsWith('MA') && p.value != null)
+              .forEach(p => { s += `<div>${p.seriesName}<b style="color:${p.color};margin-left:4px">${p.value}</b></div>`; });
+        return s;
+      },
+    },
+    series: [
+      { name: 'K', type: 'candlestick', data: ohlc,
+        itemStyle: { color: '#e84040', color0: '#2ecc71', borderColor: '#e84040', borderColor0: '#2ecc71' } },
+      { name: 'MA5',  type: 'line', data: ma5,  smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#f39c12' } },
+      { name: 'MA10', type: 'line', data: ma10, smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#9b59b6' } },
+      { name: 'MA20', type: 'line', data: ma20, smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#3498db' } },
+      { name: 'MA30', type: 'line', data: ma30, smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#1abc9c' } },
+    ],
+  }, true);
+
+  vChart.setOption({
+    backgroundColor: '#0d0d0d',
+    animation: false,
+    grid: { left: 2, right: '9%', top: 4, bottom: 26 },
+    xAxis: {
+      type: 'category', data: dates, boundaryGap: true,
+      axisLabel: { color: '#444', fontSize: 9 },
+      axisLine: { lineStyle: { color: '#2a2a2a' } }, splitLine: { show: false },
+    },
+    yAxis: {
+      scale: true, splitNumber: 2, position: 'right',
+      axisLabel: {
+        color: '#555', fontSize: 9,
+        formatter: v => v >= 1e8 ? (v / 1e8).toFixed(1) + '億' : v >= 1e4 ? (v / 1e4).toFixed(0) + '萬' : v,
+      },
+      splitLine: { lineStyle: { color: '#181818' } },
+    },
+    dataZoom: [{ type: 'inside', start: zs, end: 100, minValueSpan: 6 }],
+    tooltip: { show: false },
+    series: [{ name: '量', type: 'bar', data: vols, barMaxWidth: 8 }],
+  }, true);
+}
+
+/* ═══════════════════════════════════════
+   渲染分時折線圖
+═══════════════════════════════════════ */
+function renderMinute(rows, prevClose) {
+  // rows: [HHMMSS, price, avg_price, volume, amount]
+  const times  = rows.map(r => r[0].replace(/^(\d{2})(\d{2})(\d{2})$/, '$1:$2'));
+  const prices = rows.map(r => +r[1]);
+  const avgs   = rows.map(r => +r[2]);
+  const vols   = rows.map((r, i) => {
+    const v = +r[3];
+    return { value: v, itemStyle: { color: prices[i] >= (prices[i - 1] ?? prevClose) ? '#e84040' : '#2ecc71' } };
+  });
+
+  kChart.setOption({
+    backgroundColor: '#0d0d0d',
+    animation: false,
+    legend: {
+      data: ['分時','均價'], top: 4, left: 4,
+      textStyle: { color: '#666', fontSize: 10 }, itemWidth: 12, itemHeight: 6,
+    },
+    grid: { left: 2, right: '9%', top: 28, bottom: 40 },
+    xAxis: {
+      type: 'category', data: times, boundaryGap: false,
+      axisLabel: { color: '#555', fontSize: 10, interval: Math.floor(times.length / 5) },
+      axisLine: { lineStyle: { color: '#2a2a2a' } }, splitLine: { show: false },
+    },
+    yAxis: {
+      scale: true, splitNumber: 4, position: 'right',
+      axisLabel: { color: '#777', fontSize: 10 },
+      axisLine: { lineStyle: { color: '#2a2a2a' } },
+      splitLine: { lineStyle: { color: '#181818' } },
+      min: v => +(Math.min(v.min, prevClose) * 0.998).toFixed(2),
+      max: v => +(Math.max(v.max, prevClose) * 1.002).toFixed(2),
+    },
+    dataZoom: [{ type: 'inside', start: 0, end: 100 }],
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'line' },
+      backgroundColor: 'rgba(18,18,18,.95)', borderColor: '#333',
+      textStyle: { color: '#ddd', fontSize: 11 },
+      formatter(params) {
+        let s = `<div style="color:#888;margin-bottom:2px">${params[0].axisValue}</div>`;
+        params.forEach(p => { s += `<div>${p.seriesName}<b style="color:${p.color};margin-left:4px">${p.value}</b></div>`; });
+        return s;
+      },
+    },
+    series: [
+      {
+        name: '分時', type: 'line', data: prices, smooth: false, showSymbol: false,
+        lineStyle: { width: 1.5, color: '#e84040' },
+        areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(232,64,64,.25)' }, { offset: 1, color: 'rgba(232,64,64,0)' }] } },
+      },
+      { name: '均價', type: 'line', data: avgs, smooth: false, showSymbol: false,
+        lineStyle: { width: 1, color: '#f39c12' } },
+    ],
+  }, true);
+
+  vChart.setOption({
+    backgroundColor: '#0d0d0d',
+    animation: false,
+    grid: { left: 2, right: '9%', top: 4, bottom: 26 },
+    xAxis: {
+      type: 'category', data: times, boundaryGap: false,
+      axisLabel: { color: '#444', fontSize: 9 },
+      axisLine: { lineStyle: { color: '#2a2a2a' } }, splitLine: { show: false },
+    },
+    yAxis: {
+      scale: true, splitNumber: 2, position: 'right',
+      axisLabel: {
+        color: '#555', fontSize: 9,
+        formatter: v => v >= 1e8 ? (v / 1e8).toFixed(1) + '億' : v >= 1e4 ? (v / 1e4).toFixed(0) + '萬' : v,
+      },
+      splitLine: { lineStyle: { color: '#181818' } },
+    },
+    dataZoom: [{ type: 'inside', start: 0, end: 100 }],
+    tooltip: { show: false },
+    series: [{ type: 'bar', data: vols, barMaxWidth: 8 }],
+  }, true);
+}
+
+/* ═══════════════════════════════════════
+   行情欄更新
+═══════════════════════════════════════ */
+let lastQuote = null;
+
+function renderQuote(q) {
+  if (!q) return;
+  lastQuote = q;
+  const cls   = q.pctChg > 0 ? 'up' : q.pctChg < 0 ? 'dn' : 'flat';
+  const sign  = q.pctChg > 0 ? '+' : '';
+  document.getElementById('q-price').className = cls;
+  document.getElementById('q-price').textContent = q.price.toFixed(2);
+  document.getElementById('q-pct').className = cls;
+  document.getElementById('q-pct').textContent = `${sign}${q.pctChg.toFixed(2)}%  ${sign}${q.change.toFixed(2)}`;
+  document.getElementById('qi-open').textContent = q.open.toFixed(2);
+  document.getElementById('qi-high').textContent = q.high.toFixed(2);
+  document.getElementById('qi-low').textContent  = q.low.toFixed(2);
+  document.getElementById('qi-prev').textContent = q.prevClose.toFixed(2);
+  const v = q.volume;
+  document.getElementById('qi-vol').textContent =
+    v >= 1e8 ? (v / 1e8).toFixed(2) + '億' : v >= 1e4 ? (v / 1e4).toFixed(0) + '萬' : v;
+  document.getElementById('stock-name').textContent = q.name;
+}
+
+/* ═══════════════════════════════════════
+   主加載邏輯
+═══════════════════════════════════════ */
+let currentFull = 'sh000001';
+let currentMode = 'm5';
+
+function showLoading(b) { document.getElementById('mask').style.display = b ? 'flex' : 'none'; }
+function showErr(msg)   {
+  const el = document.getElementById('err');
+  el.textContent = msg; el.style.display = msg ? 'block' : 'none';
+}
+
+async function loadChart() {
+  showLoading(true);
+  showErr('');
+  try {
+    let rows;
+    if (currentMode === 'minute') {
+      const raw = await fetchMinute(currentFull);
+      if (!raw.length) { showErr('暫無分時數據'); return; }
+      const prev = lastQuote?.prevClose ?? 0;
+      renderMinute(raw, prev);
+    } else if (/^m\d+$/.test(currentMode)) {
+      const mins = parseInt(currentMode.slice(1));
+      const raw = await fetchMinK(currentFull, mins);
+      if (!raw.length) { showErr('暫無數據'); return; }
+      // Tencent 格式: [datetime, open, close, high, low, volume]
+      rows = raw.map(r => ({ date: r[0], open: +r[1], close: +r[2], high: +r[3], low: +r[4], volume: +r[5] }));
+      renderKline(rows);
+    } else {
+      const raw = await fetchDayK(currentFull, currentMode);
+      if (!raw.length) { showErr('暫無數據'); return; }
+      rows = raw.map(r => ({ date: r[0], open: +r[1], close: +r[2], high: +r[3], low: +r[4], volume: +r[5] }));
+      renderKline(rows);
+    }
+  } catch (e) {
+    showErr(e.message || '數據加載失敗');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function loadQuote() {
+  try {
+    const q = await fetchQuote(currentFull);
+    renderQuote(q);
+  } catch (_) {}
+}
+
+async function loadAll() {
+  await Promise.allSettled([loadQuote(), loadChart()]);
+}
+
+/* ═══════════════════════════════════════
+   週期按鈕
+═══════════════════════════════════════ */
+document.querySelectorAll('.pb').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pb').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    loadChart();
+  });
+});
+
+/* ═══════════════════════════════════════
+   搜索
+═══════════════════════════════════════ */
+let searchTimer;
+
+async function doSearch() {
+  const q = document.getElementById('search-input').value.trim();
+  const dd = document.getElementById('dropdown');
+  if (!q) { dd.style.display = 'none'; return; }
+  const list = await searchTencent(q);
+  if (!list.length) { dd.style.display = 'none'; return; }
+  dd.innerHTML = list.map(item =>
+    `<div class="d-item" data-code="${item.fullCode}">
+      <span class="d-code">${item.fullCode}</span>
+      <span class="d-name">${item.name}</span>
+    </div>`
+  ).join('');
+  dd.style.display = 'block';
+  dd.querySelectorAll('.d-item').forEach(el => {
+    el.addEventListener('click', () => {
+      currentFull = el.dataset.code;
+      document.getElementById('search-input').value = '';
+      dd.style.display = 'none';
+      loadAll();
+    });
+  });
+}
+
+document.getElementById('search-btn').addEventListener('click', doSearch);
+document.getElementById('search-input').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(doSearch, 400);
+});
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { clearTimeout(searchTimer); doSearch(); }
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('#search-wrap') && !e.target.closest('#dropdown'))
+    document.getElementById('dropdown').style.display = 'none';
+});
+
+/* ═══════════════════════════════════════
+   啟動
+═══════════════════════════════════════ */
+initCharts();
+loadAll();
+setInterval(loadQuote, 30000); // 每30秒刷新行情
+</script>
+</body>
+</html>

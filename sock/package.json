@@ -1,0 +1,13 @@
+{
+  "name": "a-stock-kline",
+  "version": "1.0.0",
+  "description": "A股K線圖 H5，使用騰訊財經接口",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
