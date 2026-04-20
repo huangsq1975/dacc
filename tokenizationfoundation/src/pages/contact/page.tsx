@@ -142,7 +142,7 @@ export default function Contact() {
     explore: '',
     details: '',
   })
-  const contactSubmit = useFormSubmit('https://formspree.io/f/placeholder-contact')
+  const contactSubmit = useFormSubmit('https://formspree.io/f/mbdqkyvy')
 
   const [councilForm, setCouncilForm] = useState({
     firstName: '',
@@ -152,7 +152,7 @@ export default function Contact() {
     role: '',
     interest: '',
   })
-  const councilSubmit = useFormSubmit('https://formspree.io/f/placeholder-council')
+  const councilSubmit = useFormSubmit('https://formspree.io/f/mbdqkyvy')
 
   const [waitlistForm, setWaitlistForm] = useState({
     firstName: '',
@@ -164,7 +164,12 @@ export default function Contact() {
     allocationRange: '',
     notes: '',
   })
-  const waitlistSubmit = useFormSubmit('https://formspree.io/f/placeholder-waitlist')
+  const waitlistSubmit = useFormSubmit('https://formspree.io/f/mbdqkyvy')
+  const [honeypot, setHoneypot] = useState({
+    contact: '',
+    council: '',
+    waitlist: '',
+  })
 
   // Auto-scroll to section if hash in URL
   useEffect(() => {
@@ -180,6 +185,7 @@ export default function Contact() {
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (honeypot.contact.trim()) return
     await contactSubmit.submit({
       'First Name': contactForm.firstName,
       'Last Name': contactForm.lastName,
@@ -189,6 +195,7 @@ export default function Contact() {
       'Company Name': contactForm.companyName,
       'What would you like to explore?': contactForm.explore,
       'Write more here, if you’d like': contactForm.details,
+      _gotcha: honeypot.contact,
     })
     if (contactSubmit.status === 'success') {
       setContactForm({
@@ -207,6 +214,7 @@ export default function Contact() {
 
   const handleCouncilSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (honeypot.council.trim()) return
     await councilSubmit.submit({
       'First Name': councilForm.firstName,
       'Last Name': councilForm.lastName,
@@ -214,6 +222,7 @@ export default function Contact() {
       Organization: councilForm.organization,
       Role: councilForm.role,
       'Why do you want to join the council?': councilForm.interest,
+      _gotcha: honeypot.council,
     })
     if (councilSubmit.status === 'success') {
       setCouncilForm({
@@ -229,6 +238,7 @@ export default function Contact() {
 
   const handleWaitlistSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (honeypot.waitlist.trim()) return
     await waitlistSubmit.submit({
       'First Name': waitlistForm.firstName,
       'Last Name': waitlistForm.lastName,
@@ -238,6 +248,7 @@ export default function Contact() {
       'Participant Type': waitlistForm.participantType,
       'Expected Allocation': waitlistForm.allocationRange,
       Notes: waitlistForm.notes,
+      _gotcha: honeypot.waitlist,
     })
     if (waitlistSubmit.status === 'success') {
       setWaitlistForm({
@@ -389,6 +400,18 @@ export default function Contact() {
 
               {activeTab === 'contact' && (
                 <form onSubmit={handleContactSubmit} className="space-y-5">
+                  <div className="absolute -left-[9999px] opacity-0 pointer-events-none" aria-hidden="true">
+                    <label htmlFor="c-company-website">Website</label>
+                    <input
+                      id="c-company-website"
+                      type="text"
+                      name="_gotcha"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot.contact}
+                      onChange={e => setHoneypot(p => ({ ...p, contact: e.target.value }))}
+                    />
+                  </div>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <FormField
                       label="First Name"
@@ -524,6 +547,18 @@ export default function Contact() {
 
               {activeTab === 'council' && (
                 <form id="council" onSubmit={handleCouncilSubmit} className="space-y-5">
+                  <div className="absolute -left-[9999px] opacity-0 pointer-events-none" aria-hidden="true">
+                    <label htmlFor="gc-company-website">Website</label>
+                    <input
+                      id="gc-company-website"
+                      type="text"
+                      name="_gotcha"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot.council}
+                      onChange={e => setHoneypot(p => ({ ...p, council: e.target.value }))}
+                    />
+                  </div>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <FormField
                       label="First Name"
@@ -602,6 +637,18 @@ export default function Contact() {
 
               {activeTab === 'waitlist' && (
                 <form id="waitlist" onSubmit={handleWaitlistSubmit} className="space-y-5">
+                  <div className="absolute -left-[9999px] opacity-0 pointer-events-none" aria-hidden="true">
+                    <label htmlFor="wl-company-website">Website</label>
+                    <input
+                      id="wl-company-website"
+                      type="text"
+                      name="_gotcha"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot.waitlist}
+                      onChange={e => setHoneypot(p => ({ ...p, waitlist: e.target.value }))}
+                    />
+                  </div>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <FormField
                       label="First Name"
