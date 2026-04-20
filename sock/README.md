@@ -1,1 +1,1 @@
-用 Apache ECharts 製作繪製中國A股K綫圖的H5網頁，要用在手機端。通過 AKShare 獲取 A 股票數據。
+用 Apache ECharts 製作繪製中國A股K綫圖的H5網頁,时K和日k，要用在手機端。通過 AKShare 獲取 A 股票數據。
