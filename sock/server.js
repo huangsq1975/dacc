@@ -10,6 +10,30 @@ app.get('/stock-details', (req, res) => {
   res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 
+app.get('/api/intraday', async (req, res) => {
+  try {
+    const symbol = String(req.query.symbol || '').trim();
+    if (!/^\d{6}$/.test(symbol)) {
+      return res.status(400).json({ code: '400', status: false, message: 'Invalid symbol', data: [] });
+    }
+
+    const url = `http://qa-test.qcoral.tech/stock/getStockIntraday?symbol=${encodeURIComponent(symbol)}`;
+    const resp = await fetch(url, { method: 'GET' });
+    const text = await resp.text();
+
+    res.status(resp.status);
+    res.set('Content-Type', 'application/json; charset=utf-8');
+    return res.send(text);
+  } catch (error) {
+    return res.status(502).json({
+      code: '502',
+      status: false,
+      message: error?.message || 'Upstream request failed',
+      data: [],
+    });
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });

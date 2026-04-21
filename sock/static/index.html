@@ -183,24 +183,34 @@ async function fetchMinK(fullCode, minutes = 5, count = 320) {
 }
 
 /**
- * 分時數據（當日逐分鐘），使用 mkline m1 接口
- * 返回格式：[HHMMSS, price, vwap, volume]（供 renderMinute 使用）
+ * 分時數據（當日逐分鐘），由本地後端代理接口：
+ * GET /api/intraday?symbol=002506
+ * 返回格式：[HHMMSS, price, vwap, volume, kind]（供 renderMinute 使用）
  */
 async function fetchMinute(fullCode) {
-  // mkline m1：[datetime, open, close, high, low, volume, {}, amount]
-  const raw = await fetchMinK(fullCode, 1, 300);
+  const symbol = String(fullCode || '').replace(/^(sh|sz)/i, '');
+  if (!symbol) return [];
+
+  const url = `/api/intraday?symbol=${encodeURIComponent(symbol)}`;
+  const resp = await fetch(url, { method: 'GET' });
+  if (!resp.ok) throw new Error('分時接口請求失敗');
+
+  const payload = await resp.json();
+  const raw = Array.isArray(payload?.data) ? payload.data : [];
   if (!raw.length) return [];
 
   let cumVol = 0, cumPriceVol = 0;
-  return raw.map(r => {
-    const dt    = String(r[0]);                              // '202604210931'
-    const hms   = dt.length >= 12 ? dt.slice(8, 12) + '00' : dt + '00'; // '093100'
-    const price = +r[2];   // close
-    const vol   = +r[5];
-    cumVol      += vol;
+  return raw.map(item => {
+    const hms = String(item?.time || '').replace(/:/g, '').padEnd(6, '0').slice(0, 6);
+    const price = +item?.price || 0;
+    const vol = +item?.volume || 0;
+    const kind = String(item?.kind || '').toUpperCase();
+
+    cumVol += vol;
     cumPriceVol += price * vol;
-    const vwap  = cumVol > 0 ? +(cumPriceVol / cumVol).toFixed(2) : price;
-    return [hms, price, vwap, vol];
+    const vwap = cumVol > 0 ? +(cumPriceVol / cumVol).toFixed(2) : price;
+
+    return [hms, price, vwap, vol, kind];
   });
 }
 
@@ -506,6 +516,13 @@ document.querySelectorAll('.pb').forEach(btn => {
 ═══════════════════════════════════════ */
 let searchTimer;
 
+function parseSearchToFullCode(q) {
+  const v = String(q || '').trim().toLowerCase();
+  if (/^(sh|sz)\d{6}$/.test(v)) return v;
+  if (/^\d{6}$/.test(v)) return toFullCode(v);
+  return '';
+}
+
 async function doSearch() {
   const q = document.getElementById('search-input').value.trim();
   const dd = document.getElementById('dropdown');
@@ -529,13 +546,27 @@ async function doSearch() {
   });
 }
 
-document.getElementById('search-btn').addEventListener('click', doSearch);
+async function handleSearchSubmit() {
+  const input = document.getElementById('search-input');
+  const q = input.value.trim();
+  const directCode = parseSearchToFullCode(q);
+  if (directCode) {
+    currentFull = directCode;
+    input.value = '';
+    document.getElementById('dropdown').style.display = 'none';
+    await loadAll();
+    return;
+  }
+  await doSearch();
+}
+
+document.getElementById('search-btn').addEventListener('click', handleSearchSubmit);
 document.getElementById('search-input').addEventListener('input', () => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(doSearch, 400);
 });
 document.getElementById('search-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') { clearTimeout(searchTimer); doSearch(); }
+  if (e.key === 'Enter') { clearTimeout(searchTimer); handleSearchSubmit(); }
 });
 document.addEventListener('click', e => {
   if (!e.target.closest('#search-wrap') && !e.target.closest('#dropdown'))
