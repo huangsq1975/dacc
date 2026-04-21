@@ -190,7 +190,25 @@ async function fetchMinute(fullCode) {
   const varName = 'min_' + fullCode;
   const url = `https://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=${varName}&param=${fullCode}`;
   const data = await loadVar(url, varName);
-  return data?.data?.[fullCode]?.data?.time ?? [];
+  const payload = data?.data?.[fullCode]?.data;
+  const rows = payload?.data ?? payload?.time ?? [];
+  if (!Array.isArray(rows)) return [];
+
+  // 兼容騰訊常見分時格式：
+  // 1) ["0930 1411.00 1411.00 120 1693200", ...]
+  // 2) [["093000","1411.00","1411.00","120","1693200"], ...]
+  return rows.map(r => {
+    if (Array.isArray(r)) return r;
+    if (typeof r === 'string') {
+      const parts = r.trim().split(/\s+/);
+      if (parts.length >= 5) {
+        const hhmm = parts[0];
+        const hhmmss = hhmm.length === 4 ? `${hhmm}00` : hhmm;
+        return [hhmmss, parts[1], parts[2], parts[3], parts[4]];
+      }
+    }
+    return null;
+  }).filter(Boolean);
 }
 
 /* ═══════════════════════════════════════
@@ -420,8 +438,11 @@ function renderQuote(q) {
 /* ═══════════════════════════════════════
    主加載邏輯
 ═══════════════════════════════════════ */
-let currentFull = 'sh000001';
-let currentMode = 'm5';
+const symbolFromQuery = new URLSearchParams(window.location.search).get('symbol');
+let currentFull = symbolFromQuery ? toFullCode(symbolFromQuery) : 'sh000001';
+const modeFromQuery = new URLSearchParams(window.location.search).get('mode');
+const validModes = new Set(['minute', 'm5', 'm15', 'm30', 'm60', 'day', 'week', 'month']);
+let currentMode = validModes.has(modeFromQuery) ? modeFromQuery : 'm5';
 
 function showLoading(b) { document.getElementById('mask').style.display = b ? 'flex' : 'none'; }
 function showErr(msg)   {
@@ -480,6 +501,11 @@ document.querySelectorAll('.pb').forEach(btn => {
     currentMode = btn.dataset.mode;
     loadChart();
   });
+});
+
+// 若 URL 指定 mode，初始化時同步高亮對應按鈕
+document.querySelectorAll('.pb').forEach(btn => {
+  btn.classList.toggle('active', btn.dataset.mode === currentMode);
 });
 
 /* ═══════════════════════════════════════
