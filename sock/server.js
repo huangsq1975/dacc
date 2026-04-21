@@ -1,10 +1,31 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'static')));
+
+function httpGetText(url) {
+  return new Promise((resolve, reject) => {
+    const req = http.get(url, (resp) => {
+      let body = '';
+      resp.setEncoding('utf8');
+      resp.on('data', (chunk) => {
+        body += chunk;
+      });
+      resp.on('end', () => {
+        resolve({
+          statusCode: resp.statusCode || 500,
+          body,
+        });
+      });
+    });
+
+    req.on('error', reject);
+  });
+}
 
 app.get('/stock-details', (req, res) => {
   res.sendFile(path.join(__dirname, 'static', 'index.html'));
@@ -18,17 +39,16 @@ app.get('/api/intraday', async (req, res) => {
     }
 
     const url = `http://qa-test.qcoral.tech/stock/getStockIntraday?symbol=${encodeURIComponent(symbol)}`;
-    const resp = await fetch(url, { method: 'GET' });
-    const text = await resp.text();
+    const resp = await httpGetText(url);
 
-    res.status(resp.status);
+    res.status(resp.statusCode);
     res.set('Content-Type', 'application/json; charset=utf-8');
-    return res.send(text);
+    return res.send(resp.body);
   } catch (error) {
     return res.status(502).json({
       code: '502',
       status: false,
-      message: error?.message || 'Upstream request failed',
+      message: (error && error.message) || 'Upstream request failed',
       data: [],
     });
   }
