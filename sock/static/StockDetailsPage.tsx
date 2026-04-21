@@ -168,46 +168,6 @@ export default defineComponent({
     // };
 
     const pollInterval = ref<number | null>(null);
-    const chartRefreshTs = ref(Date.now());
-
-    // 獲取分時時序數據並存入 window['min_data_${symbol}']，供 K 線圖 iframe 讀取
-    const fetchMinuteKlineData = (sym: string): Promise<void> => {
-      const varName = `min_${sym}`;
-      return new Promise<void>((resolve) => {
-        const script = document.createElement('script');
-        script.src = `https://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=${varName}&param=${sym}&_t=${Date.now()}`;
-        script.onload = () => {
-          try {
-            const data = (window as any)[varName];
-            const payload = data?.data?.[sym]?.data;
-            const rows = payload?.data ?? payload?.time ?? [];
-            if (Array.isArray(rows)) {
-              (window as any)[`min_data_${sym}`] = rows.map((r: any) => {
-                if (Array.isArray(r)) return r;
-                if (typeof r === 'string') {
-                  const parts = r.trim().split(/\s+/);
-                  if (parts.length >= 5) {
-                    const hhmm = parts[0];
-                    const hhmmss = hhmm.length === 4 ? `${hhmm}00` : hhmm;
-                    return [hhmmss, parts[1], parts[2], parts[3], parts[4]];
-                  }
-                }
-                return null;
-              }).filter(Boolean);
-            }
-          } catch (e) {
-            console.error('Parse minute data error:', e);
-          }
-          if (script.parentNode) script.parentNode.removeChild(script);
-          resolve();
-        };
-        script.onerror = () => {
-          if (script.parentNode) script.parentNode.removeChild(script);
-          resolve();
-        };
-        document.head.appendChild(script);
-      });
-    };
 
     const startPolling = () => {
       if (pollInterval.value) return; // 防止重复启动
@@ -246,7 +206,7 @@ export default defineComponent({
             };
             document.head.appendChild(script);
 
-            setTimeout(async () => {
+            setTimeout(() => {
               try {
                 const hqStrMain = (window as any)[`hq_str_${symbol.value}`];
                 const hqStrBase = (window as any)[`hq_str_${symbol.value}_i`];
@@ -259,21 +219,12 @@ export default defineComponent({
                   Record[`${symbol.value}_i`] = hqStrBase;
                 }
 
-                // delete (window as any)[`hq_str_${symbol.value}`];
-                // delete (window as any)[`hq_str_${symbol.value}_i`];
-
                 if (Record[symbol.value]) {
                   stockInfo_detail.value = Record[symbol.value].split(',');
                 }
                 if (Record[`${symbol.value}_i`]) {
                   stockInfo_base.value = Record[`${symbol.value}_i`].split(',');
                 }
-
-                // 同步獲取分時時序數據，供 K 線圖 iframe 使用
-                await fetchMinuteKlineData(symbol.value);
-
-                // 每次輪詢拿到行情後，刷新分時圖 iframe，確保圖表使用最新數據
-                chartRefreshTs.value = Date.now();
 
                 if (isFirst.value && stockInfo_detail.value.length > 0) {
                   document.title = `${stockInfo_detail.value[0]}(${symbol.value.toLocaleUpperCase()})`;
@@ -321,9 +272,8 @@ export default defineComponent({
     };
 
     const hqChartUrl = computed(() => {
-      const stockhqChart = '/stock-details';
-      if (!symbol.value) { return ''}
-      return `${stockhqChart}?symbol=${symbol.value}&mode=minute&_t=${chartRefreshTs.value}`;
+      if (!symbol.value) return '';
+      return `/stock-details?symbol=${symbol.value}&mode=minute`;
     });
 
     const lunxun = ref(0);
@@ -398,7 +348,7 @@ export default defineComponent({
                       stockInfoDetail={stockInfo_detail.value}
                     />
 
-                    {hqChartUrl.value ? <iframe key={chartRefreshTs.value} src={hqChartUrl.value} class={styles.iframe} frameborder="0"></iframe> : null}
+                    {hqChartUrl.value ? <iframe src={hqChartUrl.value} class={styles.iframe} frameborder="0"></iframe> : null}
 
                     <StockFiveDetail
                       symbol={symbol.value}

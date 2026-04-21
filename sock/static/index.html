@@ -138,36 +138,8 @@ function searchTencent(q) {
   });
 }
 
-/** 實時行情：優先讀取父頁面（StockDetailsPage）已獲取的 Sina 格式行情數據，
- *  降級到騰訊 qt.gtimg.cn */
+/** 實時行情 qt.gtimg.cn */
 async function fetchQuote(fullCode) {
-  // 嵌入 iframe 時，嘗試從父頁面的 hq_str_${fullCode}（Sina 格式）讀取
-  if (window.parent !== window) {
-    try {
-      const raw = window.parent['hq_str_' + fullCode];
-      if (raw && typeof raw === 'string' && raw.length > 10) {
-        const p = raw.split(',');
-        // Sina 格式：[0]名稱 [1]今開 [2]昨收 [3]最新價 [4]最高 [5]最低 [8]成交量(手)
-        if (p.length > 9) {
-          const price     = +p[3] || 0;
-          const prevClose = +p[2] || 0;
-          return {
-            name:      p[0] || '',
-            open:      +p[1] || 0,
-            prevClose,
-            price,
-            high:      +p[4] || 0,
-            low:       +p[5] || 0,
-            volume:    +p[8] || 0,
-            change:    +(price - prevClose).toFixed(2),
-            pctChg:    prevClose ? +((price - prevClose) / prevClose * 100).toFixed(2) : 0,
-          };
-        }
-      }
-    } catch (_) {}
-  }
-
-  // 降級：從騰訊 qt.gtimg.cn 獲取（格式用 ~ 分隔）
   const varName = 'v_' + fullCode;
   const url = `https://qt.gtimg.cn/q=${fullCode}`;
   await loadVar(url, varName);
@@ -211,46 +183,25 @@ async function fetchMinK(fullCode, minutes = 5, count = 320) {
 }
 
 /**
- * 分時數據（當日逐分鐘）
- * 返回數組：[HHMMSS, price, avg_price, volume, amount]
- *
- * 優先讀取父頁面（StockDetailsPage）已預取並解析好的 min_data_${fullCode}，
- * 降級到騰訊 web.ifzq.gtimg.cn API。
+ * 分時數據（當日逐分鐘），使用 mkline m1 接口
+ * 返回格式：[HHMMSS, price, vwap, volume]（供 renderMinute 使用）
  */
 async function fetchMinute(fullCode) {
-  // 嵌入 iframe 時，嘗試從父頁面讀取已獲取的分時時序數據
-  if (window.parent !== window) {
-    try {
-      const parentData = window.parent['min_data_' + fullCode];
-      if (Array.isArray(parentData) && parentData.length > 0) {
-        return parentData;
-      }
-    } catch (_) {}
-  }
+  // mkline m1：[datetime, open, close, high, low, volume, {}, amount]
+  const raw = await fetchMinK(fullCode, 1, 300);
+  if (!raw.length) return [];
 
-  // 降級：從騰訊 API 獲取
-  const varName = 'min_' + fullCode;
-  const url = `https://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=${varName}&param=${fullCode}`;
-  const data = await loadVar(url, varName);
-  const payload = data?.data?.[fullCode]?.data;
-  const rows = payload?.data ?? payload?.time ?? [];
-  if (!Array.isArray(rows)) return [];
-
-  // 兼容騰訊常見分時格式：
-  // 1) ["0930 1411.00 1411.00 120 1693200", ...]
-  // 2) [["093000","1411.00","1411.00","120","1693200"], ...]
-  return rows.map(r => {
-    if (Array.isArray(r)) return r;
-    if (typeof r === 'string') {
-      const parts = r.trim().split(/\s+/);
-      if (parts.length >= 5) {
-        const hhmm = parts[0];
-        const hhmmss = hhmm.length === 4 ? `${hhmm}00` : hhmm;
-        return [hhmmss, parts[1], parts[2], parts[3], parts[4]];
-      }
-    }
-    return null;
-  }).filter(Boolean);
+  let cumVol = 0, cumPriceVol = 0;
+  return raw.map(r => {
+    const dt    = String(r[0]);                              // '202604210931'
+    const hms   = dt.length >= 12 ? dt.slice(8, 12) + '00' : dt + '00'; // '093100'
+    const price = +r[2];   // close
+    const vol   = +r[5];
+    cumVol      += vol;
+    cumPriceVol += price * vol;
+    const vwap  = cumVol > 0 ? +(cumPriceVol / cumVol).toFixed(2) : price;
+    return [hms, price, vwap, vol];
+  });
 }
 
 /* ═══════════════════════════════════════
@@ -596,7 +547,18 @@ document.addEventListener('click', e => {
 ═══════════════════════════════════════ */
 initCharts();
 loadAll();
-setInterval(loadQuote, 30000); // 每30秒刷新行情
+
+// 每 30 秒刷新行情欄
+setInterval(loadQuote, 30000);
+
+// 分時模式：每 3 秒靜默刷新圖表（不顯示 loading 遮罩）
+setInterval(async () => {
+  if (currentMode !== 'minute') return;
+  try {
+    const raw = await fetchMinute(currentFull);
+    if (raw.length) renderMinute(raw, lastQuote?.prevClose ?? 0);
+  } catch (_) {}
+}, 3000);
 </script>
 </body>
 </html>
