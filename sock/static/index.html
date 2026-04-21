@@ -138,8 +138,36 @@ function searchTencent(q) {
   });
 }
 
-/** 實時行情 qt.gtimg.cn */
+/** 實時行情：優先讀取父頁面（StockDetailsPage）已獲取的 Sina 格式行情數據，
+ *  降級到騰訊 qt.gtimg.cn */
 async function fetchQuote(fullCode) {
+  // 嵌入 iframe 時，嘗試從父頁面的 hq_str_${fullCode}（Sina 格式）讀取
+  if (window.parent !== window) {
+    try {
+      const raw = window.parent['hq_str_' + fullCode];
+      if (raw && typeof raw === 'string' && raw.length > 10) {
+        const p = raw.split(',');
+        // Sina 格式：[0]名稱 [1]今開 [2]昨收 [3]最新價 [4]最高 [5]最低 [8]成交量(手)
+        if (p.length > 9) {
+          const price     = +p[3] || 0;
+          const prevClose = +p[2] || 0;
+          return {
+            name:      p[0] || '',
+            open:      +p[1] || 0,
+            prevClose,
+            price,
+            high:      +p[4] || 0,
+            low:       +p[5] || 0,
+            volume:    +p[8] || 0,
+            change:    +(price - prevClose).toFixed(2),
+            pctChg:    prevClose ? +((price - prevClose) / prevClose * 100).toFixed(2) : 0,
+          };
+        }
+      }
+    } catch (_) {}
+  }
+
+  // 降級：從騰訊 qt.gtimg.cn 獲取（格式用 ~ 分隔）
   const varName = 'v_' + fullCode;
   const url = `https://qt.gtimg.cn/q=${fullCode}`;
   await loadVar(url, varName);
@@ -185,8 +213,22 @@ async function fetchMinK(fullCode, minutes = 5, count = 320) {
 /**
  * 分時數據（當日逐分鐘）
  * 返回數組：[HHMMSS, price, avg_price, volume, amount]
+ *
+ * 優先讀取父頁面（StockDetailsPage）已預取並解析好的 min_data_${fullCode}，
+ * 降級到騰訊 web.ifzq.gtimg.cn API。
  */
 async function fetchMinute(fullCode) {
+  // 嵌入 iframe 時，嘗試從父頁面讀取已獲取的分時時序數據
+  if (window.parent !== window) {
+    try {
+      const parentData = window.parent['min_data_' + fullCode];
+      if (Array.isArray(parentData) && parentData.length > 0) {
+        return parentData;
+      }
+    } catch (_) {}
+  }
+
+  // 降級：從騰訊 API 獲取
   const varName = 'min_' + fullCode;
   const url = `https://web.ifzq.gtimg.cn/appstock/app/minute/query?_var=${varName}&param=${fullCode}`;
   const data = await loadVar(url, varName);
