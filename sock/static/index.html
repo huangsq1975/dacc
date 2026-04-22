@@ -85,6 +85,12 @@
   <button class="pb" data-mode="week">周K</button>
   <button class="pb" data-mode="month">月K</button>
 </div>
+<div id="zone-bar" style="display:none;background:#111;padding:6px 12px;border-bottom:1px solid #1a1a1a">
+  <label style="font-size:13px;color:#888;cursor:pointer;display:flex;align-items:center;gap:6px">
+    <input type="checkbox" id="zone-toggle" style="cursor:pointer;accent-color:#e84040">
+    趋势擒龙
+  </label>
+</div>
 
 <div id="err"></div>
 <div id="kline-chart"></div>
@@ -247,6 +253,7 @@ function calcMA(closes, n) {
    ECharts 初始化
 ═══════════════════════════════════════ */
 let kChart, vChart;
+let currentDailyRows = [];
 
 function initCharts() {
   kChart = echarts.init(document.getElementById('kline-chart'), 'dark');
@@ -265,8 +272,8 @@ function initCharts() {
 /* ═══════════════════════════════════════
    渲染 K 線（蠟燭圖）
 ═══════════════════════════════════════ */
-function renderKline(rows) {
-  // rows: {date, open, close, high, low, volume}[]
+function renderKline(rows, showZones = false) {
+  // rows: {date, open, close, high, low, volume, kind1?}[]
   const dates  = rows.map(r => r.date);
   const ohlc   = rows.map(r => [r.open, r.close, r.low, r.high]);
   const vols   = rows.map(r => ({ value: r.volume, itemStyle: { color: r.close >= r.open ? '#e84040' : '#2ecc71' } }));
@@ -277,6 +284,43 @@ function renderKline(rows) {
   const ma30 = calcMA(closes, 30);
 
   const zs = Math.max(0, ((dates.length - 80) / dates.length) * 100);
+
+  // Compute B/S zone markArea and scatter markers
+  const markAreaData = [];
+  const bsScatterData = [];
+  if (showZones) {
+    let lastKind = null, lastKindIdx = -1;
+    rows.forEach((r, i) => {
+      const k = String(r.kind1 || '').toUpperCase();
+      if (k !== 'B' && k !== 'S') return;
+      bsScatterData.push({
+        value: [i, k === 'B' ? r.low : r.high],
+        kind: k,
+        itemStyle: { color: k === 'B' ? '#e84040' : '#2ecc71' },
+      });
+      if (lastKind !== null && lastKind !== k) {
+        const color = lastKind === 'B'
+          ? 'rgba(232,64,64,0.2)'
+          : 'rgba(46,204,113,0.2)';
+        markAreaData.push([
+          { xAxis: rows[lastKindIdx].date, itemStyle: { color, borderWidth: 0 } },
+          { xAxis: r.date },
+        ]);
+      }
+      lastKind = k;
+      lastKindIdx = i;
+    });
+    // Extend the last open zone to the last bar
+    if (lastKind !== null && lastKindIdx < rows.length - 1) {
+      const color = lastKind === 'B'
+        ? 'rgba(232,64,64,0.2)'
+        : 'rgba(46,204,113,0.2)';
+      markAreaData.push([
+        { xAxis: rows[lastKindIdx].date, itemStyle: { color, borderWidth: 0 } },
+        { xAxis: rows[rows.length - 1].date },
+      ]);
+    }
+  }
 
   const dzConfig = [
     { type: 'inside', start: zs, end: 100, minValueSpan: 6 },
@@ -322,11 +366,23 @@ function renderKline(rows) {
     },
     series: [
       { name: 'K', type: 'candlestick', data: ohlc,
-        itemStyle: { color: '#e84040', color0: '#2ecc71', borderColor: '#e84040', borderColor0: '#2ecc71' } },
+        itemStyle: { color: '#e84040', color0: '#2ecc71', borderColor: '#e84040', borderColor0: '#2ecc71' },
+        markArea: { silent: true, data: markAreaData },
+      },
       { name: 'MA5',  type: 'line', data: ma5,  smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#f39c12' } },
       { name: 'MA10', type: 'line', data: ma10, smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#9b59b6' } },
       { name: 'MA20', type: 'line', data: ma20, smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#3498db' } },
       { name: 'MA30', type: 'line', data: ma30, smooth: true, showSymbol: false, lineStyle: { width: 1, color: '#1abc9c' } },
+      {
+        name: '買賣點', type: 'scatter', data: bsScatterData,
+        symbolSize: 10, z: 10,
+        encode: { x: 0, y: 1 },
+        label: {
+          show: true,
+          formatter: p => p?.data?.kind || '',
+          color: '#fff', fontSize: 10, fontWeight: 'bold',
+        },
+      },
     ],
   }, true);
 
@@ -500,6 +556,7 @@ function showErr(msg)   {
 async function loadChart() {
   showLoading(true);
   showErr('');
+  document.getElementById('zone-bar').style.display = currentMode === 'day' ? 'block' : 'none';
   try {
     let rows;
     if (currentMode === 'minute') {
@@ -525,13 +582,16 @@ async function loadChart() {
           high: +r?.high || 0,
           low: +r?.low || 0,
           volume: +r?.volume || 0,
+          kind1: String(r?.kind1 || '').toUpperCase(),
         }));
+        currentDailyRows = rows;
+        renderKline(rows, document.getElementById('zone-toggle').checked);
       } else {
         const raw = await fetchDayK(currentFull, currentMode);
         if (!raw.length) { showErr('暫無數據'); return; }
         rows = raw.map(r => ({ date: r[0], open: +r[1], close: +r[2], high: +r[3], low: +r[4], volume: +r[5] }));
+        renderKline(rows);
       }
-      renderKline(rows);
     }
   } catch (e) {
     showErr(e.message || '數據加載失敗');
@@ -566,6 +626,12 @@ document.querySelectorAll('.pb').forEach(btn => {
 // 若 URL 指定 mode，初始化時同步高亮對應按鈕
 document.querySelectorAll('.pb').forEach(btn => {
   btn.classList.toggle('active', btn.dataset.mode === currentMode);
+});
+
+document.getElementById('zone-toggle').addEventListener('change', () => {
+  if (currentDailyRows.length) {
+    renderKline(currentDailyRows, document.getElementById('zone-toggle').checked);
+  }
 });
 
 /* ═══════════════════════════════════════
