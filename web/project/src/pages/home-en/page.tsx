@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useRef } from 'react';
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import WaveBackground from '../../components/feature/WaveBackground';
 
 // ─── Prism WebGL Component ───────────────────────────────────────────────────
 const Prism = ({
@@ -410,6 +411,9 @@ export default function HomeEN() {
           HERO
       ════════════════════════════════════════ */}
       <header className="relative min-h-screen flex items-center bg-[radial-gradient(circle_at_20%_20%,rgba(103,232,249,0.18),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(186,230,253,0.16),transparent_52%),linear-gradient(180deg,#6e97c4_0%,#9ec6ef_46%,#d4ebff_100%)] pt-20 lg:pt-0 overflow-hidden">
+        {/* Wave animated background */}
+        <WaveBackground />
+
         {/* Subtle grid overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-20"
           style={{ backgroundImage: 'linear-gradient(rgba(102,153,153,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(102,153,153,0.25) 1px, transparent 1px)', backgroundSize: '72px 72px' }}>
