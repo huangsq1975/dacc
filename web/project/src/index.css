@@ -132,6 +132,16 @@ body {
   animation: spin-slow 3s linear infinite;
 }
 
+/* Hero product orbit — outer wrapper spins, inner item counter-spins to stay upright */
+@keyframes hero-orbit-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes hero-orbit-counter {
+  from { transform: translateX(152px) translateY(-50%) rotate(0deg); }
+  to   { transform: translateX(152px) translateY(-50%) rotate(-360deg); }
+}
+
 /* Floating animation */
 @keyframes float {
   0%, 100% {
