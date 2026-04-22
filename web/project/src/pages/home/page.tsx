@@ -301,7 +301,7 @@ export default function Home() {
           导航 — 桌面端
       ════════════════════════════════════════ */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden lg:block w-[92vw] max-w-[1240px]">
-        <nav className="bg-white border border-[#b8d9ed]/60 rounded-2xl px-6 xl:px-8 py-3 shadow-[0_8px_32px_rgba(30,107,138,0.12)] flex items-center justify-between gap-4">
+        <nav className="bg-[#8ed3f5]/65 backdrop-blur-xl border border-[#b8d9ed]/60 rounded-2xl px-6 xl:px-8 py-3 shadow-[0_8px_32px_rgba(30,107,138,0.12)] flex items-center justify-between gap-4">
           <a href="/zh" className="flex-shrink-0">
             <img
               src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png"
@@ -309,7 +309,7 @@ export default function Home() {
               className="h-6 w-auto object-contain"
             />
           </a>
-          <div className="flex items-center gap-5 xl:gap-7">
+          <div className="ml-auto flex items-center justify-end gap-5 xl:gap-7">
             <a href="#why-dacc" className={navLinkClass}>公司</a>
             <a href="#services" className={navLinkClass}>服务</a>
             <a href="#compliance" className={navLinkClass}>合规</a>
@@ -335,7 +335,7 @@ export default function Home() {
       </div>
 
       {/* 导航 — 移动端 */}
-      <div className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-white/95 backdrop-blur-xl border-b border-[#b8d9ed]/50 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#8ed3f5]/70 backdrop-blur-xl border-b border-[#b8d9ed]/50 shadow-sm">
         <div className="flex items-center justify-between px-5 py-3.5">
           <a href="/zh">
             <img
