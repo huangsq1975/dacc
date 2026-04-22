@@ -323,9 +323,11 @@ function renderKline(rows, showZones = false, showEscapeTop = false, showCrazyBo
     for (let j = 0; j < signals.length - 1; j++) {
       const start = signals[j].i;
       const end   = signals[j + 1].i;
-      const kind  = signals[j].k; // 'B'→'S' = red (上涨), 'S'→'B' = green (下跌)
-      const lineColor = kind === 'B' ? '#e84040' : '#2ecc71';
-      const fillColor = kind === 'B' ? 'rgba(232,64,64,0.2)' : 'rgba(46,204,113,0.2)';
+      // 依區間曲線方向著色：向上=紅、向下=綠
+      const isUp = rows[end].close >= rows[start].close;
+      const lineColor = isUp ? '#e84040' : '#2ecc71';
+      const fillColor = isUp ? 'rgba(232,64,64,0.2)' : 'rgba(46,204,113,0.2)';
+      const areaOrigin = isUp ? 'end' : 'start'; // 紅色填在線上方，綠色填在線下方
 
       // Data: close prices only within [start, end], null outside (keeps curve segment isolated)
       const segData = rows.map((r, i) => (i >= start && i <= end ? r.close : null));
@@ -340,7 +342,7 @@ function renderKline(rows, showZones = false, showEscapeTop = false, showCrazyBo
         silent: true,
         z: 1,
         lineStyle: { width: 2, color: lineColor },
-        areaStyle: { color: fillColor, origin: 'start' },
+        areaStyle: { color: fillColor, origin: areaOrigin },
       });
     }
   }
