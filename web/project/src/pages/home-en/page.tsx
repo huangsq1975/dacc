@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
@@ -410,22 +410,6 @@ export default function HomeEN() {
           HERO
       ════════════════════════════════════════ */}
       <header className="relative min-h-screen flex items-center bg-[radial-gradient(circle_at_20%_20%,rgba(103,232,249,0.18),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(186,230,253,0.16),transparent_52%),linear-gradient(180deg,#6e97c4_0%,#9ec6ef_46%,#d4ebff_100%)] pt-20 lg:pt-0 overflow-hidden">
-        {/* Prism background */}
-        <Prism
-          animationType="3drotate"
-          glow={0.7}
-          scale={4.2}
-          hueShift={0.15}
-          colorFrequency={0.85}
-          timeScale={0.4}
-          transparent={true}
-          bloom={0.78}
-          hoverStrength={1.1}
-          inertia={0.05}
-          noise={0}
-          suspendWhenOffscreen={true}
-        />
-
         {/* Subtle grid overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-20"
           style={{ backgroundImage: 'linear-gradient(rgba(102,153,153,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(102,153,153,0.25) 1px, transparent 1px)', backgroundSize: '72px 72px' }}>
@@ -441,7 +425,8 @@ export default function HomeEN() {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.1] text-white font-montserrat mb-5">
-              Where CIPS meets <span className="text-[#67e8f9]">Tokenization</span>
+              <span className="whitespace-nowrap">Where CIPS meets</span>{' '}
+              <span className="text-[#67e8f9]">Tokenization</span>
             </h1>
 
             <p className="text-base md:text-lg text-white/80 font-montserrat leading-relaxed mb-10 max-w-xl">
