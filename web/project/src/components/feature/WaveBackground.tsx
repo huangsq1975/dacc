@@ -28,8 +28,8 @@ interface Sparkle {
 function waveY(wl: WaveLine, x: number, t: number, W: number, H: number): number {
   const baseY = wl.side === 'top' ? wl.yBase * H : H - wl.yBase * H;
   const dir   = wl.side === 'top' ? 1 : -1;
-  // Horizontal envelope: sin(x/W·π) → 0 at edges, 1 at centre
-  const env   = Math.sin((x / W) * Math.PI);
+  // Horizontal envelope: 1 + sin(x/W·π) → 1 at edges, 2 at centre
+  const env   = 1 + Math.sin((x / W) * Math.PI);
   return baseY + dir * env * (
     wl.a1 * Math.sin(x * wl.f1 + t * wl.s1 + wl.p1) +
     wl.a2 * Math.sin(x * wl.f2 + t * wl.s2 + wl.p2) +
@@ -118,8 +118,8 @@ export default function WaveBackground() {
         a3: 1, f3:4.39*K, s3:0.0025, p3:0.5 },
     ];
 
-    // Outermost lines (most visible) — sparkles spawn only here
-    const sparkleWaveIdxs = [0, 6]; // top[0] and bottom[0]
+    // Sparkle wave pool — bottom heavily weighted (4:1) vs top
+    const sparkleWaveIdxs = [0, 6, 6, 6, 7, 6, 7, 7];
 
     // ── Bokeh particles ───────────────────────────────────
     const rand = (a: number, b: number) => Math.random() * (b - a) + a;
