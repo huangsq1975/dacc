@@ -25,15 +25,25 @@ interface Sparkle {
 }
 
 // Compute the y position of a wave line at pixel x and time t
-function waveY(wl: WaveLine, x: number, t: number, W: number, H: number): number {
+function waveY(
+  wl: WaveLine,
+  x: number,
+  t: number,
+  W: number,
+  H: number,
+  frequencyScale = 1,
+  bottomLift = 0
+): number {
   const baseY = wl.side === 'top' ? wl.yBase * H : H - wl.yBase * H;
   const dir   = wl.side === 'top' ? 1 : -1;
+  const adjustedX = x * frequencyScale;
+  const yOffset = wl.side === 'bottom' ? -bottomLift : 0;
   // Horizontal envelope: 1 + sin(x/W·π) → 1 at edges, 2 at centre
   const env   = 1 + Math.sin((x / W) * Math.PI);
-  return baseY + dir * env * (
-    wl.a1 * Math.sin(x * wl.f1 + t * wl.s1 + wl.p1) +
-    wl.a2 * Math.sin(x * wl.f2 + t * wl.s2 + wl.p2) +
-    wl.a3 * Math.sin(x * wl.f3 + t * wl.s3 + wl.p3)
+  return baseY + yOffset + dir * env * (
+    wl.a1 * Math.sin(adjustedX * wl.f1 + t * wl.s1 + wl.p1) +
+    wl.a2 * Math.sin(adjustedX * wl.f2 + t * wl.s2 + wl.p2) +
+    wl.a3 * Math.sin(adjustedX * wl.f3 + t * wl.s3 + wl.p3)
   );
 }
 
@@ -48,11 +58,18 @@ export default function WaveBackground() {
 
     let animId: number;
     let t = 0;
+    let waveFrequencyScale = 1;
+    let mobileBottomLift = 0;
 
     // ── Resize ────────────────────────────────────────────
     const resize = () => {
       const parent = canvas.parentElement!;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isMobile = window.innerWidth < 1024;
+      // Mobile requirement: make waves look twice as wide.
+      waveFrequencyScale = isMobile ? 0.5 : 1;
+      // Keep bottom waves visible on first screen without scrolling.
+      mobileBottomLift = isMobile ? 44 : 0;
       canvas.width  = parent.offsetWidth  * dpr;
       canvas.height = parent.offsetHeight * dpr;
       canvas.style.width  = `${parent.offsetWidth}px`;
@@ -92,7 +109,7 @@ export default function WaveBackground() {
         a2: 2, f2:2.77*K, s2:0.0049, p2:2.9,
         a3: 1, f3:4.40*K, s3:0.0029, p3:0.3 },
       // Bottom edge
-      { side:'bottom', yBase:0.00, alpha:0.50, width:1.0,
+      { side:'bottom', yBase:0.01, alpha:0.50, width:1.0,
         a1:24, f1:0.72*K, s1:0.0044, p1:0.5,
         a2:10, f2:1.25*K, s2:0.0034, p2:2.2,
         a3: 5, f3:2.04*K, s3:0.0054, p3:4.8 },
@@ -163,7 +180,7 @@ export default function WaveBackground() {
         ctx.lineWidth   = wl.width;
         ctx.strokeStyle = `rgba(120,185,230,${wl.alpha})`;
         for (let x = 0; x <= W + 1; x++) {
-          const y = waveY(wl, x, t, W, H);
+          const y = waveY(wl, x, t, W, H, waveFrequencyScale, mobileBottomLift);
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.stroke();
@@ -197,7 +214,7 @@ export default function WaveBackground() {
           : 1 - (progress - 0.2) / 0.8;
 
         const wl = waveLines[sp.waveIdx];
-        const sy = waveY(wl, sp.x, t, W, H);
+        const sy = waveY(wl, sp.x, t, W, H, waveFrequencyScale, mobileBottomLift);
 
         const g = ctx.createRadialGradient(sp.x, sy, 0, sp.x, sy, sp.size * 3);
         g.addColorStop(0,   `rgba(255,255,255,${(a * 0.95).toFixed(3)})`);
