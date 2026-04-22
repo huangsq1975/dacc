@@ -54,6 +54,39 @@ app.get('/api/intraday', async (req, res) => {
   }
 });
 
+app.get('/api/daily', async (req, res) => {
+  try {
+    const symbol = String(req.query.symbol || '').trim();
+    const date = String(req.query.date || '').trim();
+    const numRaw = String(req.query.num || '').trim();
+    const num = numRaw ? Number(numRaw) : 320;
+
+    if (!/^\d{6}$/.test(symbol)) {
+      return res.status(400).json({ code: '400', status: false, message: 'Invalid symbol', data: [] });
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return res.status(400).json({ code: '400', status: false, message: 'Invalid date', data: [] });
+    }
+    if (!Number.isFinite(num) || num <= 0) {
+      return res.status(400).json({ code: '400', status: false, message: 'Invalid num', data: [] });
+    }
+
+    const url = `http://qa-test.qcoral.tech/stock/getStockDaily?symbol=${encodeURIComponent(symbol)}&date=${encodeURIComponent(date)}&num=${encodeURIComponent(Math.floor(num))}`;
+    const resp = await httpGetText(url);
+
+    res.status(resp.statusCode);
+    res.set('Content-Type', 'application/json; charset=utf-8');
+    return res.send(resp.body);
+  } catch (error) {
+    return res.status(502).json({
+      code: '502',
+      status: false,
+      message: (error && error.message) || 'Upstream request failed',
+      data: [],
+    });
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });

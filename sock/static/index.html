@@ -172,6 +172,24 @@ async function fetchDayK(fullCode, period = 'day', count = 320) {
 }
 
 /**
+ * 日 K（自定義後端接口）
+ * 文檔格式見 doc.txt：data[] 每項含 date/open/high/low/close/volume
+ */
+async function fetchDailyFromApi(fullCode, count = 320) {
+  const symbol = String(fullCode || '').replace(/^(sh|sz)/i, '');
+  if (!symbol) return [];
+
+  const today = new Date().toISOString().slice(0, 10);
+  const url = `/api/daily?symbol=${encodeURIComponent(symbol)}&date=${encodeURIComponent(today)}&num=${encodeURIComponent(count)}`;
+  const resp = await fetch(url, { method: 'GET' });
+  if (!resp.ok) throw new Error('日K接口請求失敗');
+
+  const payload = await resp.json();
+  if (!payload?.status || payload?.code !== '00000') return [];
+  return Array.isArray(payload?.data) ? payload.data : [];
+}
+
+/**
  * 分鐘 K（5/15/30/60）
  * 返回數組：[datetime, open, close, high, low, volume]
  */
@@ -339,10 +357,21 @@ function renderKline(rows) {
    渲染分時折線圖
 ═══════════════════════════════════════ */
 function renderMinute(rows, prevClose) {
-  // rows: [HHMMSS, price, avg_price, volume, amount]
+  // rows: [HHMMSS, price, avg_price, volume, kind]
   const times  = rows.map(r => r[0].replace(/^(\d{2})(\d{2})(\d{2})$/, '$1:$2'));
   const prices = rows.map(r => +r[1]);
   const avgs   = rows.map(r => +r[2]);
+  const marks  = rows
+    .map((r, i) => {
+      const kind = String(r[4] || '').toUpperCase();
+      if (kind !== 'B' && kind !== 'S') return null;
+      return {
+        value: [i, +r[1]],
+        kind,
+        itemStyle: { color: kind === 'B' ? '#e84040' : '#2ecc71' },
+      };
+    })
+    .filter(Boolean);
   const vols   = rows.map((r, i) => {
     const v = +r[3];
     return { value: v, itemStyle: { color: prices[i] >= (prices[i - 1] ?? prevClose) ? '#e84040' : '#2ecc71' } };
@@ -388,6 +417,21 @@ function renderMinute(rows, prevClose) {
       },
       { name: '均價', type: 'line', data: avgs, smooth: false, showSymbol: false,
         lineStyle: { width: 1, color: '#f39c12' } },
+      {
+        name: '買賣點',
+        type: 'scatter',
+        data: marks,
+        symbolSize: 10,
+        z: 10,
+        encode: { x: 0, y: 1 },
+        label: {
+          show: true,
+          formatter: p => p?.data?.kind || '',
+          color: '#fff',
+          fontSize: 10,
+          fontWeight: 'bold',
+        },
+      },
     ],
   }, true);
 
@@ -442,7 +486,7 @@ function renderQuote(q) {
    主加載邏輯
 ═══════════════════════════════════════ */
 const symbolFromQuery = new URLSearchParams(window.location.search).get('symbol');
-let currentFull = symbolFromQuery ? toFullCode(symbolFromQuery) : 'sh000001';
+let currentFull = symbolFromQuery ? toFullCode(symbolFromQuery) : 'sz301486';
 const modeFromQuery = new URLSearchParams(window.location.search).get('mode');
 const validModes = new Set(['minute', 'm5', 'm15', 'm30', 'm60', 'day', 'week', 'month']);
 let currentMode = validModes.has(modeFromQuery) ? modeFromQuery : 'm5';
@@ -471,9 +515,22 @@ async function loadChart() {
       rows = raw.map(r => ({ date: r[0], open: +r[1], close: +r[2], high: +r[3], low: +r[4], volume: +r[5] }));
       renderKline(rows);
     } else {
-      const raw = await fetchDayK(currentFull, currentMode);
-      if (!raw.length) { showErr('暫無數據'); return; }
-      rows = raw.map(r => ({ date: r[0], open: +r[1], close: +r[2], high: +r[3], low: +r[4], volume: +r[5] }));
+      if (currentMode === 'day') {
+        const raw = await fetchDailyFromApi(currentFull, 320);
+        if (!raw.length) { showErr('暫無數據'); return; }
+        rows = raw.map(r => ({
+          date: String(r?.date || ''),
+          open: +r?.open || 0,
+          close: +r?.close || 0,
+          high: +r?.high || 0,
+          low: +r?.low || 0,
+          volume: +r?.volume || 0,
+        }));
+      } else {
+        const raw = await fetchDayK(currentFull, currentMode);
+        if (!raw.length) { showErr('暫無數據'); return; }
+        rows = raw.map(r => ({ date: r[0], open: +r[1], close: +r[2], high: +r[3], low: +r[4], volume: +r[5] }));
+      }
       renderKline(rows);
     }
   } catch (e) {

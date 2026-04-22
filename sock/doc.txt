@@ -1,5 +1,6 @@
 http://qa-test.qcoral.tech/stock/getStockIntraday?symbol=002506
-002506是股票代码，返回：time时间，price价格，volume成交量，kind，B买入，S卖出，如果是B、S，在线上打个点，B用红色，S用绿色，标注一下，可以用小图标，或者直接就用B、S
+002506是股票代码，返回：time时间，price价格，volume成交量，kind，B买入，S卖出，如果是B、S，
+在线上打个点，B用红色，S用绿色，标注一下，可以用小图标，或者直接就用B、S
 现在只有这一只股票的数据
 {
     "code": "00000",
@@ -26,3 +27,44 @@ http://qa-test.qcoral.tech/stock/getStockIntraday?symbol=002506
         }
     ]
 }
+增加一个需求，在日k页面，加个单选按钮：趋势擒龙，调下面接口，date可选默认当日，num可选，默认20
+stock/getStockDaily?symbol=301486&date=2026-04-10&num=2，
+返回数据kind1字段会包含B/S，把B和S之间的区域用红色，把S和B之前区域用绿色，类似这个效果，
+如果不单选框非选中状态，则不显示红绿色区域，和普通k线一样。
+{
+    "code": "00000",
+    "status": true,
+    "message": "Successful",
+    "data": [
+        {
+            "symbol": "301486",
+            "date": "2026-04-10",
+            "open": 170.0,
+            "high": 174.29,
+            "low": 165.0,
+            "close": 167.41,
+            "pct": -0.57,
+            "volume": 1.1483198E7,
+            "amount": 1.933232256E9,
+            "kind1": "",
+            "kind2": "",
+            "kind3": ""
+        },
+        {
+            "symbol": "301486",
+            "date": "2026-04-09",
+            "open": 162.99,
+            "high": 175.0,
+            "low": 162.85,
+            "close": 168.37,
+            "pct": 2.98,
+            "volume": 1.2128758E7,
+            "amount": 2.059838848E9,
+            "kind1": "",
+            "kind2": "",
+            "kind3": ""
+        }
+    ]
+}
+
+{"code":"00000","status":true,"message":"Successful","data":[{"time":"10:45:27","price":211.22,"volume":44.0,"kind":""},{"time":"10:54:51","price":209.39,"volume":2.0,"kind":""},{"time":"10:55:48","price":209.0,"volume":54.0,"kind":""},{"time":"10:56:51","price":209.61,"volume":194.0,"kind":""},{"time":"10:57:51","price":210.78,"volume":5.0,"kind":""},{"time":"10:58:51","price":210.4,"volume":2.0,"kind":""},{"time":"10:59:51","price":210.5,"volume":4.0,"kind":""},{"time":"11:00:51","price":210.7,"volume":1.0,"kind":""},{"time":"11:01:51","price":210.62,"volume":2.0,"kind":""},{"time":"11:02:51","price":210.3,"volume":4.0,"kind":""},{"time":"11:03:51","price":210.24,"volume":2.0,"kind":""},{"time":"11:04:51","price":210.03,"volume":6.0,"kind":""},{"time":"11:05:54","price":209.87,"volume":7.0,"kind":""},{"time":"11:09:06","price":209.29,"volume":17.0,"kind":""},{"time":"11:10:03","price":209.57,"volume":1.0,"kind":""},{"time":"11:11:06","price":209.24,"volume":1.0,"kind":""},{"time":"11:12:06","price":208.32,"volume":17.0,"kind":""},{"time":"13:05:45","price":212.37,"volume":17.0,"kind":""},{"time":"13:12:06","price":212.64,"volume":2.0,"kind":""},{"time":"13:36:24","price":212.15,"volume":13.0,"kind":""},{"time":"13:37:24","price":212.12,"volume":7.0,"kind":""},{"time":"13:38:27","price":211.96,"volume":2.0,"kind":""},{"time":"13:39:27","price":211.62,"volume":14.0,"kind":""},{"time":"13:40:24","price":212.53,"volume":4.0,"kind":""},{"time":"13:41:27","price":212.22,"volume":1.0,"kind":""},{"time":"13:42:24","price":212.0,"volume":18.0,"kind":""},{"time":"13:43:24","price":213.44,"volume":24.0,"kind":""},{"time":"13:44:24","price":213.45,"volume":35.0,"kind":""},{"time":"13:45:24","price":213.1,"volume":5.0,"kind":""},{"time":"13:46:24","price":212.94,"volume":1.0,"kind":""},{"time":"13:47:27","price":212.66,"volume":4.0,"kind":""}]}
