@@ -12,9 +12,9 @@ interface Particle {
 interface WaveLine {
   amplitude: number;
   frequency: number;
-  speed: number;
+  speed: number;   // radians per frame — kept very small for slow drift
   phase: number;
-  yBase: number; // 0..1 (top edge vs bottom edge)
+  yBase: number;   // fraction of H from the edge
   side: 'top' | 'bottom';
   alpha: number;
   width: number;
@@ -26,7 +26,6 @@ export default function WaveBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -35,88 +34,93 @@ export default function WaveBackground() {
 
     // ── Resize ────────────────────────────────────────────
     const resize = () => {
-      const { offsetWidth, offsetHeight } = canvas.parentElement!;
+      const parent = canvas.parentElement!;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = offsetWidth * dpr;
-      canvas.height = offsetHeight * dpr;
-      canvas.style.width = `${offsetWidth}px`;
-      canvas.style.height = `${offsetHeight}px`;
+      canvas.width  = parent.offsetWidth  * dpr;
+      canvas.height = parent.offsetHeight * dpr;
+      canvas.style.width  = `${parent.offsetWidth}px`;
+      canvas.style.height = `${parent.offsetHeight}px`;
       ctx.scale(dpr, dpr);
     };
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas.parentElement!);
 
-    // ── Wave lines config ─────────────────────────────────
-    // Multiple thin lines at top and bottom, slightly offset from each other
+    // ── Wave lines ────────────────────────────────────────
+    // speed: ~0.008–0.015 gives one full cycle every 400–800 frames (~7–13 s at 60fps)
     const waveLines: WaveLine[] = [
-      // Top edge waves
-      { side: 'top', yBase: 0.0,  amplitude: 28, frequency: 0.8,  speed: 0.28, phase: 0,    alpha: 0.55, width: 1.0 },
-      { side: 'top', yBase: 0.02, amplitude: 22, frequency: 0.9,  speed: 0.20, phase: 1.2,  alpha: 0.40, width: 0.8 },
-      { side: 'top', yBase: 0.04, amplitude: 18, frequency: 1.1,  speed: 0.35, phase: 2.5,  alpha: 0.30, width: 0.7 },
-      { side: 'top', yBase: 0.06, amplitude: 14, frequency: 1.3,  speed: 0.22, phase: 0.8,  alpha: 0.22, width: 0.6 },
-      { side: 'top', yBase: 0.08, amplitude: 10, frequency: 1.5,  speed: 0.18, phase: 3.1,  alpha: 0.15, width: 0.5 },
-      { side: 'top', yBase: 0.10, amplitude: 8,  frequency: 1.7,  speed: 0.25, phase: 1.6,  alpha: 0.10, width: 0.5 },
-      // Bottom edge waves
-      { side: 'bottom', yBase: 0.0,  amplitude: 30, frequency: 0.7,  speed: 0.22, phase: 0.5,  alpha: 0.50, width: 1.0 },
-      { side: 'bottom', yBase: 0.02, amplitude: 24, frequency: 0.85, speed: 0.30, phase: 1.8,  alpha: 0.38, width: 0.8 },
-      { side: 'bottom', yBase: 0.04, amplitude: 20, frequency: 1.0,  speed: 0.18, phase: 3.0,  alpha: 0.28, width: 0.7 },
-      { side: 'bottom', yBase: 0.06, amplitude: 15, frequency: 1.2,  speed: 0.26, phase: 0.3,  alpha: 0.20, width: 0.6 },
-      { side: 'bottom', yBase: 0.08, amplitude: 11, frequency: 1.4,  speed: 0.20, phase: 2.1,  alpha: 0.13, width: 0.5 },
-      { side: 'bottom', yBase: 0.10, amplitude: 7,  frequency: 1.6,  speed: 0.16, phase: 1.0,  alpha: 0.09, width: 0.4 },
+      // Top edge — 6 lines, each slightly offset from edge
+      { side: 'top', yBase: 0.00, amplitude: 26, frequency: 0.80, speed: 0.010, phase: 0.0,  alpha: 0.55, width: 1.0 },
+      { side: 'top', yBase: 0.02, amplitude: 20, frequency: 0.90, speed: 0.008, phase: 1.2,  alpha: 0.40, width: 0.8 },
+      { side: 'top', yBase: 0.04, amplitude: 16, frequency: 1.05, speed: 0.012, phase: 2.5,  alpha: 0.28, width: 0.7 },
+      { side: 'top', yBase: 0.06, amplitude: 12, frequency: 1.20, speed: 0.009, phase: 0.8,  alpha: 0.20, width: 0.6 },
+      { side: 'top', yBase: 0.08, amplitude:  9, frequency: 1.40, speed: 0.011, phase: 3.1,  alpha: 0.13, width: 0.5 },
+      { side: 'top', yBase: 0.10, amplitude:  6, frequency: 1.60, speed: 0.007, phase: 1.6,  alpha: 0.08, width: 0.5 },
+      // Bottom edge — 6 lines
+      { side: 'bottom', yBase: 0.00, amplitude: 28, frequency: 0.72, speed: 0.009, phase: 0.5,  alpha: 0.50, width: 1.0 },
+      { side: 'bottom', yBase: 0.02, amplitude: 22, frequency: 0.85, speed: 0.011, phase: 1.8,  alpha: 0.37, width: 0.8 },
+      { side: 'bottom', yBase: 0.04, amplitude: 18, frequency: 1.00, speed: 0.008, phase: 3.0,  alpha: 0.26, width: 0.7 },
+      { side: 'bottom', yBase: 0.06, amplitude: 13, frequency: 1.15, speed: 0.010, phase: 0.3,  alpha: 0.18, width: 0.6 },
+      { side: 'bottom', yBase: 0.08, amplitude:  9, frequency: 1.35, speed: 0.012, phase: 2.1,  alpha: 0.12, width: 0.5 },
+      { side: 'bottom', yBase: 0.10, amplitude:  6, frequency: 1.55, speed: 0.007, phase: 1.0,  alpha: 0.07, width: 0.4 },
     ];
 
-    // ── Particles config ──────────────────────────────────
-    const PARTICLE_COUNT = 32;
-    const rand = (min: number, max: number) => Math.random() * (max - min) + min;
-    const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
+    // ── Bokeh particles ───────────────────────────────────
+    const rand = (a: number, b: number) => Math.random() * (b - a) + a;
+    const particles: Particle[] = Array.from({ length: 28 }, () => ({
       x: rand(0, 1),
       y: rand(0, 1),
-      r: rand(3, 18),
-      alpha: rand(0.1, 0.5),
-      speed: rand(0.0003, 0.001),
+      r: rand(4, 20),
+      alpha: rand(0.12, 0.45),
+      speed: rand(0.0003, 0.0009),
       phase: rand(0, Math.PI * 2),
     }));
 
-    // ── Draw ──────────────────────────────────────────────
+    // ── Draw loop ─────────────────────────────────────────
     const draw = () => {
       const W = canvas.offsetWidth;
       const H = canvas.offsetHeight;
 
       ctx.clearRect(0, 0, W, H);
 
-      // Wave lines
+      // — Center-to-edge radial gradient (white glow in the middle)
+      const cx = W * 0.5;
+      const cy = H * 0.5;
+      const r  = Math.max(W, H) * 0.65;
+      const radGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      radGrad.addColorStop(0,   'rgba(255,255,255,0.55)');
+      radGrad.addColorStop(0.45,'rgba(255,255,255,0.20)');
+      radGrad.addColorStop(1,   'rgba(255,255,255,0)');
+      ctx.fillStyle = radGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // — Wave lines
       for (const wl of waveLines) {
-        const baseY = wl.side === 'top'
-          ? wl.yBase * H
-          : H - wl.yBase * H;
+        const baseY = wl.side === 'top' ? wl.yBase * H : H - wl.yBase * H;
 
         ctx.beginPath();
-        ctx.lineWidth = wl.width;
+        ctx.lineWidth   = wl.width;
         ctx.strokeStyle = `rgba(120,185,230,${wl.alpha})`;
 
-        const steps = Math.ceil(W) + 1;
-        for (let i = 0; i <= steps; i++) {
-          const x = i;
+        for (let x = 0; x <= W + 1; x++) {
           const waveY = Math.sin(x * wl.frequency * 0.012 + t * wl.speed + wl.phase) * wl.amplitude;
-          const y = baseY + (wl.side === 'top' ? waveY : -waveY);
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+          const y     = baseY + (wl.side === 'top' ? waveY : -waveY);
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
         ctx.stroke();
       }
 
-      // Bokeh particles
+      // — Bokeh
       for (const p of particles) {
-        const alpha = p.alpha * (0.6 + 0.4 * Math.sin(t * p.speed * 60 + p.phase));
+        const alpha = p.alpha * (0.55 + 0.45 * Math.sin(t * p.speed * 60 + p.phase));
         const px = p.x * W;
         const py = p.y * H;
-        const grad = ctx.createRadialGradient(px, py, 0, px, py, p.r);
-        grad.addColorStop(0, `rgba(170,215,240,${alpha})`);
-        grad.addColorStop(1, `rgba(170,215,240,0)`);
+        const g  = ctx.createRadialGradient(px, py, 0, px, py, p.r);
+        g.addColorStop(0, `rgba(170,215,240,${alpha})`);
+        g.addColorStop(1, 'rgba(170,215,240,0)');
         ctx.beginPath();
         ctx.arc(px, py, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
+        ctx.fillStyle = g;
         ctx.fill();
       }
 
