@@ -85,10 +85,18 @@
   <button class="pb" data-mode="week">周K</button>
   <button class="pb" data-mode="month">月K</button>
 </div>
-<div id="zone-bar" style="display:none;background:#111;padding:6px 12px;border-bottom:1px solid #1a1a1a">
+<div id="zone-bar" style="display:none;background:#111;padding:6px 12px;border-bottom:1px solid #1a1a1a;flex-wrap:wrap;gap:16px;align-items:center">
   <label style="font-size:13px;color:#888;cursor:pointer;display:flex;align-items:center;gap:6px">
     <input type="checkbox" id="zone-toggle" style="cursor:pointer;accent-color:#e84040">
     趋势擒龙
+  </label>
+  <label style="font-size:13px;color:#888;cursor:pointer;display:flex;align-items:center;gap:6px">
+    <input type="checkbox" id="escape-top-toggle" style="cursor:pointer;accent-color:#2ecc71">
+    精准逃顶
+  </label>
+  <label style="font-size:13px;color:#888;cursor:pointer;display:flex;align-items:center;gap:6px">
+    <input type="checkbox" id="crazy-bottom-toggle" style="cursor:pointer;accent-color:#e84040">
+    疯狂抄底
   </label>
 </div>
 
@@ -272,8 +280,8 @@ function initCharts() {
 /* ═══════════════════════════════════════
    渲染 K 線（蠟燭圖）
 ═══════════════════════════════════════ */
-function renderKline(rows, showZones = false) {
-  // rows: {date, open, close, high, low, volume, kind1?}[]
+function renderKline(rows, showZones = false, showEscapeTop = false, showCrazyBottom = false) {
+  // rows: {date, open, close, high, low, volume, kind1?, kind2?, kind3?}[]
   const dates  = rows.map(r => r.date);
   const ohlc   = rows.map(r => [r.open, r.close, r.low, r.high]);
   const vols   = rows.map(r => ({ value: r.volume, itemStyle: { color: r.close >= r.open ? '#e84040' : '#2ecc71' } }));
@@ -320,6 +328,26 @@ function renderKline(rows, showZones = false) {
         { xAxis: rows[rows.length - 1].date },
       ]);
     }
+  }
+
+  // 精准逃顶：kind2=S，绿色向下箭头，标注在当日最高价上方
+  const escapeTopData = [];
+  if (showEscapeTop) {
+    rows.forEach((r, i) => {
+      if (String(r.kind2 || '').toUpperCase() === 'S') {
+        escapeTopData.push({ value: [i, r.high], itemStyle: { color: '#2ecc71' } });
+      }
+    });
+  }
+
+  // 疯狂抄底：kind3=B，红色向上箭头，标注在当日最低价下方
+  const crazyBottomData = [];
+  if (showCrazyBottom) {
+    rows.forEach((r, i) => {
+      if (String(r.kind3 || '').toUpperCase() === 'B') {
+        crazyBottomData.push({ value: [i, r.low], itemStyle: { color: '#e84040' } });
+      }
+    });
   }
 
   const dzConfig = [
@@ -382,6 +410,16 @@ function renderKline(rows, showZones = false) {
           formatter: p => p?.data?.kind || '',
           color: '#fff', fontSize: 10, fontWeight: 'bold',
         },
+      },
+      {
+        name: '逃頂', type: 'scatter', data: escapeTopData,
+        symbol: 'arrow', symbolRotate: 180, symbolSize: 14,
+        z: 11, encode: { x: 0, y: 1 },
+      },
+      {
+        name: '抄底', type: 'scatter', data: crazyBottomData,
+        symbol: 'arrow', symbolRotate: 0, symbolSize: 14,
+        z: 11, encode: { x: 0, y: 1 },
       },
     ],
   }, true);
@@ -556,7 +594,7 @@ function showErr(msg)   {
 async function loadChart() {
   showLoading(true);
   showErr('');
-  document.getElementById('zone-bar').style.display = currentMode === 'day' ? 'block' : 'none';
+  document.getElementById('zone-bar').style.display = currentMode === 'day' ? 'flex' : 'none';
   try {
     let rows;
     if (currentMode === 'minute') {
@@ -583,9 +621,16 @@ async function loadChart() {
           low: +r?.low || 0,
           volume: +r?.volume || 0,
           kind1: String(r?.kind1 || '').toUpperCase(),
+          kind2: String(r?.kind2 || '').toUpperCase(),
+          kind3: String(r?.kind3 || '').toUpperCase(),
         }));
         currentDailyRows = rows;
-        renderKline(rows, document.getElementById('zone-toggle').checked);
+        renderKline(
+          rows,
+          document.getElementById('zone-toggle').checked,
+          document.getElementById('escape-top-toggle').checked,
+          document.getElementById('crazy-bottom-toggle').checked,
+        );
       } else {
         const raw = await fetchDayK(currentFull, currentMode);
         if (!raw.length) { showErr('暫無數據'); return; }
@@ -628,11 +673,19 @@ document.querySelectorAll('.pb').forEach(btn => {
   btn.classList.toggle('active', btn.dataset.mode === currentMode);
 });
 
-document.getElementById('zone-toggle').addEventListener('change', () => {
+function reRenderDailyKline() {
   if (currentDailyRows.length) {
-    renderKline(currentDailyRows, document.getElementById('zone-toggle').checked);
+    renderKline(
+      currentDailyRows,
+      document.getElementById('zone-toggle').checked,
+      document.getElementById('escape-top-toggle').checked,
+      document.getElementById('crazy-bottom-toggle').checked,
+    );
   }
-});
+}
+document.getElementById('zone-toggle').addEventListener('change', reRenderDailyKline);
+document.getElementById('escape-top-toggle').addEventListener('change', reRenderDailyKline);
+document.getElementById('crazy-bottom-toggle').addEventListener('change', reRenderDailyKline);
 
 /* ═══════════════════════════════════════
    搜索
