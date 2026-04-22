@@ -2,7 +2,7 @@
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import WaveBackground from '../../components/feature/WaveBackground';
-import HeroIB from '../../assets/HeroIB.png';
+import HeroShield from '../../components/feature/HeroShield';
 
 // ─── Prism WebGL Component ───────────────────────────────────────────────────
 const Prism = ({
@@ -445,35 +445,7 @@ export default function HomeEN() {
           </div>
 
           {/* Right: Security visual */}
-          <div className="hidden lg:flex items-center justify-center relative">
-            <div className="relative w-[380px] h-[380px]">
-              {/* Outer ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-[#67e8f9]/20 animate-[spin_30s_linear_infinite]">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#67e8f9]/60"></div>
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 rounded-full bg-[#12b7d6]/60"></div>
-              </div>
-              {/* Mid ring */}
-              <div className="absolute inset-8 rounded-full border border-[#67e8f9]/15 animate-[spin_20s_linear_infinite_reverse]">
-                <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#f5b942]/70"></div>
-              </div>
-              {/* Inner circle */}
-              <div className="absolute inset-16 flex items-center justify-center">
-                <img src={HeroIB} alt="Hero IB" className="w-64 h-64 object-contain drop-shadow-[0_0_16px_rgba(103,232,249,0.45)]" />
-              </div>
-              {/* Floating nodes */}
-              {[
-                { top: '10%', left: '75%', icon: 'ri-bank-line', delay: '0s' },
-                { top: '65%', left: '82%', icon: 'ri-exchange-line', delay: '0.5s' },
-                { top: '78%', left: '20%', icon: 'ri-coin-line', delay: '1s' },
-                { top: '15%', left: '12%', icon: 'ri-shield-check-line', delay: '1.5s' },
-              ].map((node, i) => (
-                <div key={i} className="absolute w-12 h-12 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center animate-[float_4s_ease-in-out_infinite]"
-                  style={{ top: node.top, left: node.left, animationDelay: node.delay }}>
-                  <i className={`${node.icon} text-[#67e8f9] text-xl`}></i>
-                </div>
-              ))}
-            </div>
-          </div>
+          <HeroShield />
         </div>
 
         {/* Scroll hint */}
