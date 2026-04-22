@@ -405,7 +405,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           首屏 Hero
       ════════════════════════════════════════ */}
-      <header className="relative min-h-screen flex items-center bg-[radial-gradient(circle_at_20%_20%,rgba(186,224,248,0.12),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(200,232,252,0.10),transparent_52%),linear-gradient(180deg,#a8c8e3_0%,#c8dff2_50%,#e0f0ff_100%)] pt-20 lg:pt-0 overflow-hidden">
+      <header className="relative min-h-screen flex items-center bg-[radial-gradient(circle_at_20%_20%,rgba(150,205,235,0.15),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(180,220,245,0.12),transparent_52%),linear-gradient(180deg,#7aaec9_0%,#a8c8df_50%,#cee3f2_100%)] pt-20 lg:pt-0 overflow-hidden">
         {/* Wave animated background */}
         <WaveBackground />
 
@@ -423,12 +423,12 @@ export default function Home() {
               持牌 · 保险 · 合规托管
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.15] text-white font-montserrat mb-5">
+            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.15] text-white font-montserrat mb-5 [text-shadow:0_2px_16px_rgba(8,30,60,0.45),0_1px_4px_rgba(8,30,60,0.30)]">
               <span className="whitespace-nowrap">Where CIPS meets</span>{' '}
               <span className="text-[#67e8f9]">Tokenization</span>
             </h1>
 
-            <p className="text-base md:text-lg text-white/80 font-montserrat leading-relaxed mb-10 max-w-xl">
+            <p className="text-base md:text-lg text-white/80 font-montserrat leading-relaxed mb-10 max-w-xl [text-shadow:0_1px_10px_rgba(8,30,60,0.40)]">
               Pioneering the Next Decade of Digital Clearing and Settlement
             </p>
 
