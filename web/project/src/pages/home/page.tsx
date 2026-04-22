@@ -405,7 +405,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           首屏 Hero
       ════════════════════════════════════════ */}
-      <header className="relative min-h-screen flex items-center bg-[radial-gradient(circle_at_20%_20%,rgba(103,232,249,0.18),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(186,230,253,0.16),transparent_52%),linear-gradient(180deg,#6e97c4_0%,#9ec6ef_46%,#d4ebff_100%)] pt-20 lg:pt-0 overflow-hidden">
+      <header className="relative min-h-screen flex items-center bg-[radial-gradient(circle_at_20%_20%,rgba(186,224,248,0.12),transparent_50%),radial-gradient(circle_at_78%_18%,rgba(200,232,252,0.10),transparent_52%),linear-gradient(180deg,#a8c8e3_0%,#c8dff2_50%,#e0f0ff_100%)] pt-20 lg:pt-0 overflow-hidden">
         {/* Wave animated background */}
         <WaveBackground />
 

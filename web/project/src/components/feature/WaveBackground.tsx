@@ -151,8 +151,8 @@ export default function WaveBackground() {
 
       // Center-to-edge white glow
       const rg = ctx.createRadialGradient(W*.5, H*.5, 0, W*.5, H*.5, Math.max(W,H)*0.65);
-      rg.addColorStop(0,    'rgba(255,255,255,0.55)');
-      rg.addColorStop(0.45, 'rgba(255,255,255,0.20)');
+      rg.addColorStop(0,    'rgba(255,255,255,0.32)');
+      rg.addColorStop(0.55, 'rgba(255,255,255,0.10)');
       rg.addColorStop(1,    'rgba(255,255,255,0)');
       ctx.fillStyle = rg;
       ctx.fillRect(0, 0, W, H);
