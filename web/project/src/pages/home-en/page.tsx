@@ -2,6 +2,7 @@
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import WaveBackground from '../../components/feature/WaveBackground';
+import HeroIB from '../../assets/HeroIB.png';
 
 // ─── Prism WebGL Component ───────────────────────────────────────────────────
 const Prism = ({
@@ -287,28 +288,12 @@ const investors = [
 export default function HomeEN() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
-  const [showScrollTop, setShowScrollTop] = useState(false);
   const [expandedDirector, setExpandedDirector] = useState<string | null>(null);
 
   const [challengesRef, challengesVisible] = useIntersectionObserver({ threshold: 0.15 });
   const [whyDaccRef, whyDaccVisible] = useIntersectionObserver({ threshold: 0.1 });
   const [complianceRef, complianceVisible] = useIntersectionObserver({ threshold: 0.1 });
   const [leadershipRef, leadershipVisible] = useIntersectionObserver({ threshold: 0.05 });
-
-  useEffect(() => {
-    let rafId = 0;
-    const onScroll = () => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = 0;
-        setShowScrollTop(window.scrollY > 500);
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => { window.removeEventListener('scroll', onScroll); if (rafId) cancelAnimationFrame(rafId); };
-  }, []);
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const navLinkClass = 'text-[#1e3a4a]/80 hover:text-[#1e6b8a] transition-colors text-sm font-semibold font-montserrat whitespace-nowrap';
 
@@ -472,11 +457,8 @@ export default function HomeEN() {
                 <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#f5b942]/70"></div>
               </div>
               {/* Inner circle */}
-              <div className="absolute inset-16 rounded-full bg-gradient-to-br from-[#0b2742]/80 to-[#1e6b8a]/60 border border-[#67e8f9]/30 backdrop-blur-sm flex items-center justify-center shadow-[0_0_60px_rgba(103,232,249,0.2)]">
-                <div className="text-center">
-                  <i className="ri-shield-keyhole-line text-6xl text-[#67e8f9]"></i>
-                  <div className="mt-2 text-xs font-bold text-[#67e8f9]/80 tracking-widest">DACC</div>
-                </div>
+              <div className="absolute inset-16 flex items-center justify-center">
+                <img src={HeroIB} alt="Hero IB" className="w-64 h-64 object-contain drop-shadow-[0_0_16px_rgba(103,232,249,0.45)]" />
               </div>
               {/* Floating nodes */}
               {[
@@ -934,18 +916,6 @@ export default function HomeEN() {
         </div>
       </footer>
 
-      {/* ════════════════════════════════════════
-          SCROLL TO TOP
-      ════════════════════════════════════════ */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-6 z-50 w-11 h-11 bg-[#1e6b8a] hover:bg-[#12b7d6] text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-          aria-label="Back to top"
-        >
-          <i className="ri-arrow-up-line text-lg"></i>
-        </button>
-      )}
     </div>
   );
 }
