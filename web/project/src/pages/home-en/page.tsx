@@ -422,23 +422,32 @@ export default function HomeEN() {
               Pioneering the Next Decade of Digital Clearing and Settlement
             </p>
 
-            <div className="flex flex-wrap gap-3 mb-10">
+            <div className="flex flex-wrap gap-4 md:gap-5 mb-12">
               <a href="/contact-en"
-                className="inline-flex items-center rounded-full bg-[#12b7d6] px-7 py-3 text-sm font-bold text-[#031122] hover:bg-[#67e8f9] transition-colors">
+                className="inline-flex items-center rounded-full border border-[#12b7d6] bg-[#12b7d6] px-8 py-3.5 text-sm font-bold text-[#031122] shadow-[0_10px_30px_rgba(18,183,214,0.35)] hover:bg-[#67e8f9] hover:border-[#67e8f9] hover:-translate-y-0.5 transition-all duration-200">
                 Get Started
               </a>
               <a href="#why-dacc"
-                className="inline-flex items-center rounded-full border border-white/35 bg-white/8 px-7 py-3 text-sm font-bold text-white hover:border-[#67e8f9] hover:text-[#67e8f9] transition-colors">
+                className="inline-flex items-center rounded-full border-2 border-white/80 bg-transparent px-8 py-3.5 text-sm font-bold text-white hover:border-[#67e8f9] hover:text-[#67e8f9] hover:bg-white/10 transition-all duration-200">
                 Learn More
               </a>
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap gap-2">
-              {['Licensed', 'Insured', 'Regulated'].map(badge => (
-                <span key={badge} className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3.5 py-1 text-xs font-semibold text-white/90 backdrop-blur-sm">
-                  <i className="ri-check-line text-[#67e8f9]"></i>
-                  {badge}
+            <div className="flex flex-wrap gap-3">
+              {[
+                { label: 'Licensed', icon: 'ri-award-line' },
+                { label: 'Insured', icon: 'ri-safe-2-line' },
+                { label: 'Regulated', icon: 'ri-file-shield-2-line' },
+              ].map(({ label, icon }) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#9ed8ec]/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.3)_0%,rgba(255,255,255,0.12)_100%)] px-4 py-2 text-xs font-bold tracking-wide text-white shadow-[0_6px_18px_rgba(7,28,56,0.22)] backdrop-blur-md"
+                >
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#0d2b4a] shadow-[inset_0_0_0_1px_rgba(103,232,249,0.35)]">
+                    <i className={`${icon} text-[11px] text-[#67e8f9]`}></i>
+                  </span>
+                  {label}
                 </span>
               ))}
             </div>
