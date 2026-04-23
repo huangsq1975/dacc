@@ -223,23 +223,177 @@ function BlockchainCanvas() {
   return <canvas ref={ref} className="absolute inset-0 w-full h-full" />;
 }
 
-// ── Shield SVG ────────────────────────────────────────────────────────────────
+// ── Settlement Network SVG ────────────────────────────────────────────────────
 function Shield() {
   return (
-    <svg viewBox="0 0 120 138" width="148" height="170" fill="none" xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: 'drop-shadow(0 0 24px rgba(103,232,249,0.7)) drop-shadow(0 0 8px rgba(30,107,138,0.8))' }}>
+    <svg viewBox="0 0 200 200" width="200" height="200" fill="none" xmlns="http://www.w3.org/2000/svg"
+      style={{ filter: 'drop-shadow(0 0 24px rgba(56,189,248,0.55)) drop-shadow(0 0 10px rgba(14,79,117,0.7))' }}>
       <defs>
-        <linearGradient id="sg" x1="0" y1="0" x2="120" y2="138" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#a8eeff" /><stop offset="50%" stopColor="#1e8ab5" /><stop offset="100%" stopColor="#0d4f75" />
-        </linearGradient>
-        <linearGradient id="sg2" x1="0" y1="0" x2="120" y2="100" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.25)" /><stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </linearGradient>
+        <radialGradient id="fs-core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#e0f9ff" />
+          <stop offset="35%" stopColor="#38bdf8" />
+          <stop offset="80%" stopColor="#0369a1" />
+          <stop offset="100%" stopColor="#0c4a6e" />
+        </radialGradient>
+        <radialGradient id="fs-hub" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(56,189,248,0.35)" />
+          <stop offset="100%" stopColor="rgba(12,74,110,0.1)" />
+        </radialGradient>
+        <radialGradient id="fs-node" cx="35%" cy="30%" r="65%">
+          <stop offset="0%" stopColor="#bae6fd" />
+          <stop offset="55%" stopColor="#0284c7" />
+          <stop offset="100%" stopColor="#082f49" />
+        </radialGradient>
+        <radialGradient id="fs-cips" cx="35%" cy="30%" r="65%">
+          <stop offset="0%" stopColor="#fef9c3" />
+          <stop offset="55%" stopColor="#eab308" />
+          <stop offset="100%" stopColor="#713f12" />
+        </radialGradient>
+        <filter id="fs-glow" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <filter id="fs-cglow" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
       </defs>
-      <path d="M60 4 L112 28 V74 C112 106 60 134 60 134 C60 134 8 106 8 74 V28 Z" fill="url(#sg)" />
-      <path d="M60 14 L102 34 V72 C102 98 60 122 60 122 C60 122 18 98 18 72 V34 Z" fill="url(#sg2)" />
-      <path d="M36 70 L53 88 L84 50" stroke="white" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"
-        style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9))' }} />
+
+      {/* Static outer decorative rings */}
+      <circle cx="100" cy="100" r="92" stroke="rgba(56,189,248,0.08)" strokeWidth="0.5" strokeDasharray="3 8" />
+      <circle cx="100" cy="100" r="78" stroke="rgba(56,189,248,0.13)" strokeWidth="0.5" strokeDasharray="1.5 6" />
+
+      {/* ── Rotating group: routes + relay diamonds + outer nodes ── */}
+      <g className="animate-spin-ccw" style={{ transformOrigin: '100px 100px', transformBox: 'view-box' }}>
+
+        {/* Settlement routes — nodes now at r=65 from centre */}
+        <line x1="100" y1="100" x2="100" y2="35"  stroke="rgba(234,179,8,0.18)"   strokeWidth="5" />
+        <line x1="100" y1="100" x2="100" y2="35"  stroke="rgba(234,179,8,0.75)"   strokeWidth="0.8" filter="url(#fs-glow)" />
+
+        <line x1="100" y1="100" x2="156" y2="68"  stroke="rgba(56,189,248,0.18)"  strokeWidth="5" />
+        <line x1="100" y1="100" x2="156" y2="68"  stroke="rgba(103,232,249,0.75)" strokeWidth="0.8" filter="url(#fs-glow)" />
+
+        <line x1="100" y1="100" x2="156" y2="132" stroke="rgba(167,139,250,0.18)" strokeWidth="5" />
+        <line x1="100" y1="100" x2="156" y2="132" stroke="rgba(167,139,250,0.75)" strokeWidth="0.8" filter="url(#fs-glow)" />
+
+        <line x1="100" y1="100" x2="100" y2="165" stroke="rgba(56,189,248,0.18)"  strokeWidth="5" />
+        <line x1="100" y1="100" x2="100" y2="165" stroke="rgba(103,232,249,0.75)" strokeWidth="0.8" filter="url(#fs-glow)" />
+
+        <line x1="100" y1="100" x2="44"  y2="132" stroke="rgba(52,211,153,0.18)"  strokeWidth="5" />
+        <line x1="100" y1="100" x2="44"  y2="132" stroke="rgba(52,211,153,0.75)"  strokeWidth="0.8" filter="url(#fs-glow)" />
+
+        <line x1="100" y1="100" x2="44"  y2="68"  stroke="rgba(56,189,248,0.18)"  strokeWidth="5" />
+        <line x1="100" y1="100" x2="44"  y2="68"  stroke="rgba(103,232,249,0.75)" strokeWidth="0.8" filter="url(#fs-glow)" />
+
+        {/* Relay diamonds — midpoints of new routes */}
+        <rect x="96.5" y="64"   width="7" height="7" fill="rgba(234,179,8,0.75)"   stroke="rgba(254,249,195,0.9)" strokeWidth="0.6" transform="rotate(45 100 67.5)"  filter="url(#fs-glow)" />
+        <rect x="124.5" y="80.5" width="7" height="7" fill="rgba(56,189,248,0.75)"  stroke="rgba(186,230,253,0.9)" strokeWidth="0.6" transform="rotate(45 128 84)"    filter="url(#fs-glow)" />
+        <rect x="124.5" y="112.5" width="7" height="7" fill="rgba(167,139,250,0.75)" stroke="rgba(233,213,255,0.9)" strokeWidth="0.6" transform="rotate(45 128 116)"  filter="url(#fs-glow)" />
+        <rect x="96.5" y="129"  width="7" height="7" fill="rgba(56,189,248,0.75)"  stroke="rgba(186,230,253,0.9)" strokeWidth="0.6" transform="rotate(45 100 132.5)" filter="url(#fs-glow)" />
+        <rect x="68.5" y="112.5" width="7" height="7" fill="rgba(52,211,153,0.75)"  stroke="rgba(167,243,208,0.9)" strokeWidth="0.6" transform="rotate(45 72 116)"    filter="url(#fs-glow)" />
+        <rect x="68.5" y="80.5" width="7" height="7" fill="rgba(56,189,248,0.75)"  stroke="rgba(186,230,253,0.9)" strokeWidth="0.6" transform="rotate(45 72 84)"     filter="url(#fs-glow)" />
+
+        {/* CIPS — top | r=19 (+50%) | icon ×1.5 */}
+        <circle cx="100" cy="35" r="19" fill="url(#fs-cips)" filter="url(#fs-glow)" />
+        <circle cx="100" cy="35" r="19" stroke="rgba(234,179,8,0.8)" strokeWidth="1" />
+        <g transform="translate(100,35) scale(1.5)" fill="rgba(255,248,200,0.95)" stroke="rgba(255,248,200,0.95)" strokeLinecap="round">
+          <circle r="2" />
+          <line x1="0"    y1="-2.3" x2="0"    y2="-6.8" strokeWidth="0.8" />
+          <line x1="2.3"  y1="0"    x2="6.8"  y2="0"    strokeWidth="0.8" />
+          <line x1="0"    y1="2.3"  x2="0"    y2="6.8"  strokeWidth="0.8" />
+          <line x1="-2.3" y1="0"    x2="-6.8" y2="0"    strokeWidth="0.8" />
+          <circle cx="0"    cy="-6.8" r="1.5" />
+          <circle cx="6.8"  cy="0"    r="1.5" />
+          <circle cx="0"    cy="6.8"  r="1.5" />
+          <circle cx="-6.8" cy="0"    r="1.5" />
+        </g>
+
+        {/* ETH — top-right | r=16 (+50%) | icon ×1.5 */}
+        <circle cx="156" cy="68" r="16" fill="url(#fs-node)" filter="url(#fs-glow)" />
+        <circle cx="156" cy="68" r="16" stroke="rgba(103,232,249,0.7)" strokeWidth="0.9" />
+        <g transform="translate(156,68) scale(1.5)">
+          <polygon points="0,-5.2 -4.3,0   0,-0.8  4.3,0"  fill="rgba(186,230,253,1)"   />
+          <polygon points="0,-5.2 -4.3,0   0,-0.8"         fill="rgba(186,230,253,0.55)" />
+          <polygon points="0,5.2  -4.3,0.8 0,2    4.3,0.8" fill="rgba(186,230,253,0.85)" />
+          <polygon points="0,5.2  -4.3,0.8 0,2"            fill="rgba(186,230,253,0.5)"  />
+        </g>
+
+        {/* MPC — bottom-right | r=16 (+50%) | icon ×1.5 */}
+        <circle cx="156" cy="132" r="16" fill="url(#fs-node)" filter="url(#fs-glow)" />
+        <circle cx="156" cy="132" r="16" stroke="rgba(167,139,250,0.7)" strokeWidth="0.9" />
+        <g transform="translate(156,132) scale(1.5)" stroke="rgba(233,213,255,0.95)" fill="none" strokeLinecap="round">
+          <path d="M -3.2,-0.8 L -3.2,-2.8 A 3.2,3.2 0 0,1 3.2,-2.8 L 3.2,-0.8" strokeWidth="0.93" />
+          <rect x="-4" y="-0.8" width="8" height="5.8" rx="1.1" strokeWidth="0.73" />
+          <circle cx="0" cy="2.2" r="1.2" fill="rgba(233,213,255,0.8)" stroke="none" />
+        </g>
+
+        {/* HSM — bottom | r=16 (+50%) | icon ×1.5 */}
+        <circle cx="100" cy="165" r="16" fill="url(#fs-node)" filter="url(#fs-glow)" />
+        <circle cx="100" cy="165" r="16" stroke="rgba(56,189,248,0.7)" strokeWidth="0.9" />
+        <g transform="translate(100,165) scale(1.5)" stroke="rgba(186,230,253,0.95)" fill="none" strokeLinecap="round">
+          <rect x="-3.5" y="-3.5" width="7" height="7" rx="0.8" strokeWidth="0.73" />
+          <rect x="-2"   y="-2"   width="4" height="4" rx="0.4" fill="rgba(186,230,253,0.55)" stroke="none" />
+          <line x1="-2" y1="-3.5" x2="-2" y2="-5.3" strokeWidth="0.67" />
+          <line x1="0"  y1="-3.5" x2="0"  y2="-5.3" strokeWidth="0.67" />
+          <line x1="2"  y1="-3.5" x2="2"  y2="-5.3" strokeWidth="0.67" />
+          <line x1="-2" y1="3.5"  x2="-2" y2="5.3"  strokeWidth="0.67" />
+          <line x1="0"  y1="3.5"  x2="0"  y2="5.3"  strokeWidth="0.67" />
+          <line x1="2"  y1="3.5"  x2="2"  y2="5.3"  strokeWidth="0.67" />
+          <line x1="-3.5" y1="-1.5" x2="-5.3" y2="-1.5" strokeWidth="0.67" />
+          <line x1="-3.5" y1="1.5"  x2="-5.3" y2="1.5"  strokeWidth="0.67" />
+          <line x1="3.5"  y1="-1.5" x2="5.3"  y2="-1.5" strokeWidth="0.67" />
+          <line x1="3.5"  y1="1.5"  x2="5.3"  y2="1.5"  strokeWidth="0.67" />
+        </g>
+
+        {/* BTC — bottom-left | r=16 (+50%) | icon ×1.5 */}
+        <circle cx="44" cy="132" r="16" fill="url(#fs-node)" filter="url(#fs-glow)" />
+        <circle cx="44" cy="132" r="16" stroke="rgba(52,211,153,0.7)" strokeWidth="0.9" />
+        <g transform="translate(44,132) scale(1.5)" stroke="rgba(167,243,208,0.95)" fill="none" strokeLinecap="round">
+          <circle r="4.6" strokeWidth="0.6" />
+          <line x1="-1.6" y1="-3.3" x2="-1.6" y2="3.3" strokeWidth="0.87" />
+          <path d="M -1.6,-3.3 C 2.6,-3.3 3.2,-2 3.2,-1 C 3.2,0 2.6,0.2 -1.6,0.2" strokeWidth="0.73" />
+          <path d="M -1.6,0.2 C 3.0,0.2 3.5,0.9 3.5,1.9 C 3.5,2.9 3.0,3.3 -1.6,3.3" strokeWidth="0.73" />
+        </g>
+
+        {/* FX — top-left | r=16 (+50%) | icon ×1.5 */}
+        <circle cx="44" cy="68" r="16" fill="url(#fs-node)" filter="url(#fs-glow)" />
+        <circle cx="44" cy="68" r="16" stroke="rgba(56,189,248,0.7)" strokeWidth="0.9" />
+        <g transform="translate(44,68) scale(1.5)" stroke="rgba(186,230,253,0.95)" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="-4.2" y1="-2" x2="2.8"  y2="-2" strokeWidth="0.8" />
+          <polyline points="1,-3.8 3.5,-2 1,-0.2" strokeWidth="0.8" />
+          <line x1="4.2"  y1="2"  x2="-2.8" y2="2"  strokeWidth="0.8" />
+          <polyline points="-1,0.2 -3.5,2 -1,3.8" strokeWidth="0.8" />
+        </g>
+
+      </g>{/* end rotating group */}
+
+      {/* Central settlement hub — halo */}
+      <circle cx="100" cy="100" r="40" fill="url(#fs-hub)" />
+      <circle cx="100" cy="100" r="40" stroke="rgba(56,189,248,0.28)" strokeWidth="0.8" />
+
+      {/* Hub hexagon frame */}
+      <polygon
+        points="126,100 113,122.5 87,122.5 74,100 87,77.5 113,77.5"
+        fill="rgba(3,105,161,0.4)"
+        stroke="rgba(103,232,249,0.5)"
+        strokeWidth="0.9"
+        filter="url(#fs-glow)"
+      />
+      <circle cx="126" cy="100"   r="2.2" fill="rgba(103,232,249,0.8)" />
+      <circle cx="113" cy="122.5" r="2.2" fill="rgba(103,232,249,0.8)" />
+      <circle cx="87"  cy="122.5" r="2.2" fill="rgba(103,232,249,0.8)" />
+      <circle cx="74"  cy="100"   r="2.2" fill="rgba(103,232,249,0.8)" />
+      <circle cx="87"  cy="77.5"  r="2.2" fill="rgba(103,232,249,0.8)" />
+      <circle cx="113" cy="77.5"  r="2.2" fill="rgba(103,232,249,0.8)" />
+
+      {/* Central core */}
+      <circle cx="100" cy="100" r="19" fill="url(#fs-core)" filter="url(#fs-cglow)" />
+      <circle cx="100" cy="100" r="19" stroke="rgba(186,230,253,0.6)" strokeWidth="0.9" />
+      <circle cx="100" cy="100" r="10" fill="rgba(255,255,255,0.12)" />
+      <circle cx="100" cy="100" r="10" stroke="rgba(224,249,255,0.45)" strokeWidth="0.5" />
+      {/* Core icon: concentric rings + centre dot (no text) */}
+      <circle cx="100" cy="100" r="5.5" stroke="rgba(224,249,255,0.7)" strokeWidth="0.8" fill="none" />
+      <circle cx="100" cy="100" r="2.5" fill="rgba(255,255,255,0.92)" />
     </svg>
   );
 }
@@ -312,9 +466,8 @@ export default function HeroShield() {
 
         <OrbitingProducts />
 
-        {/* Shield — floating centre */}
-        <div className="absolute inset-0 flex items-center justify-center"
-          style={{ animation: 'float 6s ease-in-out infinite' }}>
+        {/* Settlement hub — centre static, outer ring rotates inside SVG */}
+        <div className="absolute inset-0 flex items-center justify-center">
           <Shield />
         </div>
 
