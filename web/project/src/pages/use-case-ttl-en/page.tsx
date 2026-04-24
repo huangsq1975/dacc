@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { WireframeSphere } from '../../components/feature/WireframeSphere';
 
 export default function UseCaseTTLEN() {
+  const { t, i18n } = useTranslation();
+  const isZh = i18n.language === 'zh';
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => { document.title = 'TTL Token | DACC - Digital Asset Clearing Center'; }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,16 +62,16 @@ export default function UseCaseTTLEN() {
               </button>
               {dropdownOpen && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 min-w-[200px] shadow-xl">
-                  <a href="/use-case-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
+                  <a href="/use-case" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
                     Global Merchants x DACC
                   </a>
-                  <a href="/use-case-ttl-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
+                  <a href="/use-case-ttl" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
                     TTL × DACC
                   </a>
-                  <a href="/use-case-conflux-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
+                  <a href="/use-case-conflux" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
                     Conflux x DACC
                   </a>
-                  <a href="/use-case-vatp-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
+                  <a href="/use-case-vatp" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] hover:bg-[#e8f4fb]/50 transition-all cursor-pointer">
                     Crypto Exchanges x DACC
                   </a>
                 </div>
@@ -77,10 +83,10 @@ export default function UseCaseTTLEN() {
             >
               Investors
             </button>
-            <a href="/blog-en" className="text-[#1e6b8a] hover:text-[#0ea5e9] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat">
+            <a href="/blog" className="text-[#1e6b8a] hover:text-[#0ea5e9] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat">
               News
             </a>
-            <a href="/contact-en" className="text-[#1e6b8a] hover:text-[#0ea5e9] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat">
+            <a href="/contact" className="text-[#1e6b8a] hover:text-[#0ea5e9] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat">
               Contact Us
               <i className="ri-arrow-right-up-line ml-1 text-xs"></i>
             </a>
@@ -105,9 +111,10 @@ export default function UseCaseTTLEN() {
             >
               <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-xl`}></i>
             </button>
-            <a href="/use-case-ttl" className="bg-[#dbeafe] backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#0ea5e9] transition-all duration-300 cursor-pointer whitespace-nowrap">
-              中文
-            </a>
+            <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1 rounded-full border border-[#b8d9ed] bg-transparent px-2 py-1.5 text-xs font-semibold text-[#1e6b8a]">
+              <WireframeSphere size={12} />
+              <span>{isZh ? '中文' : 'EN'}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -147,7 +154,7 @@ export default function UseCaseTTLEN() {
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <a
-                  href="/blog-en"
+                  href="/blog"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#38bdf8] transition-colors border-b border-white/20"
                 >
@@ -155,7 +162,7 @@ export default function UseCaseTTLEN() {
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
                 <a
-                  href="/contact-en"
+                  href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#38bdf8] transition-colors border-b border-white/20"
                 >
@@ -177,10 +184,10 @@ export default function UseCaseTTLEN() {
               <div className="px-6 py-6">
                 <p className="text-white/70 text-sm mb-6">Explore our solutions</p>
                 <div className="space-y-2">
-                  <a href="/use-case-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">Global Merchants x DACC</a>
-                  <a href="/use-case-ttl-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">TTL × DACC</a>
-                  <a href="/use-case-conflux-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">Conflux x DACC</a>
-                  <a href="/use-case-vatp-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">Crypto Exchanges x DACC</a>
+                  <a href="/use-case" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">Global Merchants x DACC</a>
+                  <a href="/use-case-ttl" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">TTL × DACC</a>
+                  <a href="/use-case-conflux" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">Conflux x DACC</a>
+                  <a href="/use-case-vatp" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#38bdf8] transition-colors border-b border-white/20">Crypto Exchanges x DACC</a>
                 </div>
               </div>
             </div>
@@ -190,9 +197,10 @@ export default function UseCaseTTLEN() {
 
       {/* Language Switcher - Desktop Only */}
       <div className="fixed top-6 right-6 z-50 hidden lg:block">
-        <a href="/use-case-ttl" className="bg-white/80 backdrop-blur-md border border-[#b8d9ed] rounded-full px-3 md:px-4 py-2 text-xs md:text-sm text-[#1e6b8a] hover:text-[#0ea5e9] transition-all duration-300 cursor-pointer whitespace-nowrap">
-          中文
-        </a>
+        <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1.5 rounded-full border border-[#b8d9ed] bg-white/80 backdrop-blur-md px-2.5 py-1.5 text-[#1e6b8a] hover:border-[#1e6b8a] hover:text-[#12b7d6] transition-colors text-xs font-semibold shadow-md">
+          <WireframeSphere size={14} />
+          <span>{isZh ? '中文' : 'EN'}</span>
+        </button>
       </div>
 
       {/* Hero Section */}
@@ -205,14 +213,14 @@ export default function UseCaseTTLEN() {
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <div className="inline-block mb-6">
             <span className="bg-[#0ea5e9]/10 border border-[#0284c7] text-[#0284c7] px-4 py-2 rounded-full text-sm font-semibold">
-              Use Case / Partner Solution
+              {t('ttl_hero_badge')}
             </span>
           </div>
           <h1 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-6 leading-tight">
-            TTL × DACC: Scalable Financial Infrastructure for <span className="text-[#0ea5e9]">Tokenized Assets</span>
+            {t('ttl_hero_title')} <span className="text-[#0ea5e9]">{t('ttl_hero_title_highlight')}</span>
           </h1>
           <p className="text-lg text-[#1e3a4a] max-w-3xl mx-auto leading-relaxed mb-8">
-            Combining TTL's institutional trading capabilities with DACC's compliant clearing and settlement infrastructure to enable seamless tokenized asset transactions.
+            {t('ttl_hero_subtitle')}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="#contact" className="bg-[#0ea5e9] hover:bg-[#0284c7] text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap inline-flex items-center space-x-2 transform hover:scale-105">
@@ -236,23 +244,23 @@ export default function UseCaseTTLEN() {
                 <div className="w-12 h-12 bg-[#0ea5e9]/20 rounded-xl flex items-center justify-center">
                   <i className="ri-error-warning-line text-[#0284c7] text-2xl"></i>
                 </div>
-                <h3 className="text-2xl font-bold text-[#1e6b8a]">Industry Challenge</h3>
+                <h3 className="text-2xl font-bold text-[#1e6b8a]">{t('ttl_challenge_title')}</h3>
               </div>
               <p className="text-[#1e3a4a] leading-relaxed mb-4">
-                As tokenized assets move toward mainstream adoption, key bottlenecks remain:
+                {t('ttl_challenge_intro')}
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start space-x-3">
                   <i className="ri-checkbox-blank-circle-fill text-[#0284c7] text-xs mt-2"></i>
-                  <span className="text-[#1e3a4a]">Lack of compliant post-trade infrastructure</span>
+                  <span className="text-[#1e3a4a]">{t('ttl_challenge_1')}</span>
                 </li>
                 <li className="flex items-start space-x-3">
                   <i className="ri-checkbox-blank-circle-fill text-[#0284c7] text-xs mt-2"></i>
-                  <span className="text-[#1e3a4a]">Fragmented on-chain and off-chain systems</span>
+                  <span className="text-[#1e3a4a]">{t('ttl_challenge_2')}</span>
                 </li>
                 <li className="flex items-start space-x-3">
                   <i className="ri-checkbox-blank-circle-fill text-[#0284c7] text-xs mt-2"></i>
-                  <span className="text-[#1e3a4a]">Regulatory compliance complexity</span>
+                  <span className="text-[#1e3a4a]">{t('ttl_challenge_3')}</span>
                 </li>
               </ul>
             </div>
@@ -263,13 +271,13 @@ export default function UseCaseTTLEN() {
                 <div className="w-12 h-12 bg-[#0ea5e9]/20 rounded-xl flex items-center justify-center">
                   <i className="ri-lightbulb-line text-[#0284c7] text-2xl"></i>
                 </div>
-                <h3 className="text-2xl font-bold text-[#1e6b8a]">Why TTL × DACC</h3>
+                <h3 className="text-2xl font-bold text-[#1e6b8a]">{t('ttl_why_title')}</h3>
               </div>
               <p className="text-[#1e3a4a] leading-relaxed mb-4">
-                DACC provides compliant clearing, settlement, and custody infrastructure. TTL delivers institutional-grade trading systems with VASP/VATP licensing, fiat on/off ramps, and AML/KYC capabilities.
+                {t('ttl_why_body')}
               </p>
               <p className="text-[#1e6b8a] font-medium">
-                Together, we create a modular, compliant foundation that reduces institutional barriers and accelerates tokenized asset adoption.
+                {t('ttl_why_conclusion')}
               </p>
             </div>
           </div>
@@ -280,8 +288,8 @@ export default function UseCaseTTLEN() {
       <section id="solutions" className="py-16 px-6 bg-white/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1e6b8a] mb-4">Joint Solution</h2>
-            <p className="text-[#1e3a4a]">Comprehensive capabilities for tokenized asset operations</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#1e6b8a] mb-4">{t('ttl_joint_title')}</h2>
+            <p className="text-[#1e3a4a]">{t('ttl_joint_sub')}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -290,8 +298,8 @@ export default function UseCaseTTLEN() {
               <div className="w-14 h-14 bg-[#0ea5e9]/20 rounded-xl flex items-center justify-center mb-6">
                 <i className="ri-exchange-funds-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Clearing & Settlement</h3>
-              <p className="text-[#1e3a4a] mb-4">DACC provides tokenized asset clearing capabilities, bridging on-chain assets with off-chain fund settlement.</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('ttl_clearing_title')}</h3>
+              <p className="text-[#1e3a4a] mb-4">{t('ttl_clearing_desc')}</p>
               <div className="flex flex-wrap gap-2">
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">Real-time Settlement</span>
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">Multi-chain Support</span>
@@ -303,8 +311,8 @@ export default function UseCaseTTLEN() {
               <div className="w-14 h-14 bg-[#0ea5e9]/20 rounded-xl flex items-center justify-center mb-6">
                 <i className="ri-building-2-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Institutional Trading System</h3>
-              <p className="text-[#1e3a4a] mb-4">TTL provides institutional-grade settlement modules, fiat on/off ramps, and open API connectivity.</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('ttl_trading_title')}</h3>
+              <p className="text-[#1e3a4a] mb-4">{t('ttl_trading_desc')}</p>
               <div className="flex flex-wrap gap-2">
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">VASP/VATP Licensed</span>
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">Open API</span>
@@ -316,8 +324,8 @@ export default function UseCaseTTLEN() {
               <div className="w-14 h-14 bg-[#0ea5e9]/20 rounded-xl flex items-center justify-center mb-6">
                 <i className="ri-shield-check-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Compliance & Audit</h3>
-              <p className="text-[#1e3a4a] mb-4">TTL's AML/KYC capabilities combined with DACC's auditable business logic for transparent, compliant operations.</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('ttl_compliance_title')}</h3>
+              <p className="text-[#1e3a4a] mb-4">{t('ttl_compliance_desc')}</p>
               <div className="flex flex-wrap gap-2">
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">AML/KYC</span>
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">Audit Trail</span>
@@ -329,8 +337,8 @@ export default function UseCaseTTLEN() {
               <div className="w-14 h-14 bg-[#0ea5e9]/20 rounded-xl flex items-center justify-center mb-6">
                 <i className="ri-stack-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Modular Deployment</h3>
-              <p className="text-[#1e3a4a] mb-4">Flexible implementation based on institutional needs - custody first, settlement first, or full integration.</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('ttl_modular_title')}</h3>
+              <p className="text-[#1e3a4a] mb-4">{t('ttl_modular_desc')}</p>
               <div className="flex flex-wrap gap-2">
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">Phased Rollout</span>
                 <span className="bg-[#0ea5e9]/10 text-[#0284c7] px-3 py-1 rounded-full text-xs">Customizable</span>
@@ -344,8 +352,8 @@ export default function UseCaseTTLEN() {
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1e6b8a] mb-4">Who It's For</h2>
-            <p className="text-[#1e3a4a]">Designed for regulated financial institutions</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#1e6b8a] mb-4">{t('ttl_who_title')}</h2>
+            <p className="text-[#1e3a4a]">{t('ttl_who_sub')}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -353,32 +361,32 @@ export default function UseCaseTTLEN() {
               <div className="w-16 h-16 bg-[#0ea5e9]/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i className="ri-bank-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h4 className="font-bold text-[#1e6b8a] mb-2">Banks</h4>
-              <p className="text-sm text-[#1e3a4a]">Digital currency settlement & asset custody</p>
+              <h4 className="font-bold text-[#1e6b8a] mb-2">{t('ttl_who_banks_title')}</h4>
+              <p className="text-sm text-[#1e3a4a]">{t('ttl_who_banks_desc')}</p>
             </div>
 
             <div className="bg-white/70 rounded-xl p-6 border border-[#b8d9ed] hover:border-[#0ea5e9] transition-all duration-300 text-center">
               <div className="w-16 h-16 bg-[#0ea5e9]/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i className="ri-exchange-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h4 className="font-bold text-[#1e6b8a] mb-2">Exchanges</h4>
-              <p className="text-sm text-[#1e3a4a]">RWA secondary trading & custody</p>
+              <h4 className="font-bold text-[#1e6b8a] mb-2">{t('ttl_who_exchanges_title')}</h4>
+              <p className="text-sm text-[#1e3a4a]">{t('ttl_who_exchanges_desc')}</p>
             </div>
 
             <div className="bg-white/70 rounded-xl p-6 border border-[#b8d9ed] hover:border-[#0ea5e9] transition-all duration-300 text-center">
               <div className="w-16 h-16 bg-[#0ea5e9]/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i className="ri-funds-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h4 className="font-bold text-[#1e6b8a] mb-2">Asset Managers</h4>
-              <p className="text-sm text-[#1e3a4a]">Fund/bond tokenization & distribution</p>
+              <h4 className="font-bold text-[#1e6b8a] mb-2">{t('ttl_who_assets_title')}</h4>
+              <p className="text-sm text-[#1e3a4a]">{t('ttl_who_assets_desc')}</p>
             </div>
 
             <div className="bg-white/70 rounded-xl p-6 border border-[#b8d9ed] hover:border-[#0ea5e9] transition-all duration-300 text-center">
               <div className="w-16 h-16 bg-[#0ea5e9]/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i className="ri-pie-chart-line text-[#0284c7] text-2xl"></i>
               </div>
-              <h4 className="font-bold text-[#1e6b8a] mb-2">Wealth Platforms</h4>
-              <p className="text-sm text-[#1e3a4a]">On-chain asset delivery & compliance</p>
+              <h4 className="font-bold text-[#1e6b8a] mb-2">{t('ttl_who_wealth_title')}</h4>
+              <p className="text-sm text-[#1e3a4a]">{t('ttl_who_wealth_desc')}</p>
             </div>
           </div>
         </div>
@@ -388,17 +396,17 @@ export default function UseCaseTTLEN() {
       <section className="py-16 px-6 bg-white/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1e6b8a] mb-4">How It Works</h2>
-            <p className="text-[#1e3a4a]">Simple 5-step process flow</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#1e6b8a] mb-4">{t('ttl_how_title')}</h2>
+            <p className="text-[#1e3a4a]">{t('ttl_how_sub')}</p>
           </div>
 
           <div className="grid md:grid-cols-5 gap-4">
             {[
-              { step: 1, title: 'Asset Initiation', desc: 'Institution initiates tokenized asset issuance' },
-              { step: 2, title: 'Compliance Check', desc: 'AML/KYC verification and regulatory approval' },
-              { step: 3, title: 'Settlement', desc: 'DACC bridges on-chain and off-chain settlement' },
-              { step: 4, title: 'Clearing', desc: 'Atomic settlement with real-time reconciliation' },
-              { step: 5, title: 'Custody', desc: 'Secure institutional-grade asset custody' }
+              { step: 1, title: t('ttl_step_1_title'), desc: t('ttl_step_1_desc') },
+              { step: 2, title: t('ttl_step_2_title'), desc: t('ttl_step_2_desc') },
+              { step: 3, title: t('ttl_step_3_title'), desc: t('ttl_step_3_desc') },
+              { step: 4, title: t('ttl_step_4_title'), desc: t('ttl_step_4_desc') },
+              { step: 5, title: t('ttl_step_5_title'), desc: t('ttl_step_5_desc') }
             ].map((item) => (
               <div key={item.step} className="bg-white/70 rounded-xl p-6 border border-[#b8d9ed] hover:border-[#0ea5e9] transition-all duration-300">
                 <div className="w-10 h-10 bg-[#0ea5e9] rounded-full flex items-center justify-center mb-4">
@@ -422,18 +430,18 @@ export default function UseCaseTTLEN() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="text-4xl lg:text-5xl font-bold text-[#0ea5e9] mb-2">T+0</div>
-                <p className="text-[#1e6b8a] font-medium">Near Real-time</p>
-                <p className="text-sm text-[#1e3a4a]">Settlement efficiency</p>
+                <p className="text-[#1e6b8a] font-medium">{t('ttl_kpi_settlement_label')}</p>
+                <p className="text-sm text-[#1e3a4a]">{t('ttl_kpi_settlement_desc')}</p>
               </div>
               <div className="text-center">
                 <div className="text-4xl lg:text-5xl font-bold text-[#0ea5e9] mb-2">≥99.9%</div>
-                <p className="text-[#1e6b8a] font-medium">System Uptime</p>
-                <p className="text-sm text-[#1e3a4a]">SLA target availability</p>
+                <p className="text-[#1e6b8a] font-medium">{t('ttl_kpi_uptime_label')}</p>
+                <p className="text-sm text-[#1e3a4a]">{t('ttl_kpi_uptime_desc')}</p>
               </div>
               <div className="text-center">
-                <div className="text-4xl lg:text-5xl font-bold text-[#0ea5e9] mb-2">Audit-ready</div>
-                <p className="text-[#1e6b8a] font-medium">Compliance Reports</p>
-                <p className="text-sm text-[#1e3a4a]">Full audit trail support</p>
+                <div className="text-4xl lg:text-5xl font-bold text-[#0ea5e9] mb-2">{t('ttl_kpi_audit_value')}</div>
+                <p className="text-[#1e6b8a] font-medium">{t('ttl_kpi_audit_label')}</p>
+                <p className="text-sm text-[#1e3a4a]">{t('ttl_kpi_audit_desc')}</p>
               </div>
             </div>
           </div>
@@ -447,12 +455,12 @@ export default function UseCaseTTLEN() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Infrastructure?</h2>
+              <h2 className="text-3xl font-bold mb-4">{t('ttl_cta_title')}</h2>
               <p className="text-lg text-white/80 mb-8">
                 Contact us to learn how TTL × DACC can accelerate your tokenized asset operations.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/contact-en" className="bg-white text-[#1e6b8a] px-8 py-4 rounded-full font-bold hover:bg-[#38bdf8] hover:text-white transition-all duration-300 cursor-pointer whitespace-nowrap inline-flex items-center justify-center space-x-2">
+                <a href="/contact" className="bg-white text-[#1e6b8a] px-8 py-4 rounded-full font-bold hover:bg-[#38bdf8] hover:text-white transition-all duration-300 cursor-pointer whitespace-nowrap inline-flex items-center justify-center space-x-2">
                   <span>Contact Us</span>
                   <i className="ri-arrow-right-line"></i>
                 </a>
@@ -509,8 +517,8 @@ export default function UseCaseTTLEN() {
                 >
                   Investors
                 </button>
-                <a href="/blog-en" className="block text-white/80 hover:text-[#38bdf8] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">News</a>
-                <a href="/contact-en" className="block text-white/80 hover:text-[#38bdf8] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">Contact Us</a>
+                <a href="/blog" className="block text-white/80 hover:text-[#38bdf8] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">News</a>
+                <a href="/contact" className="block text-white/80 hover:text-[#38bdf8] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">Contact Us</a>
               </div>
             </div>
 

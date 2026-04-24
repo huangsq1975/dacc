@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { WireframeSphere } from '../../components/feature/WireframeSphere';
 
 export default function ContactEN() {
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,6 +20,9 @@ export default function ContactEN() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const navigate = useNavigate();
+  const isZh = i18n.language === 'zh';
+
+  useEffect(() => { document.title = 'Contact | DACC - Digital Asset Clearing Center'; }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,17 +88,17 @@ export default function ContactEN() {
         <nav className={`${scrolled ? 'bg-white/90' : 'bg-white/80'} backdrop-blur-md border border-[#b8d9ed] rounded-full px-6 py-3 transition-all duration-300 shadow-lg`}>
           <div className="flex items-center justify-center space-x-8">
             <a href="/" className="cursor-pointer flex-shrink-0">
-              <img 
-                src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png" 
-                alt="DACC Logo" 
+              <img
+                src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png"
+                alt="DACC Logo"
                 className="h-6 w-auto object-contain"
               />
             </a>
-            <button 
+            <button
               onClick={() => handleNavigateWithHash('/', '#Services')}
               className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat"
             >
-              Services
+              {t('nav_services')}
             </button>
 
             {/* Solutions Dropdown */}
@@ -104,23 +110,23 @@ export default function ContactEN() {
               <button
                 className="flex items-center gap-1 text-[#1e6b8a] hover:text-[#f5b942] transition-colors text-sm whitespace-nowrap font-montserrat"
               >
-                Solutions
+                {t('nav_solutions')}
                 <i className={`ri-arrow-down-s-line transition-transform duration-200 ${solutionsDropdownOpen ? 'rotate-180' : ''}`}></i>
               </button>
               {solutionsDropdownOpen && (
                 <div className="absolute left-0 pt-2 w-56 z-50">
                   <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/hot-wallet-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      Hot Wallet Integration
+                    <a href="/hot-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_sol_hot_wallet')}
                     </a>
-                    <a href="/cold-wallet-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      Cold Wallet
+                    <a href="/cold-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_sol_cold_wallet')}
                     </a>
-                    <a href="/rwa-platform-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      RWA Tokenization Platform
+                    <a href="/rwa-platform" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_sol_rwa')}
                     </a>
-                    <a href="/chain-fusion-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      ChainFusion
+                    <a href="/chain-fusion" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_sol_chainfusion')}
                     </a>
                   </div>
                 </div>
@@ -136,40 +142,40 @@ export default function ContactEN() {
               <button
                 className="flex items-center gap-1 text-[#1e6b8a] hover:text-[#f5b942] transition-colors text-sm whitespace-nowrap font-montserrat"
               >
-                Use Cases
+                {t('nav_use_cases')}
                 <i className={`ri-arrow-down-s-line transition-transform duration-200 ${useCasesDropdownOpen ? 'rotate-180' : ''}`}></i>
               </button>
               {useCasesDropdownOpen && (
                 <div className="absolute left-0 pt-2 w-64 z-50">
                   <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/use-case-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      Global Merchants x DACC
+                    <a href="/use-case" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_uc_global')}
                     </a>
-                    <a href="/use-case-ttl-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      TTL × DACC
+                    <a href="/use-case-ttl" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_uc_ttl')}
                     </a>
-                    <a href="/use-case-conflux-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      Conflux x DACC
+                    <a href="/use-case-conflux" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_uc_conflux')}
                     </a>
-                    <a href="/use-case-vatp-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
-                      Crypto Exchanges x DACC
+                    <a href="/use-case-vatp" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb]/50 transition-colors">
+                      {t('nav_uc_vatp')}
                     </a>
                   </div>
                 </div>
               )}
             </div>
 
-            <button 
+            <button
               onClick={() => handleNavigateWithHash('/home-en', '#ecosystem')}
               className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat"
             >
-              Investors
+              {t('nav_investors')}
             </button>
-            <a href="/blog-en" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat">
-              News
+            <a href="/blog" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat">
+              {t('nav_news')}
             </a>
-            <a href="/contact-en" className="text-[#f5b942] font-semibold transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat">
-              Contact Us
+            <a href="/contact" className="text-[#f5b942] font-semibold transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat">
+              {t('nav_contact_us')}
               <i className="ri-arrow-right-up-line ml-1 text-xs"></i>
             </a>
           </div>
@@ -180,9 +186,9 @@ export default function ContactEN() {
       <div className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-white/95 backdrop-blur-md border-b border-[#b8d9ed]">
         <div className="flex items-center justify-between px-6 py-4">
           <a href="/" className="block cursor-pointer">
-            <img 
-              src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png" 
-              alt="DACC Logo" 
+            <img
+              src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png"
+              alt="DACC Logo"
               className="h-8 w-auto object-contain"
             />
           </a>
@@ -193,9 +199,10 @@ export default function ContactEN() {
             >
               <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-xl`}></i>
             </button>
-            <a href="/contact" className="bg-[#dbeafe] backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap">
-              中文
-            </a>
+            <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1 rounded-full border border-[#b8d9ed] bg-transparent px-2 py-1.5 text-xs font-semibold text-[#1e6b8a]">
+              <WireframeSphere size={12} />
+              <span>{isZh ? '中文' : 'EN'}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -214,21 +221,21 @@ export default function ContactEN() {
                   }}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
-                  <span>Services</span>
+                  <span>{t('nav_services')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <button
                   onClick={() => setMobileSubmenu('useCases')}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
-                  <span>Use Cases</span>
+                  <span>{t('nav_use_cases')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <button
                   onClick={() => setMobileSubmenu('solutions')}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
-                  <span>Solutions</span>
+                  <span>{t('nav_solutions')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <button
@@ -238,23 +245,23 @@ export default function ContactEN() {
                   }}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
-                  <span>Investors</span>
+                  <span>{t('nav_investors')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <a
-                  href="/blog-en"
+                  href="/blog"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
                 >
-                  <span>Blog</span>
+                  <span>{t('nav_blog')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
                 <a
-                  href="/contact-en"
+                  href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-between py-4 text-xl text-[#f5b942] font-semibold transition-colors border-b border-white/20"
                 >
-                  <span>Contact Us</span>
+                  <span>{t('nav_contact_us')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
               </div>
@@ -271,39 +278,23 @@ export default function ContactEN() {
                 >
                   <i className="ri-arrow-left-line text-2xl"></i>
                 </button>
-                <span className="text-lg font-semibold text-white">Use Cases</span>
+                <span className="text-lg font-semibold text-white">{t('nav_use_cases')}</span>
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6">
-                <p className="text-white/70 text-sm mb-6">Explore our solutions</p>
+                <p className="text-white/70 text-sm mb-6">{t('mobile_explore')}</p>
                 <div className="space-y-2">
-                  <a
-                    href="/use-case-en"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
-                  >
-                    Global Merchants x DACC
+                  <a href="/use-case" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_uc_global')}
                   </a>
-                  <a
-                    href="/use-case-ttl-en"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
-                  >
-                    TTL × DACC
+                  <a href="/use-case-ttl" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_uc_ttl')}
                   </a>
-                  <a
-                    href="/use-case-conflux-en"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
-                  >
-                    Conflux x DACC
+                  <a href="/use-case-conflux" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_uc_conflux')}
                   </a>
-                  <a
-                    href="/use-case-vatp-en"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20"
-                  >
-                    Crypto Exchanges x DACC
+                  <a href="/use-case-vatp" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_uc_vatp')}
                   </a>
                 </div>
               </div>
@@ -320,22 +311,22 @@ export default function ContactEN() {
                 >
                   <i className="ri-arrow-left-line text-2xl"></i>
                 </button>
-                <span className="text-lg font-semibold text-white">Solutions</span>
+                <span className="text-lg font-semibold text-white">{t('nav_solutions')}</span>
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6">
                 <div className="space-y-2">
-                  <a href="/hot-wallet-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                    Hot Wallet Integration
+                  <a href="/hot-wallet" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_sol_hot_wallet')}
                   </a>
-                  <a href="/cold-wallet-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                    Cold Wallet
+                  <a href="/cold-wallet" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_sol_cold_wallet')}
                   </a>
-                  <a href="/rwa-platform-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                    RWA Tokenization Platform
+                  <a href="/rwa-platform" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_sol_rwa')}
                   </a>
-                  <a href="/chain-fusion-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                    ChainFusion
+                  <a href="/chain-fusion" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                    {t('nav_sol_chainfusion')}
                   </a>
                 </div>
               </div>
@@ -346,9 +337,10 @@ export default function ContactEN() {
 
       {/* Language Switcher - Desktop Only */}
       <div className="fixed top-6 right-6 z-50 hidden lg:block">
-        <a href="/contact" className="bg-white/80 backdrop-blur-md border border-[#b8d9ed] rounded-full px-3 md:px-4 py-2 text-xs md:text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap">
-          中文
-        </a>
+        <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1.5 rounded-full border border-[#b8d9ed] bg-white/80 backdrop-blur-md px-2.5 py-1.5 text-[#1e6b8a] hover:border-[#1e6b8a] hover:text-[#12b7d6] transition-colors text-xs font-semibold shadow-lg">
+          <WireframeSphere size={14} />
+          <span>{isZh ? '中文' : 'EN'}</span>
+        </button>
       </div>
 
       {/* Hero Section */}
@@ -356,10 +348,10 @@ export default function ContactEN() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-6">
-              Contact Us
+              {t('contact_hero_title')}
             </h1>
             <p className="text-xl text-[#4a5568] max-w-3xl mx-auto">
-              Have questions about our products or services? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+              {t('contact_hero_desc')}
             </p>
           </div>
         </div>
@@ -371,19 +363,19 @@ export default function ContactEN() {
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Contact Information */}
             <div>
-              <h2 className="text-3xl font-bold text-[#1e6b8a] mb-8">Contact Information</h2>
-              
+              <h2 className="text-3xl font-bold text-[#1e6b8a] mb-8">{t('contact_info_title')}</h2>
+
               <div className="space-y-8">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-[#dbeafe] rounded-xl flex items-center justify-center flex-shrink-0">
                     <i className="ri-map-pin-line text-[#1e6b8a] text-xl"></i>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1e6b8a] mb-2">Office Address</h3>
+                    <h3 className="font-semibold text-[#1e6b8a] mb-2">{t('contact_info_address_label')}</h3>
                     <p className="text-[#4a5568]">
-                      Hong Kong<br />
-                      100 Cyberport Road<br />
-                      Fintech 2, Level 4, Cyberport 3
+                      {t('contact_info_address_line1')}<br />
+                      {t('contact_info_address_line2')}<br />
+                      {t('contact_info_address_line3')}
                     </p>
                   </div>
                 </div>
@@ -393,7 +385,7 @@ export default function ContactEN() {
                     <i className="ri-mail-line text-[#1e6b8a] text-xl"></i>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1e6b8a] mb-2">Email</h3>
+                    <h3 className="font-semibold text-[#1e6b8a] mb-2">{t('contact_info_email_label')}</h3>
                     <p className="text-[#4a5568]">
                       <a href="mailto:info@dacc.hk" className="hover:text-[#f5b942] transition-colors">
                         info@dacc.hk
@@ -407,10 +399,10 @@ export default function ContactEN() {
                     <i className="ri-time-line text-[#1e6b8a] text-xl"></i>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1e6b8a] mb-2">Business Hours</h3>
+                    <h3 className="font-semibold text-[#1e6b8a] mb-2">{t('contact_info_hours_label')}</h3>
                     <p className="text-[#4a5568]">
-                      Monday - Friday: 9:00 AM - 6:00 PM HKT<br />
-                      Saturday - Sunday: Closed
+                      {t('contact_info_hours_weekdays')}<br />
+                      {t('contact_info_hours_weekend')}
                     </p>
                   </div>
                 </div>
@@ -418,7 +410,7 @@ export default function ContactEN() {
 
               {/* Social Links */}
               <div className="mt-12">
-                <h3 className="font-semibold text-[#1e6b8a] mb-4">Follow Us</h3>
+                <h3 className="font-semibold text-[#1e6b8a] mb-4">{t('contact_info_follow')}</h3>
                 <div className="flex space-x-4">
                   <a href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white/70 rounded-full flex items-center justify-center hover:bg-[#1e6b8a] hover:text-white transition-all duration-300 cursor-pointer border border-[#b8d9ed]">
                     <i className="ri-linkedin-fill text-xl"></i>
@@ -429,12 +421,12 @@ export default function ContactEN() {
 
             {/* Contact Form */}
             <div className="bg-white/80 rounded-3xl p-8 lg:p-12 border border-[#b8d9ed] shadow-lg">
-              <h2 className="text-3xl font-bold text-[#1e6b8a] mb-8">Send a Message</h2>
-              
+              <h2 className="text-3xl font-bold text-[#1e6b8a] mb-8">{t('contact_form_title')}</h2>
+
               <form onSubmit={handleSubmit} data-readdy-form className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold text-[#1e6b8a] mb-2">
-                    Name *
+                    {t('contact_form_name')}
                   </label>
                   <input
                     type="text"
@@ -444,13 +436,13 @@ export default function ContactEN() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl border border-[#b8d9ed] bg-white text-[#1e3a4a] focus:border-[#1e6b8a] focus:ring-2 focus:ring-[#1e6b8a]/20 outline-none transition-all"
-                    placeholder="John Doe"
+                    placeholder={t('contact_form_name_placeholder')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold text-[#1e6b8a] mb-2">
-                    Email *
+                    {t('contact_form_email')}
                   </label>
                   <input
                     type="email"
@@ -460,13 +452,13 @@ export default function ContactEN() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl border border-[#b8d9ed] bg-white text-[#1e3a4a] focus:border-[#1e6b8a] focus:ring-2 focus:ring-[#1e6b8a]/20 outline-none transition-all"
-                    placeholder="john@example.com"
+                    placeholder={t('contact_form_email_placeholder')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="company" className="block text-sm font-semibold text-[#1e6b8a] mb-2">
-                    Company
+                    {t('contact_form_company')}
                   </label>
                   <input
                     type="text"
@@ -475,13 +467,13 @@ export default function ContactEN() {
                     value={formData.company}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-xl border border-[#b8d9ed] bg-white text-[#1e3a4a] focus:border-[#1e6b8a] focus:ring-2 focus:ring-[#1e6b8a]/20 outline-none transition-all"
-                    placeholder="Your Company"
+                    placeholder={t('contact_form_company_placeholder')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="subject" className="block text-sm font-semibold text-[#1e6b8a] mb-2">
-                    Subject *
+                    {t('contact_form_subject')}
                   </label>
                   <select
                     id="subject"
@@ -491,18 +483,18 @@ export default function ContactEN() {
                     required
                     className="w-full px-4 py-3 rounded-xl border border-[#b8d9ed] bg-white text-[#1e3a4a] focus:border-[#1e6b8a] focus:ring-2 focus:ring-[#1e6b8a]/20 outline-none transition-all cursor-pointer"
                   >
-                    <option value="">Select a subject</option>
-                    <option value="general">General Inquiry</option>
-                    <option value="products">Product Information</option>
-                    <option value="partnership">Partnership Opportunities</option>
-                    <option value="support">Technical Support</option>
-                    <option value="other">Other</option>
+                    <option value="">{t('contact_form_subject_placeholder')}</option>
+                    <option value="general">{t('contact_form_subject_general')}</option>
+                    <option value="products">{t('contact_form_subject_products')}</option>
+                    <option value="partnership">{t('contact_form_subject_partnership')}</option>
+                    <option value="support">{t('contact_form_subject_support')}</option>
+                    <option value="other">{t('contact_form_subject_other')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-semibold text-[#1e6b8a] mb-2">
-                    Message *
+                    {t('contact_form_message')}
                   </label>
                   <textarea
                     id="message"
@@ -513,10 +505,10 @@ export default function ContactEN() {
                     rows={6}
                     maxLength={500}
                     className="w-full px-4 py-3 rounded-xl border border-[#b8d9ed] bg-white text-[#1e3a4a] focus:border-[#1e6b8a] focus:ring-2 focus:ring-[#1e6b8a]/20 outline-none transition-all resize-none"
-                    placeholder="Tell us more about your inquiry..."
+                    placeholder={t('contact_form_message_placeholder')}
                   />
                   <p className="text-xs text-[#4a5568] mt-2">
-                    {formData.message.length}/500 characters
+                    {t('contact_form_chars', { count: formData.message.length })}
                   </p>
                 </div>
 
@@ -525,20 +517,20 @@ export default function ContactEN() {
                   disabled={submitStatus === 'submitting'}
                   className="w-full bg-[#1e6b8a] text-white px-8 py-4 rounded-full font-bold hover:bg-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitStatus === 'submitting' ? 'Sending...' : 'Send Message'}
+                  {submitStatus === 'submitting' ? t('contact_form_submitting') : t('contact_form_submit')}
                 </button>
 
                 {submitStatus === 'success' && (
                   <div className="bg-[#dbeafe] border border-[#1e6b8a]/30 text-[#1e6b8a] px-4 py-3 rounded-xl">
-                    <p className="font-semibold">Message sent successfully!</p>
-                    <p className="text-sm">We'll get back to you as soon as possible.</p>
+                    <p className="font-semibold">{t('contact_form_success_title')}</p>
+                    <p className="text-sm">{t('contact_form_success_desc')}</p>
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
                   <div className="bg-red-100 border border-red-400/30 text-red-600 px-4 py-3 rounded-xl">
-                    <p className="font-semibold">An error occurred.</p>
-                    <p className="text-sm">Please try again later.</p>
+                    <p className="font-semibold">{t('contact_form_error_title')}</p>
+                    <p className="text-sm">{t('contact_form_error_desc')}</p>
                   </div>
                 )}
               </form>
@@ -553,55 +545,55 @@ export default function ContactEN() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <img 
-                  src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/86e6f5c087b2b68763a98a978a16381f.png" 
-                  alt="DACC Logo" 
+                <img
+                  src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/86e6f5c087b2b68763a98a978a16381f.png"
+                  alt="DACC Logo"
                   className="h-20 w-auto object-contain"
                 />
               </div>
               <p className="text-white/70 text-sm leading-relaxed">
-                Building next-generation infrastructure for tokenized financial markets
+                {t('contact_footer_tagline')}
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <h4 className="font-semibold mb-4">{t('footer_quick_links')}</h4>
               <div className="space-y-2">
-                <button 
+                <button
                   onClick={() => handleNavigateWithHash('/', '#Services')}
                   className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer text-left"
                 >
-                  Services
+                  {t('nav_services')}
                 </button>
-                <button 
+                <button
                   onClick={() => handleNavigateWithHash('/', '#use-cases')}
                   className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer text-left"
                 >
-                  Use Cases
+                  {t('nav_use_cases')}
                 </button>
               </div>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
+              <h4 className="font-semibold mb-4">{t('footer_resources')}</h4>
               <div className="space-y-2">
-                <button 
+                <button
                   onClick={() => handleNavigateWithHash('/', '#ecosystem')}
                   className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer text-left"
                 >
-                  Investors
+                  {t('nav_investors')}
                 </button>
-                <a href="/blog-en" className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">
-                  News
+                <a href="/blog" className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">
+                  {t('nav_news')}
                 </a>
-                <a href="/contact-en" className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">
-                  Contact Us
+                <a href="/contact" className="block text-white/70 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">
+                  {t('nav_contact_us')}
                 </a>
               </div>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Follow Us</h4>
+              <h4 className="font-semibold mb-4">{t('footer_follow_us')}</h4>
               <div className="flex space-x-4">
                 <a href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#f5b942] transition-colors cursor-pointer">
                   <i className="ri-linkedin-fill text-lg"></i>
@@ -612,7 +604,7 @@ export default function ContactEN() {
 
           <div className="border-t border-white/20 pt-8 text-center">
             <p className="text-white/70 text-sm mb-4">
-              Copyright © 2026 Digital Asset Clearing Center (DACC). All Rights Reserved.
+              {t('footer_copyright')}
             </p>
           </div>
         </div>

@@ -156,6 +156,18 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
+/* Wireframe sphere meridian rotation */
+.wf-sphere-meridian {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wf-sphere-spin 5s linear infinite;
+}
+
+@keyframes wf-sphere-spin {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
 /* Counter-clockwise slow spin */
 @keyframes spin-ccw {
   from { transform: rotate(0deg); }

@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { WireframeSphere } from '../../components/feature/WireframeSphere';
 
 export default function UseCaseEN() {
+  const { t, i18n } = useTranslation();
+  const isZh = i18n.language === 'zh';
   const [scrolled, setScrolled] = useState(false);
   const [solutionsDropdownOpen, setSolutionsDropdownOpen] = useState(false);
   const [useCasesDropdownOpen, setUseCasesDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => { document.title = 'Use Cases | DACC - Digital Asset Clearing Center'; }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,10 +66,10 @@ export default function UseCaseEN() {
               {solutionsDropdownOpen && (
                 <div className="absolute left-0 pt-2 w-56 z-50">
                   <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/hot-wallet-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Hot Wallet Integration</a>
-                    <a href="/cold-wallet-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Cold Wallet</a>
-                    <a href="/rwa-platform-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">RWA Tokenization Platform</a>
-                    <a href="/chain-fusion-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">ChainFusion</a>
+                    <a href="/hot-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Hot Wallet Integration</a>
+                    <a href="/cold-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Cold Wallet</a>
+                    <a href="/rwa-platform" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">RWA Tokenization Platform</a>
+                    <a href="/chain-fusion" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">ChainFusion</a>
                   </div>
                 </div>
               )}
@@ -82,18 +88,18 @@ export default function UseCaseEN() {
               {useCasesDropdownOpen && (
                 <div className="absolute left-0 pt-2 w-64 z-50">
                   <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/use-case-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Global Merchants x DACC</a>
-                    <a href="/use-case-ttl-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">TTL × DACC</a>
-                    <a href="/use-case-conflux-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Conflux x DACC</a>
-                    <a href="/use-case-vatp-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Crypto Exchanges x DACC</a>
+                    <a href="/use-case" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Global Merchants x DACC</a>
+                    <a href="/use-case-ttl" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">TTL × DACC</a>
+                    <a href="/use-case-conflux" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Conflux x DACC</a>
+                    <a href="/use-case-vatp" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#e8f4fb] transition-colors">Crypto Exchanges x DACC</a>
                   </div>
                 </div>
               )}
             </div>
 
             <button onClick={() => handleNavigateWithHash('/', 'ecosystem')} className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium">Investors</button>
-            <a href="/blog-en" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium">News</a>
-            <a href="/contact-en" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat font-medium">Contact Us<i className="ri-arrow-right-up-line ml-1 text-xs"></i></a>
+            <a href="/blog" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-medium">News</a>
+            <a href="/contact" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat font-medium">Contact Us<i className="ri-arrow-right-up-line ml-1 text-xs"></i></a>
           </div>
         </nav>
       </div>
@@ -115,9 +121,10 @@ export default function UseCaseEN() {
             >
               <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-xl`}></i>
             </button>
-            <a href="/use-case" className="bg-[#e8f4fb] backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap">
-              中文
-            </a>
+            <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1 rounded-full border border-[#b8d9ed] bg-transparent px-2 py-1.5 text-xs font-semibold text-[#1e6b8a]">
+              <WireframeSphere size={12} />
+              <span>{isZh ? '中文' : 'EN'}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -156,11 +163,11 @@ export default function UseCaseEN() {
                   <span>Investors</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
-                <a href="/blog-en" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                <a href="/blog" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
                   <span>Blog</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
-                <a href="/contact-en" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                <a href="/contact" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
                   <span>Contact Us</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
@@ -177,10 +184,10 @@ export default function UseCaseEN() {
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6 space-y-2">
-                <a href="/hot-wallet-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Hot Wallet Integration</a>
-                <a href="/cold-wallet-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Cold Wallet</a>
-                <a href="/rwa-platform-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">RWA Tokenization Platform</a>
-                <a href="/chain-fusion-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">ChainFusion</a>
+                <a href="/hot-wallet" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Hot Wallet Integration</a>
+                <a href="/cold-wallet" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Cold Wallet</a>
+                <a href="/rwa-platform" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">RWA Tokenization Platform</a>
+                <a href="/chain-fusion" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">ChainFusion</a>
               </div>
             </div>
           )}
@@ -196,10 +203,10 @@ export default function UseCaseEN() {
               <div className="px-6 py-6">
                 <p className="text-white/80 text-sm mb-6">Explore our solutions</p>
                 <div className="space-y-2">
-                  <a href="/use-case-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Global Merchants x DACC</a>
-                  <a href="/use-case-ttl-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">TTL × DACC</a>
-                  <a href="/use-case-conflux-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Conflux x DACC</a>
-                  <a href="/use-case-vatp-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Crypto Exchanges x DACC</a>
+                  <a href="/use-case" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Global Merchants x DACC</a>
+                  <a href="/use-case-ttl" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">TTL × DACC</a>
+                  <a href="/use-case-conflux" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Conflux x DACC</a>
+                  <a href="/use-case-vatp" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Crypto Exchanges x DACC</a>
                 </div>
               </div>
             </div>
@@ -209,9 +216,10 @@ export default function UseCaseEN() {
 
       {/* Language Switcher - Desktop Only */}
       <div className="fixed top-6 right-6 z-50 hidden lg:block">
-        <a href="/use-case" className="bg-white/80 backdrop-blur-md border border-[#b8d9ed] rounded-full px-3 md:px-4 py-2 text-xs md:text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap shadow-md">
-          中文
-        </a>
+        <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1.5 rounded-full border border-[#b8d9ed] bg-white/80 backdrop-blur-md px-2.5 py-1.5 text-[#1e6b8a] hover:border-[#1e6b8a] hover:text-[#12b7d6] transition-colors text-xs font-semibold shadow-md">
+          <WireframeSphere size={14} />
+          <span>{isZh ? '中文' : 'EN'}</span>
+        </button>
       </div>
 
       {/* Hero Section */}
@@ -225,14 +233,14 @@ export default function UseCaseEN() {
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <div className="inline-block mb-6">
             <span className="bg-[#f5b942] border border-[#c97a2f] text-gray-900 px-4 py-2 rounded-full text-sm font-semibold">
-              Customer Success Stories
+              {t('uc_hero_badge')}
             </span>
           </div>
           <h1 className="text-5xl lg:text-6xl font-bold text-[#1e6b8a] mb-6 leading-tight">
-            Connecting Global Merchants with Stablecoins
+            {t('uc_hero_title')}
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Accelerating global stablecoin adoption through compliant custody systems, strategic integration of crypto platforms and e-commerce ecosystems
+            {t('uc_hero_subtitle')}
           </p>
         </div>
       </section>
@@ -252,11 +260,11 @@ export default function UseCaseEN() {
                 </div>
                 <div>
                   <h2 className="text-3xl font-bold mb-2">Aegis Custody Company Limited</h2>
-                  <p className="text-blue-100 text-lg">A professional institution under DACC with Hong Kong custody license</p>
+                  <p className="text-blue-100 text-lg">{t('uc_intro_subtitle')}</p>
                 </div>
               </div>
               <p className="text-lg leading-relaxed text-white/95">
-                Through direct collaboration with Web3 payment institutions and e-commerce brands, we have built a strategic hub connecting top-tier crypto platforms and e-commerce ecosystems, accelerating the global adoption of stablecoins.
+                {t('uc_intro_body')}
               </p>
             </div>
           </div>
@@ -270,13 +278,13 @@ export default function UseCaseEN() {
                   <i className="ri-shield-check-line text-[#1e6b8a] text-2xl"></i>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#1e6b8a]">License</h3>
-                  <p className="text-sm text-gray-600">Regulatory Qualification</p>
+                  <h3 className="text-2xl font-bold text-[#1e6b8a]">{t('uc_license_title')}</h3>
+                  <p className="text-sm text-gray-600">{t('uc_license_sub')}</p>
                 </div>
               </div>
               <div className="bg-[#e8f4fb] rounded-xl p-6 border border-[#b8d9ed]">
-                <p className="text-lg font-semibold text-[#1e6b8a] mb-2">TCSP Hong Kong Trust and Company Service Provider</p>
-                <p className="text-sm text-gray-600">Trust and Company Service Provider</p>
+                <p className="text-lg font-semibold text-[#1e6b8a] mb-2">{t('uc_license_name')}</p>
+                <p className="text-sm text-gray-600">{t('uc_license_desc')}</p>
               </div>
             </div>
 
@@ -287,16 +295,16 @@ export default function UseCaseEN() {
                   <i className="ri-safe-line text-[#1e6b8a] text-2xl"></i>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#1e6b8a]">Core Application</h3>
-                  <p className="text-sm text-gray-600">Key Services</p>
+                  <h3 className="text-2xl font-bold text-[#1e6b8a]">{t('uc_app_title')}</h3>
+                  <p className="text-sm text-gray-600">{t('uc_app_sub')}</p>
                 </div>
               </div>
               <div className="bg-[#e8f4fb] rounded-xl p-6 border border-[#b8d9ed]">
-                <p className="text-lg font-semibold text-[#1e6b8a] mb-2">Top-tier Compliant Custody System</p>
-                <p className="text-sm text-gray-600 mb-3">Ensuring merchant fund security</p>
+                <p className="text-lg font-semibold text-[#1e6b8a] mb-2">{t('uc_app_name')}</p>
+                <p className="text-sm text-gray-600 mb-3">{t('uc_app_desc')}</p>
                 <div className="flex items-center space-x-2 text-[#1e6b8a]">
                   <i className="ri-checkbox-circle-fill"></i>
-                  <span className="text-sm font-medium">Institutional-Grade Custody</span>
+                  <span className="text-sm font-medium">{t('uc_app_badge')}</span>
                 </div>
               </div>
             </div>
@@ -309,8 +317,8 @@ export default function UseCaseEN() {
                 <i className="ri-code-box-line text-white text-2xl"></i>
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-[#1e6b8a]">Technology Empowerment</h3>
-                <p className="text-gray-600">Technical Innovation</p>
+                <h3 className="text-3xl font-bold text-[#1e6b8a]">{t('uc_tech_title')}</h3>
+                <p className="text-gray-600">{t('uc_tech_sub')}</p>
               </div>
             </div>
 
@@ -319,24 +327,24 @@ export default function UseCaseEN() {
                 <div className="w-12 h-12 bg-[#dbeafe] rounded-lg flex items-center justify-center mb-4">
                   <i className="ri-terminal-box-line text-[#1e6b8a] text-xl"></i>
                 </div>
-                <h4 className="font-bold text-[#1e6b8a] mb-2">Standardized API</h4>
-                <p className="text-sm text-gray-600">Professional technical interfaces for seamless integration</p>
+                <h4 className="font-bold text-[#1e6b8a] mb-2">{t('uc_tech_api_title')}</h4>
+                <p className="text-sm text-gray-600">{t('uc_tech_api_desc')}</p>
               </div>
 
               <div className="bg-[#e8f4fb] rounded-xl p-6 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-lg">
                 <div className="w-12 h-12 bg-[#dbeafe] rounded-lg flex items-center justify-center mb-4">
                   <i className="ri-dashboard-line text-[#1e6b8a] text-xl"></i>
                 </div>
-                <h4 className="font-bold text-[#1e6b8a] mb-2">Professional Merchant Dashboard</h4>
-                <p className="text-sm text-gray-600">Transparent fund flow and real-time order tracking</p>
+                <h4 className="font-bold text-[#1e6b8a] mb-2">{t('uc_tech_dash_title')}</h4>
+                <p className="text-sm text-gray-600">{t('uc_tech_dash_desc')}</p>
               </div>
 
               <div className="bg-[#e8f4fb] rounded-xl p-6 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-lg">
                 <div className="w-12 h-12 bg-[#dbeafe] rounded-lg flex items-center justify-center mb-4">
                   <i className="ri-file-chart-line text-[#1e6b8a] text-xl"></i>
                 </div>
-                <h4 className="font-bold text-[#1e6b8a] mb-2">Compliance Reports</h4>
-                <p className="text-sm text-gray-600">Exportable comprehensive compliance reporting system</p>
+                <h4 className="font-bold text-[#1e6b8a] mb-2">{t('uc_tech_report_title')}</h4>
+                <p className="text-sm text-gray-600">{t('uc_tech_report_desc')}</p>
               </div>
             </div>
           </div>
@@ -348,8 +356,8 @@ export default function UseCaseEN() {
                 <i className="ri-links-line text-white text-2xl"></i>
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-[#1e6b8a]">Deep Integration with Client PayStablecoin</h3>
-                <p className="text-gray-600">Strategic Partnerships</p>
+                <h3 className="text-3xl font-bold text-[#1e6b8a]">{t('uc_eco_title')}</h3>
+                <p className="text-gray-600">{t('uc_eco_sub')}</p>
               </div>
             </div>
 
@@ -400,13 +408,13 @@ export default function UseCaseEN() {
                   <i className="ri-double-quotes-l text-[#1e6b8a] text-3xl"></i>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-[#1e6b8a]">Client Testimonial</h3>
-                  <p className="text-gray-600">Customer Feedback</p>
+                  <h3 className="text-2xl font-bold text-[#1e6b8a]">{t('uc_testimonial_title')}</h3>
+                  <p className="text-gray-600">{t('uc_testimonial_sub')}</p>
                 </div>
               </div>
 
               <blockquote className="text-xl lg:text-2xl leading-relaxed mb-8 text-gray-700 italic">
-                "We chose DACC for its comprehensive empowerment across compliance, technology, and ecosystem. From stablecoin settlement to fiat currency settlement compliance barriers, DACC ensures our merchants enjoy the convenience of digital assets without bearing volatility risks. This enables us to reach 600 million global crypto users and establish a robust fund security system."
+                {t('uc_testimonial_quote')}
               </blockquote>
 
               <div className="flex items-center space-x-4">
@@ -414,9 +422,8 @@ export default function UseCaseEN() {
                   <span className="text-2xl font-bold text-white">TT</span>
                 </div>
                 <div>
-                  <p className="font-bold text-lg text-[#1e6b8a]">Tony Tsao</p>
-                  <p className="text-gray-600">Founder, PayStablecoin</p>
-                  <p className="text-sm text-gray-500">PayStablecoin Founder</p>
+                  <p className="font-bold text-lg text-[#1e6b8a]">{t('uc_testimonial_author')}</p>
+                  <p className="text-gray-600">{t('uc_testimonial_role')}</p>
                 </div>
               </div>
             </div>
@@ -428,8 +435,8 @@ export default function UseCaseEN() {
       <section className="py-20 px-6 bg-white/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-4">Key Benefits</h2>
-            <p className="text-xl text-gray-600">Core Advantages</p>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#1e6b8a] mb-4">{t('uc_benefits_title')}</h2>
+            <p className="text-xl text-gray-600">{t('uc_benefits_sub')}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -437,32 +444,32 @@ export default function UseCaseEN() {
               <div className="w-16 h-16 bg-[#dbeafe] rounded-2xl flex items-center justify-center mb-6">
                 <i className="ri-shield-check-line text-[#1e6b8a] text-3xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Compliance Assurance</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Licensed custody institution ensuring fund security and regulatory compliance</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('uc_benefit_compliance_title')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{t('uc_benefit_compliance_desc')}</p>
             </div>
 
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
               <div className="w-16 h-16 bg-[#dbeafe] rounded-2xl flex items-center justify-center mb-6">
                 <i className="ri-line-chart-line text-[#1e6b8a] text-3xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Risk Management</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Stablecoin settlement avoiding digital asset price volatility risks</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('uc_benefit_risk_title')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{t('uc_benefit_risk_desc')}</p>
             </div>
 
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
               <div className="w-16 h-16 bg-[#dbeafe] rounded-2xl flex items-center justify-center mb-6">
                 <i className="ri-global-line text-[#1e6b8a] text-3xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Global Reach</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Connected to 12 exchanges, covering 600M crypto users</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('uc_benefit_global_title')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{t('uc_benefit_global_desc')}</p>
             </div>
 
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-[#b8d9ed] hover:border-[#1e6b8a] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
               <div className="w-16 h-16 bg-[#dbeafe] rounded-2xl flex items-center justify-center mb-6">
                 <i className="ri-dashboard-line text-[#1e6b8a] text-3xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">Transparent Management</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Real-time fund flow tracking with comprehensive compliance reports</p>
+              <h3 className="text-xl font-bold text-[#1e6b8a] mb-3">{t('uc_benefit_transparent_title')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{t('uc_benefit_transparent_desc')}</p>
             </div>
           </div>
         </div>
@@ -476,16 +483,16 @@ export default function UseCaseEN() {
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
             
             <div className="relative z-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6">{t('uc_cta_title')}</h2>
               <p className="text-xl text-blue-50 mb-8 leading-relaxed">
-                Join the DACC ecosystem and connect your business to the global stablecoin market
+                {t('uc_cta_desc')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="/#contact"
                   className="bg-[#f5b942] text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-[#c97a2f] transition-all duration-300 cursor-pointer whitespace-nowrap inline-flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
-                  <span>Contact Us</span>
+                  <span>{t('uc_cta_contact')}</span>
                   <i className="ri-arrow-right-line"></i>
                 </a>
                 <a
@@ -494,7 +501,7 @@ export default function UseCaseEN() {
                   rel="noopener noreferrer"
                   className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-[#1e6b8a] transition-all duration-300 cursor-pointer whitespace-nowrap inline-flex items-center justify-center space-x-2 transform hover:-translate-y-1"
                 >
-                  <span>Learn More</span>
+                  <span>{t('uc_cta_learn')}</span>
                   <i className="ri-external-link-line"></i>
                 </a>
               </div>
@@ -547,8 +554,8 @@ export default function UseCaseEN() {
                 >
                   Investors
                 </button>
-                <a href="/blog-en" className="block text-blue-100 hover:text-[#f5b942] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">News</a>
-                <a href="/contact-en" className="block text-blue-100 hover:text-[#f5b942] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">Contact Us</a>
+                <a href="/blog" className="block text-blue-100 hover:text-[#f5b942] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">News</a>
+                <a href="/contact" className="block text-blue-100 hover:text-[#f5b942] transition-all duration-300 text-xs md:text-sm cursor-pointer hover:translate-x-2 transform">Contact Us</a>
               </div>
             </div>
 

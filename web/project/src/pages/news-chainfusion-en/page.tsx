@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { WireframeSphere } from '../../components/feature/WireframeSphere';
 
 export default function NewsChainFusionEN() {
+  const { t, i18n } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [solutionsDropdownOpen, setSolutionsDropdownOpen] = useState(false);
   const [useCasesDropdownOpen, setUseCasesDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
+
+  const isZh = i18n.language === 'zh';
+
+  useEffect(() => { document.title = 'ChainFusion News | DACC - Digital Asset Clearing Center'; }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +36,7 @@ export default function NewsChainFusionEN() {
               />
             </a>
             <a href="/#Services" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-semibold">
-              Services
+              {t('nav_services')}
             </a>
             {/* Solutions Dropdown */}
             <div
@@ -38,16 +45,16 @@ export default function NewsChainFusionEN() {
               onMouseLeave={() => setSolutionsDropdownOpen(false)}
             >
               <button className="flex items-center gap-1 text-[#1e6b8a] hover:text-[#f5b942] transition-colors text-sm whitespace-nowrap font-montserrat font-semibold">
-                Solutions
+                {t('nav_solutions')}
                 <i className={`ri-arrow-down-s-line transition-transform duration-200 ${solutionsDropdownOpen ? 'rotate-180' : ''}`}></i>
               </button>
               {solutionsDropdownOpen && (
                 <div className="absolute left-0 pt-2 w-56 z-50">
                   <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/hot-wallet-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">Hot Wallet Integration</a>
-                    <a href="/cold-wallet-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">Cold Wallet</a>
-                    <a href="/rwa-platform-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">RWA Tokenization Platform</a>
-                    <a href="/chain-fusion-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">ChainFusion</a>
+                    <a href="/hot-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_sol_hot_wallet')}</a>
+                    <a href="/cold-wallet" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_sol_cold_wallet')}</a>
+                    <a href="/rwa-platform" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_sol_rwa')}</a>
+                    <a href="/chain-fusion" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_sol_chainfusion')}</a>
                   </div>
                 </div>
               )}
@@ -59,23 +66,23 @@ export default function NewsChainFusionEN() {
               onMouseLeave={() => setUseCasesDropdownOpen(false)}
             >
               <button className="flex items-center gap-1 text-[#1e6b8a] hover:text-[#f5b942] transition-colors text-sm whitespace-nowrap font-montserrat font-semibold">
-                Use Cases
+                {t('nav_use_cases')}
                 <i className={`ri-arrow-down-s-line transition-transform duration-200 ${useCasesDropdownOpen ? 'rotate-180' : ''}`}></i>
               </button>
               {useCasesDropdownOpen && (
                 <div className="absolute left-0 pt-2 w-64 z-50">
                   <div className="bg-white/95 backdrop-blur-md border border-[#b8d9ed] rounded-xl py-2 shadow-xl">
-                    <a href="/use-case-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">Global Merchants x DACC</a>
-                    <a href="/use-case-ttl-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">TTL × DACC</a>
-                    <a href="/use-case-conflux-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">Conflux x DACC</a>
-                    <a href="/use-case-vatp-en" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">Crypto Exchanges x DACC</a>
+                    <a href="/use-case" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_uc_global')}</a>
+                    <a href="/use-case-ttl" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_uc_ttl')}</a>
+                    <a href="/use-case-conflux" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_uc_conflux')}</a>
+                    <a href="/use-case-vatp" className="block px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] hover:bg-[#dbeafe] transition-colors">{t('nav_uc_vatp')}</a>
                   </div>
                 </div>
               )}
             </div>
-            <a href="/#ecosystem" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-semibold">Investors</a>
-            <a href="/blog-en" className="text-[#f5b942] font-bold transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat">News</a>
-            <a href="/contact-en" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat font-semibold">Contact Us<i className="ri-arrow-right-up-line ml-1 text-xs"></i></a>
+            <a href="/#ecosystem" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat font-semibold">{t('nav_investors')}</a>
+            <a href="/blog" className="text-[#f5b942] font-bold transition-colors cursor-pointer text-sm whitespace-nowrap font-montserrat">{t('nav_news')}</a>
+            <a href="/contact" className="text-[#1e6b8a] hover:text-[#f5b942] transition-colors cursor-pointer text-sm flex items-center whitespace-nowrap font-montserrat font-semibold">{t('nav_contact_us')}<i className="ri-arrow-right-up-line ml-1 text-xs"></i></a>
           </div>
         </nav>
       </div>
@@ -97,9 +104,10 @@ export default function NewsChainFusionEN() {
             >
               <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-xl`}></i>
             </button>
-            <a href="/news-chainfusion" className="bg-[#dbeafe] backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap">
-              中文
-            </a>
+            <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1 rounded-full border border-[#b8d9ed] bg-transparent px-2 py-1.5 text-xs font-semibold text-[#1e6b8a]">
+              <WireframeSphere size={12} />
+              <span>{isZh ? '中文' : 'EN'}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -111,27 +119,27 @@ export default function NewsChainFusionEN() {
             <div className="flex flex-col h-full px-6 py-8">
               <div className="space-y-2">
                 <a href="/#Services" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                  <span>Services</span>
+                  <span>{t('nav_services')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
                 <button onClick={() => setMobileSubmenu('solutions')} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                  <span>Solutions</span>
+                  <span>{t('nav_solutions')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <button onClick={() => setMobileSubmenu('useCases')} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                  <span>Use Cases</span>
+                  <span>{t('nav_use_cases')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </button>
                 <a href="/#ecosystem" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                  <span>Investors</span>
+                  <span>{t('nav_investors')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
-                <a href="/blog-en" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-[#f5b942] font-bold transition-colors border-b border-white/20">
-                  <span>News</span>
+                <a href="/blog" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-[#f5b942] font-bold transition-colors border-b border-white/20">
+                  <span>{t('nav_news')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
-                <a href="/contact-en" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
-                  <span>Contact Us</span>
+                <a href="/contact" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-between py-4 text-xl text-white hover:text-[#f5b942] transition-colors border-b border-white/20">
+                  <span>{t('nav_contact_us')}</span>
                   <i className="ri-arrow-right-s-line text-2xl"></i>
                 </a>
               </div>
@@ -141,14 +149,14 @@ export default function NewsChainFusionEN() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
                 <button onClick={() => setMobileSubmenu(null)} className="w-10 h-10 flex items-center justify-center text-white hover:text-[#f5b942] transition-colors"><i className="ri-arrow-left-line text-2xl"></i></button>
-                <span className="text-lg font-semibold text-white">Solutions</span>
+                <span className="text-lg font-semibold text-white">{t('nav_solutions')}</span>
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6 space-y-2">
-                <a href="/hot-wallet-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Hot Wallet Integration</a>
-                <a href="/cold-wallet-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Cold Wallet</a>
-                <a href="/rwa-platform-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">RWA Tokenization Platform</a>
-                <a href="/chain-fusion-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">ChainFusion</a>
+                <a href="/hot-wallet" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_sol_hot_wallet')}</a>
+                <a href="/cold-wallet" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_sol_cold_wallet')}</a>
+                <a href="/rwa-platform" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_sol_rwa')}</a>
+                <a href="/chain-fusion" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_sol_chainfusion')}</a>
               </div>
             </div>
           )}
@@ -156,14 +164,14 @@ export default function NewsChainFusionEN() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
                 <button onClick={() => setMobileSubmenu(null)} className="w-10 h-10 flex items-center justify-center text-white hover:text-[#f5b942] transition-colors"><i className="ri-arrow-left-line text-2xl"></i></button>
-                <span className="text-lg font-semibold text-white">Use Cases</span>
+                <span className="text-lg font-semibold text-white">{t('nav_use_cases')}</span>
                 <div className="w-10"></div>
               </div>
               <div className="px-6 py-6 space-y-2">
-                <a href="/use-case-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Global Merchants x DACC</a>
-                <a href="/use-case-ttl-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">TTL × DACC</a>
-                <a href="/use-case-conflux-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Conflux x DACC</a>
-                <a href="/use-case-vatp-en" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">Crypto Exchanges x DACC</a>
+                <a href="/use-case" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_uc_global')}</a>
+                <a href="/use-case-ttl" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_uc_ttl')}</a>
+                <a href="/use-case-conflux" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_uc_conflux')}</a>
+                <a href="/use-case-vatp" onClick={() => setMobileMenuOpen(false)} className="block py-4 text-lg text-white hover:text-[#f5b942] transition-colors border-b border-white/20">{t('nav_uc_vatp')}</a>
               </div>
             </div>
           )}
@@ -172,9 +180,10 @@ export default function NewsChainFusionEN() {
 
       {/* Language Switcher - Desktop */}
       <div className="fixed top-6 right-6 z-50 hidden lg:block">
-        <a href="/news-chainfusion" className="bg-white/80 backdrop-blur-md border border-[#b8d9ed] rounded-full px-4 py-2 text-sm text-[#1e6b8a] hover:text-[#f5b942] transition-all duration-300 cursor-pointer whitespace-nowrap shadow-lg">
-          中文
-        </a>
+        <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1.5 rounded-full border border-[#b8d9ed] bg-white/80 backdrop-blur-md px-2.5 py-1.5 text-[#1e6b8a] hover:border-[#1e6b8a] hover:text-[#12b7d6] transition-colors text-xs font-semibold shadow-lg">
+          <WireframeSphere size={14} />
+          <span>{isZh ? '中文' : 'EN'}</span>
+        </button>
       </div>
 
       {/* Hero Banner */}
@@ -182,32 +191,32 @@ export default function NewsChainFusionEN() {
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-[#1e6b8a]/60 mb-8">
-            <a href="/blog-en" className="hover:text-[#f5b942] transition-colors cursor-pointer">Blog</a>
+            <a href="/blog" className="hover:text-[#f5b942] transition-colors cursor-pointer">{t('news_cf_breadcrumb_blog')}</a>
             <i className="ri-arrow-right-s-line"></i>
-            <span className="text-[#1e6b8a]/80">News</span>
+            <span className="text-[#1e6b8a]/80">{t('news_cf_breadcrumb_news')}</span>
           </div>
 
           {/* Category & Date */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <span className="bg-[#f5b942]/80 text-[#1e3a4a] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
-              Press Release
+              {t('news_cf_category')}
             </span>
             <span className="bg-white/80 text-[#1e6b8a] px-4 py-1.5 rounded-full text-xs font-semibold">
-              February 12, 2026
+              {t('news_cf_date')}
             </span>
             <span className="text-[#1e6b8a]/60 text-xs flex items-center gap-1">
               <i className="ri-global-line"></i>
-              Source: AsiaBizToday
+              {t('news_cf_source')}
             </span>
           </div>
 
           {/* Title */}
           <h1 className="text-3xl md:text-5xl font-bold text-[#1e6b8a] leading-tight mb-6">
-            DACC Launches ChainFusion™ to Accelerate Compliant Cross-Border Tokenised Payments
+            {t('news_cf_title')}
           </h1>
 
           <p className="text-lg text-[#1e3a4a]/80 leading-relaxed mb-10">
-            Digital Asset Clearing Center (DACC) has officially launched ChainFusion™ — a next-generation tokenised financial market infrastructure designed to improve the speed, cost efficiency, and regulatory alignment of cross-border payments.
+            {t('news_cf_intro')}
           </p>
         </div>
 
@@ -229,124 +238,106 @@ export default function NewsChainFusionEN() {
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
-
-              {/* Intro */}
               <div>
                 <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  <strong className="text-[#1e6b8a]">HONG KONG, February 12, 2026</strong> — Digital Asset Clearing Center (DACC) has launched ChainFusion™, a new tokenised financial market infrastructure platform designed to improve the speed, cost efficiency and regulatory alignment of cross-border payments.
+                  {t('news_cf_p1')}
                 </p>
               </div>
 
               <div>
                 <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  The platform aims to bridge on-chain blockchain networks with off-chain traditional financial systems, enabling real-time reconciliation while embedding regulatory compliance directly into transaction workflows. DACC positions ChainFusion™ as a solution to longstanding friction points in global payments, including slow settlement cycles, high transaction costs, fragmented data systems and regulatory barriers.
+                  {t('news_cf_p2')}
                 </p>
               </div>
 
               <div>
                 <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  According to the company, ChainFusion™ integrates multi-chain collaboration with compliant off-chain liquidation processes, with particular focus on cross-border RMB transactions. DACC states that the platform can reduce RMB liquidation timelines from days to seconds while lowering transaction costs and accelerating multi-currency payment flows.
-                </p>
-              </div>
-
-              <div>
-                <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  The platform is also designed to support digital trade finance processes and enable the compliant issuance and transfer of fixed-income real-world assets, reflecting growing institutional interest in tokenisation.
+                  {t('news_cf_p3')}
                 </p>
               </div>
 
               {/* Three-layer Architecture */}
               <div>
-                <h2 className="text-2xl font-bold text-[#1e6b8a] mb-6">Three-layer architecture</h2>
+                <h2 className="text-2xl font-bold text-[#1e6b8a] mb-6">{t('news_cf_arch_title')}</h2>
                 <p className="text-[#1e3a4a] leading-relaxed text-base mb-6">
-                  At the core of ChainFusion™ is a proprietary three-layer structure comprising:
+                  {t('news_cf_arch_intro')}
                 </p>
                 <div className="space-y-4">
                   {[
-                    { icon: 'ri-links-line', title: 'An On-Chain Collaboration Layer' },
-                    { icon: 'ri-git-merge-line', title: 'A Fusion Gateway Layer' },
-                    { icon: 'ri-bank-line', title: 'An Off-Chain Liquidation Layer' },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center space-x-4 bg-white/80 rounded-xl p-5 border border-[#b8d9ed] shadow-sm">
+                    { icon: 'ri-links-line', key: 'news_cf_arch_0' },
+                    { icon: 'ri-git-merge-line', key: 'news_cf_arch_1' },
+                    { icon: 'ri-bank-line', key: 'news_cf_arch_2' },
+                  ].map((item) => (
+                    <div key={item.key} className="flex items-center space-x-4 bg-white/80 rounded-xl p-5 border border-[#b8d9ed] shadow-sm">
                       <div className="w-10 h-10 bg-[#dbeafe] rounded-lg flex items-center justify-center flex-shrink-0">
                         <i className={`${item.icon} text-[#1e6b8a] text-xl`}></i>
                       </div>
-                      <h3 className="text-[#1e6b8a] font-semibold">{item.title}</h3>
+                      <h3 className="text-[#1e6b8a] font-semibold">{t(item.key)}</h3>
                     </div>
                   ))}
                 </div>
                 <p className="text-[#1e3a4a] leading-relaxed text-base mt-6">
-                  DACC says this architecture enables real-time data synchronisation, reconciliation and compliance-grade record keeping. The system integrates with existing financial infrastructure, including the Cross-border Interbank Payment System ecosystem, positioning it within established regulatory frameworks.
+                  {t('news_cf_arch_note')}
                 </p>
               </div>
 
               {/* Quote Block */}
               <div>
                 <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  Serra Wei, Co-Founder of DACC, said the platform seeks to combine the efficiencies of decentralised finance with the trust and regulatory standards of traditional financial systems.
+                  {t('news_cf_quote_intro')}
                 </p>
               </div>
 
               <blockquote className="border-l-4 border-[#f5b942] pl-6 py-2 bg-white/60 rounded-r-xl">
                 <p className="text-[#1e3a4a] text-lg italic leading-relaxed">
-                  "ChainFusion™ represents an innovation of solutions in cross-border payments, uniting the best of TradFi and DeFi to solve long-standing inefficiencies while upholding the highest regulatory standards."
+                  {t('news_cf_quote')}
                 </p>
                 <footer className="mt-3 text-[#1e6b8a]/70 text-sm font-semibold">
-                  — Serra Wei, Co-Founder of DACC
+                  {t('news_cf_quote_attribution')}
                 </footer>
               </blockquote>
 
               <div>
                 <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  Wei added that Hong Kong's role as an international financial centre and gateway to Mainland China has been instrumental in shaping the platform's design, particularly in aligning tokenised infrastructure with global capital markets and regulatory expectations.
+                  {t('news_cf_quote_followup')}
                 </p>
               </div>
 
               {/* Strategic Backing */}
               <div>
-                <h2 className="text-2xl font-bold text-[#1e6b8a] mb-4">Strategic backing and expansion roadmap</h2>
+                <h2 className="text-2xl font-bold text-[#1e6b8a] mb-4">{t('news_cf_backing_title')}</h2>
                 <p className="text-[#1e3a4a] leading-relaxed text-base">
-                  DACC is supported by a consortium of strategic investors and ecosystem partners including Starcoin Group Limited (399.HK), Kingdom Limited (600446.SH), Global Infotech (300465.SZ), and Fosun International Limited (656.HK), alongside private sector technology and digital asset firms.
+                  {t('news_cf_backing_p1')}
                 </p>
                 <p className="text-[#1e3a4a] leading-relaxed text-base mt-4">
-                  As tokenised finance continues to gain traction across Asia and globally, financial infrastructure players are increasingly focused on building compliant settlement and clearing layers that can integrate digital assets into mainstream capital markets.
+                  {t('news_cf_backing_p2')}
                 </p>
                 <p className="text-[#1e3a4a] leading-relaxed text-base mt-4">
-                  With ChainFusion™, DACC is positioning itself as a bridge between traditional financial institutions and the emerging tokenised economy, targeting institutional use cases in cross-border payments, trade finance and real-world asset tokenisation.
+                  {t('news_cf_backing_p3')}
                 </p>
               </div>
-
             </div>
 
             {/* Sidebar */}
             <div className="lg:col-span-1 space-y-6">
-
-              {/* Key Highlights */}
               <div className="bg-white/80 rounded-2xl p-6 border border-[#b8d9ed] shadow-lg sticky top-28">
                 <h3 className="text-[#1e6b8a] font-bold text-lg mb-5 flex items-center gap-2">
                   <i className="ri-flashlight-line text-[#f5b942]"></i>
-                  Key Highlights
+                  {t('news_cf_highlights_title')}
                 </h3>
                 <ul className="space-y-4">
-                  {[
-                    'Bridges on-chain blockchain with off-chain traditional finance',
-                    'Reduces RMB settlement from days to seconds',
-                    'Three-layer proprietary architecture for compliance',
-                    'Supports cross-border RMB, trade finance & RWA tokenisation',
-                    'Backed by listed strategic investors in HK & Mainland China',
-                    'Targets institutional cross-border payment use cases',
-                  ].map((point, i) => (
-                    <li key={i} className="flex items-start gap-3">
+                  {['news_cf_highlight_0', 'news_cf_highlight_1', 'news_cf_highlight_2', 'news_cf_highlight_3', 'news_cf_highlight_4', 'news_cf_highlight_5'].map((key) => (
+                    <li key={key} className="flex items-start gap-3">
                       <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <i className="ri-checkbox-circle-fill text-[#f5b942] text-base"></i>
                       </div>
-                      <span className="text-[#1e3a4a] text-sm leading-relaxed">{point}</span>
+                      <span className="text-[#1e3a4a] text-sm leading-relaxed">{t(key)}</span>
                     </li>
                   ))}
                 </ul>
 
                 <div className="mt-6 pt-5 border-t border-[#b8d9ed]">
-                  <p className="text-[#1e6b8a]/60 text-xs mb-1">Original Source</p>
+                  <p className="text-[#1e6b8a]/60 text-xs mb-1">{t('news_cf_source_label')}</p>
                   <a
                     href="https://www.asiabiztoday.com/2026/02/12/dacc-launches-chainfusion-to-accelerate-compliant-cross-border-tokenised-payments/"
                     target="_blank"
@@ -364,14 +355,14 @@ export default function NewsChainFusionEN() {
           {/* Back to Blog */}
           <div className="mt-16 pt-10 border-t border-[#b8d9ed] flex items-center justify-between">
             <a
-              href="/blog-en"
+              href="/blog"
               className="flex items-center gap-2 text-[#1e6b8a]/70 hover:text-[#f5b942] transition-colors cursor-pointer group"
             >
               <i className="ri-arrow-left-line group-hover:-translate-x-1 transition-transform duration-200"></i>
-              <span className="text-sm font-medium">Back to Blog</span>
+              <span className="text-sm font-medium">{t('news_cf_back_to_blog')}</span>
             </a>
             <div className="flex items-center gap-3">
-              <span className="text-[#1e6b8a]/60 text-sm">Share:</span>
+              <span className="text-[#1e6b8a]/60 text-sm">{t('news_cf_share')}</span>
               <a
                 href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all"
                 target="_blank"
@@ -396,26 +387,26 @@ export default function NewsChainFusionEN() {
                 className="h-20 w-auto object-contain mb-4"
               />
               <p className="text-white/80 text-sm leading-relaxed">
-                Pioneering the Next Decade of Digital Clearing and Settlement
+                {t('footer_tagline')}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <h4 className="font-semibold mb-4">{t('footer_quick_links')}</h4>
               <div className="space-y-2">
-                <a href="/#Services" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">Services</a>
-                <a href="/#use-cases" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">Use Cases</a>
+                <a href="/#Services" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">{t('nav_services')}</a>
+                <a href="/#use-cases" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">{t('nav_use_cases')}</a>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
+              <h4 className="font-semibold mb-4">{t('footer_resources')}</h4>
               <div className="space-y-2">
-                <a href="/#ecosystem" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">Investors</a>
-                <a href="/blog-en" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">News</a>
-                <a href="/contact-en" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">Contact Us</a>
+                <a href="/#ecosystem" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">{t('nav_investors')}</a>
+                <a href="/blog" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">{t('nav_news')}</a>
+                <a href="/contact" className="block text-white/80 hover:text-[#f5b942] transition-colors text-sm cursor-pointer">{t('nav_contact_us')}</a>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Follow Us</h4>
+              <h4 className="font-semibold mb-4">{t('footer_follow_us')}</h4>
               <div className="flex space-x-4">
                 <a href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-[#f5b942] transition-colors cursor-pointer">
                   <i className="ri-linkedin-fill text-lg"></i>
@@ -424,7 +415,7 @@ export default function NewsChainFusionEN() {
             </div>
           </div>
           <div className="border-t border-white/20 pt-8 text-center">
-            <p className="text-white/70 text-sm mb-4">Copyright © 2026 Digital Asset Clearing Center (DACC). All Rights Reserved.</p>
+            <p className="text-white/70 text-sm mb-4">{t('footer_copyright')}</p>
           </div>
         </div>
       </footer>

@@ -1,8 +1,10 @@
 ﻿import { useState, useEffect, useRef } from 'react';
 import { Renderer, Triangle, Program, Mesh } from 'ogl';
+import { useTranslation } from 'react-i18next';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import WaveBackground from '../../components/feature/WaveBackground';
 import HeroShield from '../../components/feature/HeroShield';
+import { WireframeSphere } from '../../components/feature/WireframeSphere';
 
 // ─── Prism WebGL Component ───────────────────────────────────────────────────
 const Prism = ({
@@ -237,63 +239,41 @@ const Prism = ({
   return <div className="absolute inset-0 w-full h-full" ref={containerRef} />;
 };
 
-// ─── Directors data ───────────────────────────────────────────────────────────
-const directors = [
-  {
-    name: 'Serra Wei',
-    title: 'Director & Founder',
-    image: 'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/89c8049de2f5b1d235cddaddab5c0277.png',
-    bio: 'Entrepreneur and investor with experience in traditional finance, technology and cryptocurrency. Previously at Goldman Sachs; MBA from Stanford GSB. Founder of DACC and Aegis Custody.',
-  },
-  {
-    name: 'Larry Li',
-    title: 'Director',
-    image: 'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/36ca34a59e03a4f163f2a16c7321f446.png',
-    bio: 'Senior executive in strategy and project management at Hong Kong Exchanges and Clearing (HKEX), with 20+ years across major financial institutions and market infrastructures.',
-  },
-  {
-    name: 'Lynne Marlor',
-    title: 'Director',
-    image: 'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/ef24843cf2e0be121df5f5b4d8b37bf0.png',
-    bio: 'Founder of Women in Digital Assets Forums. 30+ years in capital markets, treasury, liquidity, payments and settlements. Oxford Blockchain Strategy Programme, Saïd Business School.',
-  },
-  {
-    name: 'Stony Yen',
-    title: 'Director',
-    image: 'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/58a57df25d62987b967372c0eef01a7a.png',
-    bio: '20+ years in banking IT and financial software across Greater China and Singapore. Senior executive roles in financial technology and core banking system delivery.',
-  },
-  {
-    name: 'Wendy Sun',
-    title: 'Director',
-    image: 'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/1c27eaf061faf24e08b0332d48dc609b.png',
-    bio: '20-year global fintech veteran specialising in payments and digital financial services. Previously at Fosun, TikTok, Tencent, Grab, Ant Financial and UnionPay.',
-  },
-];
-
-// ─── Investors data ───────────────────────────────────────────────────────────
-const investors = [
-  { name: 'Conflux / Starcoin', note: 'HKEX: 399' },
-  { name: 'TTL / Kingdom', note: 'SZSE: 600446' },
-  { name: 'Global Infotech', note: 'SZSE: 300465' },
-  { name: 'Fosun International', note: 'HKEX: 0656' },
-  { name: 'Avior Capital', note: 'Strategic Investor' },
-  { name: 'Blockstone', note: 'Strategic Investor' },
-  { name: 'BridgeTower Capital', note: 'Strategic Investor' },
-  { name: 'Fintech World', note: 'Strategic Investor' },
-  { name: 'Satoshi Ventures', note: 'Strategic Investor' },
+const directorImages = [
+  'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/89c8049de2f5b1d235cddaddab5c0277.png',
+  'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/36ca34a59e03a4f163f2a16c7321f446.png',
+  'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/ef24843cf2e0be121df5f5b4d8b37bf0.png',
+  'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/58a57df25d62987b967372c0eef01a7a.png',
+  'https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/1c27eaf061faf24e08b0332d48dc609b.png',
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function HomeEN() {
+  const { t, i18n } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const [expandedDirector, setExpandedDirector] = useState<string | null>(null);
+
+  const directors = [0,1,2,3,4].map((i) => ({
+    name: t(`home_director_${i}_name`),
+    title: t(`home_director_${i}_title`),
+    image: directorImages[i],
+    bio: t(`home_director_${i}_bio`),
+  }));
+
+  const investors = [0,1,2,3,4,5,6,7,8].map((i) => ({
+    name: t(`home_investor_${i}_name`),
+    note: t(`home_investor_${i}_note`),
+  }));
+
+  const isZh = i18n.language === 'zh';
 
   const [challengesRef, challengesVisible] = useIntersectionObserver({ threshold: 0.15 });
   const [whyDaccRef, whyDaccVisible] = useIntersectionObserver({ threshold: 0.1 });
   const [complianceRef, complianceVisible] = useIntersectionObserver({ threshold: 0.1 });
   const [leadershipRef, leadershipVisible] = useIntersectionObserver({ threshold: 0.05 });
+
+  useEffect(() => { document.title = 'DACC - Digital Asset Clearing Center | Blockchain Solutions'; }, []);
 
   const navLinkClass = 'text-[#1e3a4a]/80 hover:text-[#1e6b8a] transition-colors text-sm font-semibold font-montserrat whitespace-nowrap';
 
@@ -305,7 +285,7 @@ export default function HomeEN() {
       ════════════════════════════════════════ */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden lg:block w-[92vw] max-w-[1240px]">
         <nav className="bg-[#8ed3f5]/65 backdrop-blur-xl border border-[#b8d9ed]/60 rounded-2xl px-6 xl:px-8 py-3 shadow-[0_8px_32px_rgba(30,107,138,0.12)] flex items-center justify-between gap-4">
-          <a href="/home-en" className="flex-shrink-0">
+          <a href="/" className="flex-shrink-0">
             <img
               src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png"
               alt="DACC"
@@ -313,25 +293,25 @@ export default function HomeEN() {
             />
           </a>
           <div className="ml-auto flex items-center justify-end gap-5 xl:gap-7">
-            <a href="#why-dacc" className={navLinkClass}>Company</a>
-            <a href="#services" className={navLinkClass}>Services</a>
-            <a href="#compliance" className={navLinkClass}>Compliance</a>
-            <a href="#partners" className={navLinkClass}>Partners</a>
-            <a href="/blog-en" className={navLinkClass}>News</a>
+            <a href="#why-dacc" className={navLinkClass}>{t('nav_company')}</a>
+            <a href="#services" className={navLinkClass}>{t('nav_services')}</a>
+            <a href="#compliance" className={navLinkClass}>{t('nav_compliance')}</a>
+            <a href="#partners" className={navLinkClass}>{t('nav_partners')}</a>
+            <a href="/blog" className={navLinkClass}>{t('nav_news')}</a>
           </div>
           <div className="flex items-center gap-3">
-            <a
-              href="/zh"
-              title="切換到中文"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#b8d9ed] bg-white text-[#1e6b8a] hover:border-[#1e6b8a] transition-colors text-base"
+            <button
+              onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#b8d9ed] bg-transparent px-2.5 py-1.5 text-[#1e6b8a] hover:border-[#1e6b8a] hover:text-[#12b7d6] transition-colors text-xs font-semibold"
             >
-              <i className="ri-global-line"></i>
-            </a>
+              <WireframeSphere size={14} />
+              <span>{isZh ? '中文' : 'EN'}</span>
+            </button>
             <a
-              href="/contact-en"
+              href="/contact"
               className="inline-flex items-center rounded-full bg-[#1e6b8a] px-4 py-2 text-sm font-semibold text-white hover:bg-[#12b7d6] transition-colors"
             >
-              Contact Us
+              {t('nav_contact_us')}
             </a>
           </div>
         </nav>
@@ -340,7 +320,7 @@ export default function HomeEN() {
       {/* NAVIGATION — Mobile */}
       <div className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#8ed3f5]/70 backdrop-blur-xl border-b border-[#b8d9ed]/50 shadow-sm">
         <div className="flex items-center justify-between px-5 py-3.5">
-          <a href="/home-en">
+          <a href="/">
             <img
               src="https://static.readdy.ai/image/64506299ff39ac9a5a05d764485a29b9/525c7ccd2d5f61496beafa22f224d260.png"
               alt="DACC"
@@ -348,11 +328,14 @@ export default function HomeEN() {
             />
           </a>
           <div className="flex items-center gap-2">
-            <a href="/zh" className="border border-[#b8d9ed] rounded-full px-3 py-1.5 text-xs font-semibold text-[#1e6b8a]">中文</a>
+            <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="inline-flex items-center gap-1 rounded-full border border-[#b8d9ed] bg-transparent px-2 py-1.5 text-xs font-semibold text-[#1e6b8a]">
+              <WireframeSphere size={12} />
+              <span>{isZh ? '中文' : 'EN'}</span>
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="w-9 h-9 flex items-center justify-center rounded-full bg-[#e8f4fb] text-[#1e6b8a]"
-              aria-label="Toggle menu"
+              aria-label={t('mobile_toggle_menu')}
             >
               <i className={`${mobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-xl`}></i>
             </button>
@@ -366,10 +349,10 @@ export default function HomeEN() {
           {!mobileSubmenu && (
             <div className="px-6 py-8 space-y-1">
               {[
-                { label: 'Company', action: () => { document.getElementById('why-dacc')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
-                { label: 'Services', action: () => { document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
-                { label: 'Compliance', action: () => { document.getElementById('compliance')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
-                { label: 'Partners', action: () => { document.getElementById('partners')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
+                { label: t('nav_company'), action: () => { document.getElementById('why-dacc')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
+                { label: t('nav_services'), action: () => { document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
+                { label: t('nav_compliance'), action: () => { document.getElementById('compliance')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
+                { label: t('nav_partners'), action: () => { document.getElementById('partners')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenuOpen(false); } },
               ].map(item => (
                 <button
                   key={item.label}
@@ -380,12 +363,12 @@ export default function HomeEN() {
                   <i className="ri-arrow-right-s-line text-xl"></i>
                 </button>
               ))}
-              <a href="/blog-en" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between py-4 text-lg text-white border-b border-white/10 hover:text-[#67e8f9]">
-                <span>News</span>
+              <a href="/blog" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between py-4 text-lg text-white border-b border-white/10 hover:text-[#67e8f9]">
+                <span>{t('nav_news')}</span>
                 <i className="ri-arrow-right-s-line text-xl"></i>
               </a>
-              <a href="/contact-en" onClick={() => setMobileMenuOpen(false)} className="mt-6 flex items-center justify-center rounded-full bg-[#12b7d6] py-4 text-base font-bold text-[#031122]">
-                Contact Us
+              <a href="/contact" onClick={() => setMobileMenuOpen(false)} className="mt-6 flex items-center justify-center rounded-full bg-[#12b7d6] py-4 text-base font-bold text-[#031122]">
+                {t('nav_contact_us')}
               </a>
             </div>
           )}
@@ -410,35 +393,35 @@ export default function HomeEN() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#34d5f4]/50 bg-[#0b1b31]/60 px-4 py-1.5 text-xs md:text-sm font-medium text-[#c6f6ff] tracking-wide mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-[#67e8f9] animate-pulse"></span>
-              Licensed &amp; Insured Custody
+              {t('home_hero_badge')}
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.1] text-white font-montserrat mb-5 [text-shadow:0_2px_16px_rgba(8,30,60,0.45),0_1px_4px_rgba(8,30,60,0.30)]">
-              <span className="whitespace-nowrap">Where CIPS meets</span>{' '}
-              <span className="text-[#67e8f9]">Tokenization</span>
+              <span className="whitespace-nowrap">{t('home_hero_title')}</span>{' '}
+              <span className="text-[#67e8f9]">{t('home_hero_title_highlight')}</span>
             </h1>
 
             <p className="text-base md:text-lg text-white/80 font-montserrat leading-relaxed mb-10 max-w-xl [text-shadow:0_1px_10px_rgba(8,30,60,0.40)]">
-              Pioneering the Next Decade of Digital Clearing and Settlement
+              {t('home_hero_subtitle')}
             </p>
 
             <div className="flex flex-wrap gap-4 md:gap-5 mb-12">
-              <a href="/contact-en"
+              <a href="/contact"
                 className="inline-flex items-center rounded-full border border-[#12b7d6] bg-[#12b7d6] px-8 py-3.5 text-sm font-bold text-[#031122] shadow-[0_10px_30px_rgba(18,183,214,0.35)] hover:bg-[#67e8f9] hover:border-[#67e8f9] hover:-translate-y-0.5 transition-all duration-200">
-                Get Started
+                {t('home_hero_cta_primary')}
               </a>
               <a href="#why-dacc"
                 className="inline-flex items-center rounded-full border-2 border-white/80 bg-transparent px-8 py-3.5 text-sm font-bold text-white hover:border-[#67e8f9] hover:text-[#67e8f9] hover:bg-white/10 transition-all duration-200">
-                Learn More
+                {t('home_hero_cta_secondary')}
               </a>
             </div>
 
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               {[
-                { label: 'Licensed', icon: 'ri-award-line' },
-                { label: 'Insured', icon: 'ri-safe-2-line' },
-                { label: 'Regulated', icon: 'ri-file-shield-2-line' },
+                { label: t('home_hero_badge_licensed'), icon: 'ri-award-line' },
+                { label: t('home_hero_badge_insured'), icon: 'ri-safe-2-line' },
+                { label: t('home_hero_badge_regulated'), icon: 'ri-file-shield-2-line' },
               ].map(({ label, icon }) => (
                 <span
                   key={label}
@@ -459,7 +442,7 @@ export default function HomeEN() {
 
         {/* Scroll hint */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-1 opacity-60">
-          <span className="text-white/60 text-xs font-medium tracking-wider">SCROLL</span>
+          <span className="text-white/60 text-xs font-medium tracking-wider">{t('home_hero_scroll')}</span>
           <i className="ri-arrow-down-line text-white/60 text-lg animate-bounce"></i>
         </div>
       </header>
@@ -474,29 +457,29 @@ export default function HomeEN() {
       >
         <div className="max-w-6xl mx-auto">
           <div className={`text-center mb-12 transition-all duration-700 ${challengesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">The Challenges</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">{t('home_challenges_title')}</h2>
             <p className="mt-3 text-[#1e6b8a]/70 font-montserrat max-w-2xl mx-auto text-base">
-              Today's cross-border digital asset infrastructure faces three structural barriers.
+              {t('home_challenges_subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {[
               {
                 icon: 'ri-time-line',
-                title: 'Slow Transactions',
-                desc: 'Cross-border settlements via correspondent banking networks take 3–5 business days, locking capital and increasing counterparty risk.',
+                title: t('home_challenges_0_title'),
+                desc: t('home_challenges_0_desc'),
                 delay: '0ms',
               },
               {
                 icon: 'ri-eye-off-line',
-                title: 'Lack of Transparency',
-                desc: 'No real-time visibility into transaction status or fund location. Reconciliation is manual, error-prone, and costly.',
+                title: t('home_challenges_1_title'),
+                desc: t('home_challenges_1_desc'),
                 delay: '150ms',
               },
               {
                 icon: 'ri-file-warning-line',
-                title: 'Fragmented Compliance',
-                desc: 'Regulatory requirements differ across jurisdictions. Building a compliant multi-market operation requires significant duplication of effort.',
+                title: t('home_challenges_2_title'),
+                desc: t('home_challenges_2_desc'),
                 delay: '300ms',
               },
             ].map((item, i) => (
@@ -526,7 +509,7 @@ export default function HomeEN() {
       >
         <div className="max-w-6xl mx-auto">
           <div className={`text-center mb-12 transition-all duration-700 ${whyDaccVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">Why DACC</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">{t('home_why_title')}</h2>
           </div>
           <div className="grid lg:grid-cols-5 gap-6 lg:gap-8 items-stretch">
 
@@ -537,16 +520,16 @@ export default function HomeEN() {
                   <i className="ri-shield-keyhole-line text-[#67e8f9] text-2xl"></i>
                 </div>
                 <h3 className="text-xl lg:text-2xl font-bold font-montserrat mb-4 leading-snug">
-                  Secure &amp; Compliant<br />Custody Solutions
+                  {t('home_why_card_title')}
                 </h3>
                 <p className="text-white/75 text-sm leading-relaxed font-montserrat mb-6">
-                  DACC provides regulated, institutional-grade digital asset infrastructure built in Hong Kong — combining qualified custody, tokenization capability, and cross-border settlement in a single compliance-first platform.
+                  {t('home_why_card_desc')}
                 </p>
                 <div className="space-y-3">
                   {[
-                    'Hong Kong TCSP Licensed',
-                    'Institutional Insurance Coverage',
-                    'Multi-Signature / MPC Security',
+                    t('home_why_card_pt0'),
+                    t('home_why_card_pt1'),
+                    t('home_why_card_pt2'),
                   ].map(pt => (
                     <div key={pt} className="flex items-center gap-2 text-sm font-montserrat">
                       <i className="ri-checkbox-circle-fill text-[#f5b942] flex-shrink-0"></i>
@@ -557,7 +540,7 @@ export default function HomeEN() {
               </div>
               <div className="mt-8 pt-6 border-t border-white/20">
                 <p className="text-sm font-bold text-[#f5b942] font-montserrat">
-                  Infrastructure for the tokenized economy.
+                  {t('home_why_card_footer')}
                 </p>
               </div>
             </div>
@@ -567,20 +550,20 @@ export default function HomeEN() {
               {[
                 {
                   icon: 'ri-safe-line',
-                  title: 'Qualified Custody',
-                  desc: 'Cold and hot wallet solutions with HSM key security, MPC architecture, and SFC-compliant frameworks designed for VATPs and institutional clients.',
+                  title: t('home_why_svc0_title'),
+                  desc: t('home_why_svc0_desc'),
                   href: '/cold-wallet-en',
                 },
                 {
                   icon: 'ri-coin-line',
-                  title: 'Tokenization Platform',
-                  desc: 'UI-based RWA tokenization with structured metadata, multi-party authorization, and native support for Hyperledger, Canton, Ethereum, and Conflux.',
+                  title: t('home_why_svc1_title'),
+                  desc: t('home_why_svc1_desc'),
                   href: '/rwa-platform-en',
                 },
                 {
                   icon: 'ri-exchange-funds-line',
-                  title: 'RWA Settlement',
-                  desc: 'ChainFusion™ enables near-instant cross-border settlement via CIPS — used in 193 countries and regions, reducing settlement from days to seconds.',
+                  title: t('home_why_svc2_title'),
+                  desc: t('home_why_svc2_desc'),
                   href: '/chain-fusion-en',
                 },
               ].map((card, i) => (
@@ -592,7 +575,7 @@ export default function HomeEN() {
                     <h3 className="font-bold text-[#1e3a4a] font-montserrat mb-1.5 text-base">{card.title}</h3>
                     <p className="text-sm text-[#1e6b8a]/70 leading-relaxed font-montserrat mb-3">{card.desc}</p>
                     <a href={card.href} className="inline-flex items-center gap-1 text-sm font-semibold text-[#1e6b8a] hover:text-[#12b7d6] transition-colors font-montserrat">
-                      Explore <i className="ri-arrow-right-line"></i>
+                      {t('home_why_explore')} <i className="ri-arrow-right-line"></i>
                     </a>
                   </div>
                 </div>
@@ -608,9 +591,9 @@ export default function HomeEN() {
       <section id="services" className="px-5 md:px-8 lg:px-12 py-16 md:py-24 bg-[#f0f7fc]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">Our Services</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">{t('home_services_title')}</h2>
             <p className="mt-3 text-[#1e6b8a]/70 font-montserrat max-w-2xl mx-auto text-base">
-              End-to-end digital asset infrastructure for regulated institutions.
+              {t('home_services_subtitle')}
             </p>
           </div>
 
@@ -621,27 +604,27 @@ export default function HomeEN() {
               <div className="flex-1">
                 <div className="inline-flex items-center gap-2 bg-white/15 border border-white/25 rounded-full px-3 py-1 mb-4 text-xs text-white font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#f5b942] animate-pulse"></span>
-                  Now Live: ChainFusion™
+                  {t('home_services_chainfusion_live')}
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold text-white font-montserrat mb-3 leading-tight">
-                  Cross-border settlement in <span className="text-[#f5b942]">seconds</span>
+                  {t('home_services_chainfusion_title')} <span className="text-[#f5b942]">{t('home_services_chainfusion_title_highlight')}</span>
                 </h3>
                 <p className="text-white/80 text-sm md:text-base leading-relaxed font-montserrat max-w-2xl">
-                  DACC's ChainFusion™ connects to CIPS (Cross-border Interbank Payment System) — active in 193 countries and regions with over 1,500 participating banking institutions. Settlement time: 3–5 days → seconds.
+                  {t('home_services_chainfusion_desc')}
                 </p>
               </div>
-              <a href="/chain-fusion-en"
+              <a href="/chain-fusion"
                 className="flex-shrink-0 inline-flex items-center rounded-full bg-[#f5b942] hover:bg-[#c97a2f] px-7 py-3 text-sm font-bold text-white transition-colors whitespace-nowrap">
-                Explore ChainFusion™
+                {t('home_services_chainfusion_btn')}
               </a>
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: 'ri-links-line', title: 'Hot Wallet Integration', desc: 'API-driven hot wallet solutions built for scale, exchange integration, and institutional key management.', href: '/hot-wallet-en' },
-              { icon: 'ri-database-2-line', title: 'Cold Wallet Infrastructure', desc: 'HSM-based cold storage with layered access controls, offline signing, and full audit trail.', href: '/cold-wallet-en' },
-              { icon: 'ri-coin-line', title: 'RWA Tokenization Platform', desc: 'Multi-chain RWA issuance with structured metadata and multi-party authorization on Hyperledger, Canton and EVM chains.', href: '/rwa-platform-en' },
+              { icon: 'ri-links-line', title: t('home_services_0_title'), desc: t('home_services_0_desc'), href: '/hot-wallet-en' },
+              { icon: 'ri-database-2-line', title: t('home_services_1_title'), desc: t('home_services_1_desc'), href: '/cold-wallet-en' },
+              { icon: 'ri-coin-line', title: t('home_services_2_title'), desc: t('home_services_2_desc'), href: '/rwa-platform-en' },
             ].map((svc, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 border border-[#b8d9ed]/60 hover:border-[#1e6b8a]/60 hover:shadow-[0_8px_24px_rgba(30,107,138,0.1)] transition-all duration-300 group flex flex-col">
                 <div className="w-14 h-14 bg-[#e8f4fb] group-hover:bg-[#1e6b8a] rounded-xl flex items-center justify-center mb-5 transition-colors duration-400">
@@ -650,7 +633,7 @@ export default function HomeEN() {
                 <h3 className="font-bold text-[#1e3a4a] font-montserrat text-base mb-3">{svc.title}</h3>
                 <p className="text-sm text-[#1e6b8a]/70 leading-relaxed font-montserrat flex-1 mb-5">{svc.desc}</p>
                 <a href={svc.href} className="inline-flex items-center gap-1 text-sm font-semibold text-[#1e6b8a] hover:text-[#12b7d6] transition-colors font-montserrat mt-auto">
-                  Learn More <i className="ri-arrow-right-line"></i>
+                  {t('home_services_learn_more')} <i className="ri-arrow-right-line"></i>
                 </a>
               </div>
             ))}
@@ -668,19 +651,19 @@ export default function HomeEN() {
       >
         <div className="max-w-6xl mx-auto">
           <div className={`text-center mb-12 transition-all duration-700 ${complianceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">Compliance &amp; Governance</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">{t('home_compliance_title')}</h2>
             <p className="mt-3 text-[#1e6b8a]/70 font-montserrat max-w-2xl mx-auto text-base">
-              Institutional trust built on verifiable credentials and regulatory alignment.
+              {t('home_compliance_subtitle')}
             </p>
           </div>
 
           {/* Badge row */}
           <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 transition-all duration-700 delay-100 ${complianceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {[
-              { icon: 'ri-file-list-3-line', label: 'TCSP License', sub: 'via Aegis Custody Co. Ltd.' },
-              { icon: 'ri-shield-line', label: 'Insurance Partner', sub: 'Institutional coverage' },
-              { icon: 'ri-checkbox-circle-line', label: 'Audit Ready', sub: 'Structured governance' },
-              { icon: 'ri-verified-badge-line', label: 'Regulated & Trusted', sub: 'Hong Kong licensed' },
+              { icon: 'ri-file-list-3-line', label: t('home_compliance_badge0_label'), sub: t('home_compliance_badge0_sub') },
+              { icon: 'ri-shield-line', label: t('home_compliance_badge1_label'), sub: t('home_compliance_badge1_sub') },
+              { icon: 'ri-checkbox-circle-line', label: t('home_compliance_badge2_label'), sub: t('home_compliance_badge2_sub') },
+              { icon: 'ri-verified-badge-line', label: t('home_compliance_badge3_label'), sub: t('home_compliance_badge3_sub') },
             ].map((b, i) => (
               <div key={i} className="flex flex-col items-center text-center bg-[#f0f7fc] rounded-xl p-5 border border-[#b8d9ed]/60">
                 <div className="w-11 h-11 bg-[#1e6b8a] rounded-lg flex items-center justify-center mb-3">
@@ -695,10 +678,10 @@ export default function HomeEN() {
           {/* Stats row */}
           <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-700 delay-200 ${complianceVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {[
-              { value: 'Days → Seconds', label: 'Target Settlement Speed', icon: 'ri-timer-flash-line' },
-              { value: '$214T', label: 'Global Cross-border Market', icon: 'ri-global-line' },
-              { value: '193', label: 'Countries via CIPS', icon: 'ri-map-2-line' },
-              { value: 'Multi-Sig / MPC', label: 'Key Security Architecture', icon: 'ri-key-2-line' },
+              { value: t('home_compliance_stat0_value'), label: t('home_compliance_stat0_label'), icon: 'ri-timer-flash-line' },
+              { value: t('home_compliance_stat1_value'), label: t('home_compliance_stat1_label'), icon: 'ri-global-line' },
+              { value: t('home_compliance_stat2_value'), label: t('home_compliance_stat2_label'), icon: 'ri-map-2-line' },
+              { value: t('home_compliance_stat3_value'), label: t('home_compliance_stat3_label'), icon: 'ri-key-2-line' },
             ].map((stat, i) => (
               <div key={i} className="bg-gradient-to-br from-[#1e6b8a] to-[#0b2742] rounded-xl p-5 text-center">
                 <i className={`${stat.icon} text-[#f5b942] text-2xl mb-2 block`}></i>
@@ -716,17 +699,17 @@ export default function HomeEN() {
       <section id="use-cases" className="px-5 md:px-8 lg:px-12 py-16 md:py-24 bg-[#f0f7fc]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">Use Cases</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a4a] font-montserrat">{t('home_usecases_title')}</h2>
             <p className="mt-3 text-[#1e6b8a]/70 font-montserrat text-base">
-              Real-world deployments of DACC infrastructure.
+              {t('home_usecases_subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
             {[
-              { tag: 'Broker API', title: 'TTL × DACC', sub: 'Crypto-enabled brokerage trading with coin-in/coin-out services and real-time settlement.', href: '/use-case-ttl-en' },
-              { tag: 'Multi-chain', title: 'Conflux × DACC', sub: 'Multi-asset tokenization with plug-and-play cross-chain bridging across Hyperledger, Canton, Ethereum, Conflux.', href: '/use-case-conflux-en' },
-              { tag: 'Exchange Custody', title: 'Crypto Exchanges × DACC', sub: 'Cold-hot HSM custody MOUs signed with SFC-licensed exchanges in Hong Kong.', href: '/use-case-vatp-en' },
-              { tag: 'TCSP Payments', title: 'Global Merchants × DACC', sub: 'Stablecoin payment infrastructure under a regulated TCSP licence, bridging crypto platforms and e-commerce.', href: '/use-case-en' },
+              { tag: t('home_usecases_0_tag'), title: t('home_usecases_0_title'), sub: t('home_usecases_0_sub'), href: '/use-case-ttl-en' },
+              { tag: t('home_usecases_1_tag'), title: t('home_usecases_1_title'), sub: t('home_usecases_1_sub'), href: '/use-case-conflux-en' },
+              { tag: t('home_usecases_2_tag'), title: t('home_usecases_2_title'), sub: t('home_usecases_2_sub'), href: '/use-case-vatp-en' },
+              { tag: t('home_usecases_3_tag'), title: t('home_usecases_3_title'), sub: t('home_usecases_3_sub'), href: '/use-case-en' },
             ].map((uc, i) => (
               <a key={i} href={uc.href}
                 className="bg-white rounded-2xl p-6 border border-[#b8d9ed]/60 hover:border-[#1e6b8a]/60 hover:shadow-[0_8px_24px_rgba(30,107,138,0.1)] transition-all duration-300 group block">
@@ -734,7 +717,7 @@ export default function HomeEN() {
                 <h3 className="font-bold text-[#1e3a4a] font-montserrat text-base mb-2">{uc.title}</h3>
                 <p className="text-sm text-[#1e6b8a]/70 leading-relaxed font-montserrat mb-4">{uc.sub}</p>
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#1e6b8a] group-hover:text-[#12b7d6] transition-colors font-montserrat">
-                  Learn More <i className="ri-arrow-right-line"></i>
+                  {t('home_usecases_learn_more')} <i className="ri-arrow-right-line"></i>
                 </span>
               </a>
             ))}
@@ -755,7 +738,7 @@ export default function HomeEN() {
 
             {/* Our Leadership */}
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a4a] font-montserrat mb-8">Our Leadership</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a4a] font-montserrat mb-8">{t('home_leadership_title')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {directors.map((d, i) => (
                   <div
@@ -776,7 +759,7 @@ export default function HomeEN() {
                     )}
                     <div className="text-xs text-[#1e6b8a]/50 font-montserrat mt-2 flex items-center gap-1">
                       <i className={`${expandedDirector === d.name ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'}`}></i>
-                      {expandedDirector === d.name ? 'Less' : 'More'}
+                      {expandedDirector === d.name ? t('home_director_collapse') : t('home_director_expand')}
                     </div>
                   </div>
                 ))}
@@ -785,7 +768,7 @@ export default function HomeEN() {
 
             {/* Our Partners / Investors */}
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a4a] font-montserrat mb-8">Our Partners</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a4a] font-montserrat mb-8">{t('home_partners_title')}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {investors.map((inv, i) => (
                   <div
@@ -810,19 +793,19 @@ export default function HomeEN() {
         <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white font-montserrat mb-4 leading-tight">
-            Ready to Secure Your Digital Assets?
+            {t('home_cta_title')}
           </h2>
           <p className="text-white/70 font-montserrat text-base mb-8 max-w-xl mx-auto">
-            Talk to our team about qualified custody, tokenization, or cross-border settlement infrastructure.
+            {t('home_cta_desc')}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href="/contact-en"
+            <a href="/contact"
               className="inline-flex items-center rounded-full bg-white px-7 py-3 text-sm font-bold text-[#1e6b8a] hover:bg-[#67e8f9] hover:text-[#031122] transition-colors">
-              Talk to Our Team
+              {t('home_cta_btn1')}
             </a>
-            <a href="/contact-en"
+            <a href="/contact"
               className="inline-flex items-center rounded-full border border-white/40 bg-transparent px-7 py-3 text-sm font-bold text-white hover:border-[#67e8f9] hover:text-[#67e8f9] transition-colors">
-              Request Demo
+              {t('home_cta_btn2')}
             </a>
           </div>
         </div>
@@ -842,39 +825,39 @@ export default function HomeEN() {
                 className="h-14 w-auto object-contain mb-4"
               />
               <p className="text-white/55 text-xs font-montserrat leading-relaxed">
-                Pioneering the Next Decade of Digital Clearing and Settlement
+                {t('footer_tagline')}
               </p>
             </div>
             {/* Company */}
             <div>
-              <h4 className="font-semibold text-sm font-montserrat mb-4">Company</h4>
+              <h4 className="font-semibold text-sm font-montserrat mb-4">{t('footer_company')}</h4>
               <div className="space-y-2">
-                <a href="#why-dacc" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">About DACC</a>
-                <a href="#compliance" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">Compliance</a>
-                <a href="#partners" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">Leadership</a>
-                <a href="#partners" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">Partners</a>
+                <a href="#why-dacc" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('home_footer_about')}</a>
+                <a href="#compliance" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('footer_compliance')}</a>
+                <a href="#partners" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('footer_leadership')}</a>
+                <a href="#partners" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('footer_partners')}</a>
               </div>
             </div>
             {/* Services */}
             <div>
-              <h4 className="font-semibold text-sm font-montserrat mb-4">Services</h4>
+              <h4 className="font-semibold text-sm font-montserrat mb-4">{t('footer_services')}</h4>
               <div className="space-y-2">
-                <a href="/chain-fusion-en" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">ChainFusion™</a>
-                <a href="/hot-wallet-en" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">Hot Wallet Integration</a>
-                <a href="/cold-wallet-en" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">Cold Wallet Infrastructure</a>
-                <a href="/rwa-platform-en" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">RWA Tokenization Platform</a>
+                <a href="/chain-fusion" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('home_footer_chainfusion')}</a>
+                <a href="/hot-wallet" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('home_footer_hot_wallet')}</a>
+                <a href="/cold-wallet" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('home_footer_cold_wallet')}</a>
+                <a href="/rwa-platform" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('home_footer_rwa')}</a>
               </div>
             </div>
             {/* Contact */}
             <div>
-              <h4 className="font-semibold text-sm font-montserrat mb-4">Contact</h4>
+              <h4 className="font-semibold text-sm font-montserrat mb-4">{t('footer_contact')}</h4>
               <div className="space-y-2 mb-5">
-                <a href="/contact-en" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">Contact Us</a>
-                <a href="/blog-en" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">News</a>
-                <a href="/zh" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">中文版</a>
+                <a href="/contact" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('footer_contact_us')}</a>
+                <a href="/blog" className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{t('nav_news')}</a>
+                <button onClick={() => i18n.changeLanguage(isZh ? 'en' : 'zh')} className="block text-white/55 hover:text-[#67e8f9] text-xs font-montserrat transition-colors">{isZh ? 'English Version' : '中文版'}</button>
               </div>
               {/* Social */}
-              <h4 className="font-semibold text-sm font-montserrat mb-3">Social Media</h4>
+              <h4 className="font-semibold text-sm font-montserrat mb-3">{t('footer_social')}</h4>
               <div className="flex gap-3">
                 <a
                   href="https://www.linkedin.com/company/digital-asset-clearing-center/posts/?feedView=all"
@@ -891,7 +874,7 @@ export default function HomeEN() {
 
           <div className="border-t border-white/10 pt-6 text-center">
             <p className="text-white/40 text-xs font-montserrat">
-              Copyright © 2026 Digital Asset Clearing Center (DACC). All Rights Reserved.
+              {t('footer_copyright')}
             </p>
           </div>
         </div>
