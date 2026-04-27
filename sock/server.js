@@ -1,20 +1,42 @@
-const express = require('express');
-const path = require('path');
-const http = require('http');
+import express from 'express';
+import fs from 'node:fs';
+import http from 'node:http';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distDir = path.join(__dirname, 'dist');
+const staticDir = path.join(__dirname, 'static');
+const publicDir = fs.existsSync(distDir) ? distDir : staticDir;
 
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(publicDir));
 
-function resolveIndexFile() {
-  const rootIndex = path.join(__dirname, 'index.html');
-  const staticIndexStock = path.join(__dirname, 'static', 'index_stock.html');
-  const staticIndex = path.join(__dirname, 'static', 'index.html');
+function firstExistingFile(paths) {
+  for (const p of paths) {
+    if (fs.existsSync(p)) return p;
+  }
+  return paths[paths.length - 1];
+}
 
-  if (require('fs').existsSync(rootIndex)) return rootIndex;
-  if (require('fs').existsSync(staticIndexStock)) return staticIndexStock;
-  return staticIndex;
+function resolveStockFile() {
+  return firstExistingFile([
+    path.join(distDir, 'index_stock.html'),
+    path.join(staticDir, 'index_stock.html'),
+    path.join(distDir, 'index.html'),
+    path.join(__dirname, 'index.html'),
+    path.join(staticDir, 'index.html'),
+  ]);
+}
+
+function resolveAppIndexFile() {
+  return firstExistingFile([
+    path.join(distDir, 'index.html'),
+    path.join(__dirname, 'index.html'),
+    path.join(staticDir, 'index.html'),
+  ]);
 }
 
 function httpGetText(url) {
@@ -38,7 +60,7 @@ function httpGetText(url) {
 }
 
 app.get('/stock-details', (req, res) => {
-  res.sendFile(resolveIndexFile());
+  res.sendFile(resolveStockFile());
 });
 
 app.get('/api/intraday', async (req, res) => {
@@ -98,7 +120,7 @@ app.get('/api/daily', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(resolveIndexFile());
+  res.sendFile(resolveAppIndexFile());
 });
 
 app.listen(PORT, () => {

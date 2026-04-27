@@ -56,7 +56,7 @@ export default function App() {
       case 'realtime-data':
         return (
           <iframe
-            src="/static/index_stock.html"
+            src="/index_stock.html"
             title="實時數據"
             className="w-full h-[calc(100vh-4rem)] border-0 bg-white"
           />

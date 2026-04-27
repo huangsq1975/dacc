@@ -228,32 +228,52 @@ async function fetchMinute(fullCode) {
   const symbol = String(fullCode || '').replace(/^(sh|sz)/i, '');
   if (!symbol) return [];
 
-  const url = `/api/intraday?symbol=${encodeURIComponent(symbol)}`;
-  const resp = await fetch(url, { method: 'GET' });
-  if (!resp.ok) throw new Error('分時接口請求失敗');
+  // 優先使用本地後端（可顯示 B/S），靜態部署時自動回退到騰訊分時接口
+  try {
+    const url = `/api/intraday?symbol=${encodeURIComponent(symbol)}`;
+    const resp = await fetch(url, { method: 'GET' });
+    if (!resp.ok) throw new Error('backend not available');
 
-  const ct = (resp.headers.get('content-type') || '').toLowerCase();
-  if (!ct.includes('application/json')) {
-    const txt = await resp.text();
-    throw new Error(`分時接口返回非JSON：${txt.slice(0, 80)}`);
+    const ct = (resp.headers.get('content-type') || '').toLowerCase();
+    if (!ct.includes('application/json')) throw new Error('backend non-json response');
+
+    const payload = await resp.json();
+    const raw = Array.isArray(payload?.data) ? payload.data : [];
+    if (!raw.length) return [];
+
+    let cumVol = 0, cumPriceVol = 0;
+    return raw.map(item => {
+      const hms = String(item?.time || '').replace(/:/g, '').padEnd(6, '0').slice(0, 6);
+      const price = +item?.price || 0;
+      const vol = +item?.volume || 0;
+      const kind = String(item?.kind || '').toUpperCase();
+
+      cumVol += vol;
+      cumPriceVol += price * vol;
+      const vwap = cumVol > 0 ? +(cumPriceVol / cumVol).toFixed(2) : price;
+
+      return [hms, price, vwap, vol, kind];
+    });
+  } catch (_) {
+    const tUrl = `https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=${encodeURIComponent(fullCode)}`;
+    const tResp = await fetch(tUrl, { method: 'GET' });
+    if (!tResp.ok) throw new Error('分時接口請求失敗');
+
+    const tPayload = await tResp.json();
+    const lines = tPayload?.data?.[fullCode]?.data?.data;
+    if (!Array.isArray(lines) || !lines.length) return [];
+
+    return lines.map(line => {
+      // 騰訊格式示例： "0931 201.90 2308 45981589.58"
+      const parts = String(line || '').trim().split(/\s+/);
+      const hhmm = parts[0] || '';
+      const price = +parts[1] || 0;
+      const vol = +parts[2] || 0;
+      const avg = +parts[3] || 0;
+      const hms = `${hhmm}00`.slice(0, 6);
+      return [hms, price, avg || price, vol, ''];
+    });
   }
-  const payload = await resp.json();
-  const raw = Array.isArray(payload?.data) ? payload.data : [];
-  if (!raw.length) return [];
-
-  let cumVol = 0, cumPriceVol = 0;
-  return raw.map(item => {
-    const hms = String(item?.time || '').replace(/:/g, '').padEnd(6, '0').slice(0, 6);
-    const price = +item?.price || 0;
-    const vol = +item?.volume || 0;
-    const kind = String(item?.kind || '').toUpperCase();
-
-    cumVol += vol;
-    cumPriceVol += price * vol;
-    const vwap = cumVol > 0 ? +(cumPriceVol / cumVol).toFixed(2) : price;
-
-    return [hms, price, vwap, vol, kind];
-  });
 }
 
 /* ═══════════════════════════════════════
