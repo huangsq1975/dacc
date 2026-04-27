@@ -19,11 +19,11 @@ No lint or test scripts are configured.
 
 ## Architecture Overview
 
-- **Runtime/Build**: Node.js + Vite, React 19, TypeScript
-- **Styling**: Tailwind CSS + PostCSS
+- **Runtime/Build**: Node.js + Vite 6, React 19, TypeScript 5.6 (strict mode **off**)
+- **Styling**: Tailwind CSS 3.4 + PostCSS — all styling is inline Tailwind classes, no CSS modules
 - **Routing**: `react-router-dom` v7 (`useRoutes` + `BrowserRouter` with `basename={import.meta.env.BASE_URL}`)
 - **i18n**: i18next (initialized but rarely used inline — see bilingual page strategy below)
-- **WebGL**: `ogl` used for Prism/Wave background effects in home pages
+- **WebGL**: `ogl` 1.0.8 for Prism/Wave background effects in home pages
 
 ### Entry Points
 
@@ -34,30 +34,38 @@ No lint or test scripts are configured.
 
 ### Bilingual Page Strategy
 
-Pages are split by language at the **route level**, not via `useTranslation()`:
+Pages are split by language at the **route level**, not via `useTranslation()`. Both ZH and EN page components exist under `src/pages/`, but the **active routes in `src/router/config.tsx` currently only register EN pages**. ZH page files exist but are not wired to routes yet.
 
 | Path | Component | Language |
 |---|---|---|
-| `/` or `/en` | `src/pages/home-en/page.tsx` | EN |
-| `/zh` | `src/pages/home/page.tsx` | ZH |
-| `/<page>` | `src/pages/<page>/page.tsx` | ZH |
-| `/<page>-en` | `src/pages/<page>-en/page.tsx` | EN |
+| `/` | `src/pages/home-en/page.tsx` | EN |
+| `/<page>` | `src/pages/<page>-en/page.tsx` | EN (current config) |
 
-Current page pairs: `home`, `use-case`, `use-case-ttl`, `use-case-conflux`, `use-case-vatp`, `blog`, `contact`, `cold-wallet`, `hot-wallet`, `rwa-platform`, `chain-fusion`, `news-chainfusion`.
+Current page pairs (both `page.tsx` and `<page>-en/page.tsx` exist): `home`, `use-case`, `use-case-ttl`, `use-case-conflux`, `use-case-vatp`, `blog`, `contact`, `cold-wallet`, `hot-wallet`, `rwa-platform`, `chain-fusion`, `news-chainfusion`.
 
-**When adding a page**: create both ZH and EN `page.tsx`, add both routes to `src/router/config.tsx`, and update any nav/footer links in both language variants.
+**When adding a page**: create both ZH (`src/pages/<page>/page.tsx`) and EN (`src/pages/<page>-en/page.tsx`) components, add routes to `src/router/config.tsx`, and update nav/footer links in both language variants.
+
+### i18n Translation Files
+
+Translations live in `src/i18n/local/{en,zh}/` as individual `.ts` files per page (e.g., `home.ts`, `blog.ts`). Key format: `page_section_item` (e.g., `home_hero_title`, `blog_post_0_category`). Files are imported via Vite's `import.meta.glob`. In practice, EN pages use `t('key')` for strings, but ZH page files contain inline Chinese text.
 
 ### Shared Components
 
-- `src/components/feature/AdvisorsCarouselZH.tsx` / `AdvisorsCarouselEN.tsx`
-- `src/components/feature/BackToTop.tsx`
-- `src/components/feature/WaveBackground.tsx`
-- `src/components/feature/HeroShield.tsx`
-- `src/hooks/useIntersectionObserver.ts`
+- `src/components/feature/AdvisorsCarouselZH.tsx` / `AdvisorsCarouselEN.tsx` — director/advisor profiles
+- `src/components/feature/BackToTop.tsx` — floating button, appears after 300px scroll
+- `src/components/feature/WaveBackground.tsx` — Canvas-based animated wave with sparkles
+- `src/components/feature/HeroShield.tsx` — WebGL Canvas with animated blockchain node visualization
+- `src/components/feature/WireframeSphere.tsx` — SVG animated globe, used in language switcher buttons
+- `src/hooks/useIntersectionObserver.ts` — returns `[ref, isVisible]`; once visible, disconnects observer (one-shot)
+- `src/hooks/useLanguage.ts` — `{ switchToZh(), switchToEn(), currentLang }` wrapper around i18n
 
 ### WebGL / OGL Notes
 
-The home pages embed WebGL Prism/Wave backgrounds directly in `page.tsx`. These create a WebGL context, inject shaders, use RAF + `ResizeObserver`, and include a graceful fallback if WebGL is unsupported. Avoid adding large 3D libraries nearby — keep bundle size in check.
+The home pages embed a WebGL Prism shader directly in `page.tsx` (custom pyramid with height, baseWidth, glow, noise, bloom, hueShift, colorFrequency params). `WaveBackground.tsx` and `HeroShield.tsx` use Canvas/WebGL separately. All WebGL components include graceful fallback if WebGL is unsupported. Avoid adding large 3D libraries nearby — keep bundle size in check.
+
+### Brand Tokens
+
+CSS variables defined in `src/index.css`: `--primary-blue` (#1e6b8a), `--secondary-blue` (#1a5a76), `--tertiary-grey`, `--bg-deep`, `--bg-sky-light`. Font family: Montserrat (configured in `tailwind.config.ts` as `sans`, `space`, and `montserrat`).
 
 ---
 
@@ -83,3 +91,4 @@ The home pages embed WebGL Prism/Wave backgrounds directly in `page.tsx`. These 
 
 - `src/index.css` has duplicate Tailwind directives (`@tailwind base/components/utilities` appears twice).
 - i18n is initialized (`src/i18n/`) but page content is primarily handled via split pages; mixing both approaches risks divergence.
+- ZH page components exist for all page pairs but are not registered in `src/router/config.tsx`.
