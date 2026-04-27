@@ -7,6 +7,16 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'static')));
 
+function resolveIndexFile() {
+  const staticIndexStock = path.join(__dirname, 'static', 'index_stock.html');
+  const staticIndex = path.join(__dirname, 'static', 'index.html');
+  const rootIndex = path.join(__dirname, 'index.html');
+
+  if (require('fs').existsSync(staticIndexStock)) return staticIndexStock;
+  if (require('fs').existsSync(staticIndex)) return staticIndex;
+  return rootIndex;
+}
+
 function httpGetText(url) {
   return new Promise((resolve, reject) => {
     const req = http.get(url, (resp) => {
@@ -28,7 +38,7 @@ function httpGetText(url) {
 }
 
 app.get('/stock-details', (req, res) => {
-  res.sendFile(path.join(__dirname, 'static', 'index.html'));
+  res.sendFile(resolveIndexFile());
 });
 
 app.get('/api/intraday', async (req, res) => {
@@ -88,7 +98,7 @@ app.get('/api/daily', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'static', 'index.html'));
+  res.sendFile(resolveIndexFile());
 });
 
 app.listen(PORT, () => {
