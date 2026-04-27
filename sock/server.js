@@ -8,13 +8,13 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'static')));
 
 function resolveIndexFile() {
+  const rootIndex = path.join(__dirname, 'index.html');
   const staticIndexStock = path.join(__dirname, 'static', 'index_stock.html');
   const staticIndex = path.join(__dirname, 'static', 'index.html');
-  const rootIndex = path.join(__dirname, 'index.html');
 
+  if (require('fs').existsSync(rootIndex)) return rootIndex;
   if (require('fs').existsSync(staticIndexStock)) return staticIndexStock;
-  if (require('fs').existsSync(staticIndex)) return staticIndex;
-  return rootIndex;
+  return staticIndex;
 }
 
 function httpGetText(url) {
