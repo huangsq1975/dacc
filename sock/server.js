@@ -104,8 +104,9 @@ app.get('/api/daily', async (req, res) => {
     }
 
     const url = `http://qa-test.qcoral.tech/stock/getStockDaily?symbol=${encodeURIComponent(symbol)}&date=${encodeURIComponent(date)}&num=${encodeURIComponent(Math.floor(num))}`;
+    console.log(`[daily] symbol=${symbol} date=${date} num=${num} url=${url}`);
     const resp = await httpGetText(url);
-
+    console.log(`[daily] resp=${JSON.stringify(resp)}`);
     res.status(resp.statusCode);
     res.set('Content-Type', 'application/json; charset=utf-8');
     return res.send(resp.body);

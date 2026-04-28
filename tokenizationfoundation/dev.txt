@@ -46,3 +46,53 @@ anitha@thetokenizationfoundation.com
 9?jX3F[lS}Ur
 
 https://www.cips.com.cn/cips/gywm/cipsxt/zjcyzmd/index.html
+項目那個模塊處理 QR code信息
+
+根據 docs/Copilot_20260422_102445.png 圖片製作一個動態背景放到首頁的 Hero 區塊
+綫條運動的太快了。背景也沒有向中間漸變效果。
+綫條運動的速度再減小30%，現在運動太規則向平移一樣，要顯得向海浪那樣高低起伏。
+綫條運動的速度再減小30%，綫條整體要2邊小中間大，還隨機白光點向浪花的反光一樣。
+波浪到屏幕中間高度是旁邊的2倍。閃白光下面要多些。
+首頁背景要暗點點。hero區塊字體在亮背景有點不清楚。
+根據 doc/Copilot_20260418_083328.png 圖片右邊製作出動態效果替換首頁那個旋轉效果。
+把盾牌周邊換成上4個產品圍著盾牌轉圈
+盾牌周邊轉的圖標去掉背景框，排列不要那麽整齊距離中間要有寬有窄。轉的速度減小一半。
+
+盾牌周邊背景要由多層半透明的光線網格、粒子節點、連線軌跡與緩慢流動的能量線組成。節點以微弱光點呈現，連線以柔和藍光延伸，形成 Web3 / 區塊鏈式的網絡拓撲。背景中有輕微的粒子漂浮與光暈擴散，營造出金融基礎設施級的穩定、冷靜、可信賴的科技氛圍。
+
+盾牌裏面替換成 src/assets/dacc_ico.png 圖標。并且周邊要有光圈和高亮。
+HeroShield.tsx
+HeroShield.tsx 盾牌裏面的勾替換成 src/assets/dacc_ico.png 圖標
+把 HeroShield.tsx 裏的盾牌替換成符合下面描述的
+“Institutional-grade cross-border clearing and settlement network, CIPS-integrated digital asset infrastructure, multi-chain tokenization flows converging into a central settlement core, glowing financial data pathways, regulated custody architecture (MPC + HSM), deep blue enterprise fintech aesthetic, minimal high-trust Web3 style, structured nodes and settlement routes, futuristic financial infrastructure background.”
+
+● Done. The shield has been replaced with a settlement network hub visualization
+   featuring:
+
+  - Central settlement core — layered hexagonal hub with glowing radial gradient
+   and "SETTLE CORE" label
+  - 6 radiating settlement routes — each with a wide soft-glow pass + sharp
+  bright core line
+  - Relay diamonds at each route midpoint — colored to match their route
+  - 6 outer institutional nodes:
+    - CIPS CLRG (gold) — top
+    - ETH L2/EVM (cyan) — top-right
+    - MPC CUSTODY (purple) — bottom-right
+    - HSM VAULT (cyan) — bottom
+    - BTC CHAIN (green) — bottom-left
+    - FX SWIFT (cyan) — top-left
+  - Outer orbit rings with dashed strokes for depth
+  - Deep blue enterprise fintech palette — #0369a1 / #38bdf8 / gold / purple /
+  green accents with all filter="url(#fs-glow)" drop-shadow effects
+
+“settlement network hub” 不要上下移動。要慢慢逆時針旋轉。
+“settlement network hub” 圈裏面的文字都很模糊。使用圖標替換。
+“settlement network hub” 中間不轉，圍繞的6個圖標和連綫旋轉。
+“settlement network hub” 圍繞的6個圖標要放大50%，并且向中間靠攏些。
+
+這個網站專項有哪些問題要怎麽改。寫入文檔。
+
+以英文為主通過i18next切換中文
+
+
+

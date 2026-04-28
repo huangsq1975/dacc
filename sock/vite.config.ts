@@ -30,6 +30,14 @@ export default defineConfig(({mode}) => {
           target: 'http://qa-test.qcoral.tech',
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/api\/daily/, '/stock/getStockDaily'),
+          configure: (proxy) => {
+            proxy.on('proxyReq', (_proxyReq, req) => {
+              console.log(`[daily] request ${req.method || 'GET'} ${req.url || ''}`);
+            });
+            proxy.on('proxyRes', (proxyRes, req) => {
+              console.log(`[daily] response ${proxyRes.statusCode || 500} ${req.method || 'GET'} ${req.url || ''}`);
+            });
+          },
         },
       },
     },
