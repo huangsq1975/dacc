@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="920" viewBox="0 0 1200 920"
+     xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#444"/>
+    </marker>
+    <marker id="arr-red" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#c00"/>
+    </marker>
+    <marker id="arr-gold" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#b8860b"/>
+    </marker>
+  </defs>
+
+  <!-- ==================== BACKGROUND ==================== -->
+  <rect width="1200" height="920" fill="#f4f5f7"/>
+
+  <!-- ==================== TOP EXTERNAL APIs ==================== -->
+  <!-- Globe helper macro (drawn inline per node) -->
+
+  <!-- coinmarketcap -->
+  <g transform="translate(90,30)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="90" y="62" text-anchor="middle" font-size="9" fill="#333">pro-api.coinmarketcap.com</text>
+  <text x="90" y="73" text-anchor="middle" font-size="8" fill="#666">(市場價格服務)</text>
+
+  <!-- baosin -->
+  <g transform="translate(330,30)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="330" y="62" text-anchor="middle" font-size="9" fill="#333">api.baosin.com</text>
+  <text x="330" y="73" text-anchor="middle" font-size="8" fill="#666">(KYT 服務商)</text>
+
+  <!-- mailgun -->
+  <g transform="translate(570,30)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="570" y="62" text-anchor="middle" font-size="9" fill="#333">api.mailgun.net</text>
+  <text x="570" y="73" text-anchor="middle" font-size="8" fill="#666">(郵件 motor 服務介面)</text>
+
+  <!-- alchemy -->
+  <g transform="translate(810,30)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="810" y="62" text-anchor="middle" font-size="9" fill="#333">eth-mainnet.g.alchemy.com</text>
+  <text x="810" y="73" text-anchor="middle" font-size="8" fill="#666">(Alchemy 監控)</text>
+
+  <!-- Down arrows from APIs to main border -->
+  <line x1="90"  y1="78" x2="90"  y2="108" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <line x1="330" y1="78" x2="330" y2="108" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <line x1="570" y1="78" x2="570" y2="108" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <line x1="810" y1="78" x2="810" y2="108" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+
+  <!-- port labels -->
+  <text x="94"  y="97" font-size="8" fill="#555">port: 443</text>
+  <text x="334" y="97" font-size="8" fill="#555">port: 443</text>
+  <text x="574" y="97" font-size="8" fill="#555">port: 443</text>
+  <text x="814" y="97" font-size="8" fill="#555">port: 443</text>
+
+  <!-- ==================== MAIN SYSTEM ARCHITECTURE BOX ==================== -->
+  <rect x="20" y="110" width="920" height="620" rx="10" fill="white" fill-opacity="0.6"
+        stroke="#333" stroke-width="2"/>
+  <text x="40" y="132" font-size="14" font-weight="bold" fill="#222">系統架構</text>
+
+  <!-- == User (Web) == -->
+  <g transform="translate(50,185)">
+    <circle cy="-14" r="12" fill="none" stroke="#333" stroke-width="1.6"/>
+    <path d="M-16,10 Q-16,-2 0,-2 Q16,-2 16,10" fill="none" stroke="#333" stroke-width="1.6"/>
+    <text y="26" text-anchor="middle" font-size="9" fill="#333">User (Web)</text>
+  </g>
+
+  <!-- arrow User to API Server -->
+  <line x1="68" y1="185" x2="115" y2="185" stroke="#333" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="68" y="178" font-size="7.5" fill="#444">port: 80, 443</text>
+
+  <!-- == \1 == -->
+  <rect x="115" y="155" width="195" height="90" rx="6" fill="#e8f0fe" stroke="#4a6fa5" stroke-width="1.6"/>
+  <!-- server icon -->
+  <rect x="125" y="166" width="52" height="9" rx="2" fill="#b0c4de" stroke="#4a6fa5" stroke-width="0.8"/>
+  <rect x="125" y="178" width="52" height="9" rx="2" fill="#b0c4de" stroke="#4a6fa5" stroke-width="0.8"/>
+  <rect x="125" y="190" width="52" height="9" rx="2" fill="#b0c4de" stroke="#4a6fa5" stroke-width="0.8"/>
+  <text x="185" y="170" font-size="8.5" font-weight="bold" fill="#1a3055">系統應用層 - API Server</text>
+  <text x="185" y="183" font-size="7.5" fill="#444">Ubuntu</text>
+  <text x="185" y="195" font-size="7" fill="#555">8vCPUs, 16GB RAM, 200GB Storage</text>
+  <text x="185" y="208" font-size="7.5" fill="#4a6fa5">port: 5432 ▶</text>
+  <text x="185" y="220" font-size="7.5" fill="#4a6fa5">port: 80, 443</text>
+
+  <!-- arrow to DB -->
+  <line x1="310" y1="200" x2="360" y2="200" stroke="#444" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="316" y="194" font-size="7.5" fill="#444">port: 5432</text>
+
+  <!-- == \1 == -->
+  <rect x="360" y="155" width="180" height="90" rx="6" fill="#e8f0fe" stroke="#4a6fa5" stroke-width="1.6"/>
+  <!-- DB cylinder -->
+  <ellipse cx="398" cy="173" rx="20" ry="7" fill="#9ab8d8" stroke="#4a6fa5" stroke-width="1"/>
+  <rect x="378" y="173" width="40" height="30" fill="#b8d0e8" stroke="#4a6fa5" stroke-width="1"/>
+  <ellipse cx="398" cy="203" rx="20" ry="7" fill="#9ab8d8" stroke="#4a6fa5" stroke-width="1"/>
+  <text x="428" y="175" font-size="8.5" font-weight="bold" fill="#1a3055">系統應用層 - DB</text>
+  <text x="428" y="188" font-size="7.5" fill="#444">Ubuntu</text>
+  <text x="428" y="200" font-size="7" fill="#555">8vCPUs, 16GB RAM</text>
+  <text x="428" y="212" font-size="7" fill="#555">200GB Storage</text>
+
+  <!-- Portal note box -->
+  <rect x="560" y="148" width="200" height="58" rx="5" fill="#fff9db" stroke="#ccaa00" stroke-width="1.2"/>
+  <text x="660" y="167" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#775500">系統界面層</text>
+  <text x="660" y="180" text-anchor="middle" font-size="8" fill="#775500">使用者介面 (User Portal)</text>
+  <text x="660" y="192" text-anchor="middle" font-size="8" fill="#775500">&amp; 管理者介面 (Admin Portal)</text>
+  <!-- line from API server to portal note -->
+  <line x1="540" y1="177" x2="558" y2="177" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- ==================== BACKEND PROCESSOR BOX ==================== -->
+  <rect x="50" y="270" width="860" height="430" rx="8" fill="none" stroke="#666" stroke-width="1.6"/>
+  <text x="350" y="291" text-anchor="middle" font-size="11" font-weight="bold" fill="#555">後端處理模組 (Backend Processor)</text>
+
+  <!-- == \1 == -->
+  <g transform="translate(48,360)">
+    <!-- phone icon -->
+    <rect x="-12" y="-22" width="24" height="40" rx="3" fill="none" stroke="#333" stroke-width="1.6"/>
+    <line x1="-6" y1="14" x2="6" y2="14" stroke="#333" stroke-width="1.5"/>
+    <text y="30" text-anchor="middle" font-size="8" fill="#333">User</text>
+    <text y="40" text-anchor="middle" font-size="8" fill="#333">(Auth App)</text>
+  </g>
+
+  <!-- arrow Auth App to Backend API -->
+  <line x1="62" y1="360" x2="108" y2="360" stroke="#333" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="64" y="353" font-size="7.5" fill="#444">port: 9001</text>
+
+  <!-- == \1 == -->
+  <rect x="108" y="318" width="210" height="100" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+  <rect x="118" y="330" width="52" height="9" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="0.8"/>
+  <rect x="118" y="342" width="52" height="9" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="0.8"/>
+  <rect x="118" y="354" width="52" height="9" rx="2" fill="#a5d6a7" stroke="#2e7d32" stroke-width="0.8"/>
+  <text x="180" y="334" font-size="8" font-weight="bold" fill="#1b5e20">後端處理模組 - API Server</text>
+  <text x="180" y="347" font-size="7.5" fill="#2e4c22">Ubuntu</text>
+  <text x="180" y="358" font-size="7" fill="#444">8vCPUs, 16GB RAM, 200GB Storage</text>
+  <text x="180" y="370" font-size="7.5" fill="#2e7d32">port: 9001, 9080</text>
+  <text x="180" y="382" font-size="7.5" fill="#2e7d32">port: 5432 ▶</text>
+  <text x="290" y="312" font-size="8" fill="#555">port: 9880</text>
+
+  <!-- arrow Backend API to DB -->
+  <line x1="318" y1="368" x2="368" y2="368" stroke="#444" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="322" y="362" font-size="7.5" fill="#444">port: 5432</text>
+
+  <!-- == \1 == -->
+  <rect x="368" y="318" width="210" height="100" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+  <ellipse cx="410" cy="338" rx="22" ry="8" fill="#81c784" stroke="#2e7d32" stroke-width="1"/>
+  <rect x="388" y="338" width="44" height="32" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1"/>
+  <ellipse cx="410" cy="370" rx="22" ry="8" fill="#81c784" stroke="#2e7d32" stroke-width="1"/>
+  <text x="445" y="340" font-size="8" font-weight="bold" fill="#1b5e20">後端處理模組 - DB</text>
+  <text x="445" y="353" font-size="7.5" fill="#2e4c22">Ubuntu</text>
+  <text x="445" y="364" font-size="7" fill="#444">8vCPUs, 32GB RAM</text>
+  <text x="445" y="376" font-size="7" fill="#444">300GB Storage</text>
+
+  <!-- ==================== WORK STATION BOX ==================== -->
+  <rect x="80" y="450" width="510" height="220" rx="8" fill="#f9f9f9" stroke="#999"
+        stroke-width="1.4" stroke-dasharray="7,3"/>
+  <text x="335" y="472" text-anchor="middle" font-size="10" font-weight="bold" fill="#555">
+    斷網操作流程 Work Station</text>
+
+  <!-- USB drives (3 icons) -->
+  <g transform="translate(105,510)">
+    <rect x="-10" y="-5" width="22" height="38" rx="3" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <rect x="-5" y="-12" width="12" height="9" rx="1" fill="#b8b8b8" stroke="#888" stroke-width="0.8"/>
+    <circle cx="1" cy="20" r="4" fill="#aaa"/>
+  </g>
+  <g transform="translate(140,510)">
+    <rect x="-10" y="-5" width="22" height="38" rx="3" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <rect x="-5" y="-12" width="12" height="9" rx="1" fill="#b8b8b8" stroke="#888" stroke-width="0.8"/>
+    <circle cx="1" cy="20" r="4" fill="#aaa"/>
+  </g>
+  <g transform="translate(175,510)">
+    <rect x="-10" y="-5" width="22" height="38" rx="3" fill="#d0d0d0" stroke="#888" stroke-width="1"/>
+    <rect x="-5" y="-12" width="12" height="9" rx="1" fill="#b8b8b8" stroke="#888" stroke-width="0.8"/>
+    <circle cx="1" cy="20" r="4" fill="#aaa"/>
+  </g>
+
+  <!-- Arrow right to laptop -->
+  <line x1="192" y1="510" x2="235" y2="510" stroke="#666" stroke-width="1.3" marker-end="url(#arr)"/>
+
+  <!-- Laptop icon -->
+  <rect x="235" y="495" width="52" height="34" rx="3" fill="#e0e0e0" stroke="#888" stroke-width="1.2"/>
+  <rect x="228" y="529" width="66" height="7" rx="2" fill="#c8c8c8" stroke="#888" stroke-width="1"/>
+
+  <!-- Workstation description -->
+  <text x="100" y="565" font-size="8.5" fill="#555">Personnel must match biometrics, face,</text>
+  <text x="100" y="580" font-size="8.5" fill="#555">use security USB for data transfer operation.</text>
+
+  <!-- Arrow workstation → Air-Gapped (goes right and up to KMS area) -->
+  <line x1="590" y1="530" x2="960" y2="440" stroke="#888" stroke-width="1.3"
+        stroke-dasharray="6,3" marker-end="url(#arr)"/>
+  <text x="730" y="478" font-size="8" fill="#666">port: 443</text>
+
+  <!-- ==================== AIR-GAPPED BOX ==================== -->
+  <rect x="958" y="110" width="222" height="620" rx="10" fill="white" fill-opacity="0.55"
+        stroke="#cc0000" stroke-width="2" stroke-dasharray="10,4"/>
+  <text x="1069" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#cc0000">
+    斷網 Air-Gapped</text>
+
+  <!-- KMS header -->
+  <rect x="968" y="142" width="202" height="36" rx="5" fill="#ffe8e8" stroke="#cc6666" stroke-width="1.2"/>
+  <text x="1069" y="157" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#990000">
+    Key Management System</text>
+  <text x="1069" y="170" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#990000">(KMS)</text>
+
+  <!-- NTP Server (top right inside air-gapped, same row) -->
+  <rect x="968" y="187" width="202" height="28" rx="4" fill="#f5f5f5" stroke="#aaa" stroke-width="1"/>
+  <text x="1069" y="205" text-anchor="middle" font-size="9" fill="#333">NTP Server</text>
+  <line x1="1069" y1="178" x2="1069" y2="187" stroke="#cc6666" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Thales HSM box -->
+  <rect x="968" y="230" width="202" height="90" rx="5" fill="#fff8e0" stroke="#cc8800" stroke-width="1.6"/>
+  <!-- HSM server icon -->
+  <rect x="978" y="242" width="52" height="9" rx="2" fill="#f5d060" stroke="#cc8800" stroke-width="0.8"/>
+  <rect x="978" y="254" width="52" height="9" rx="2" fill="#f5d060" stroke="#cc8800" stroke-width="0.8"/>
+  <rect x="978" y="266" width="52" height="9" rx="2" fill="#f5d060" stroke="#cc8800" stroke-width="0.8"/>
+  <text x="1040" y="246" font-size="8.5" font-weight="bold" fill="#774400">Thales HSM</text>
+  <text x="1040" y="259" font-size="7.5" fill="#885500">Config, Ca Pin, Slot ID, Certs</text>
+  <text x="1040" y="272" font-size="7.5" fill="#cc8800">port: 122</text>
+  <!-- vertical connector KMS → HSM -->
+  <line x1="1069" y1="215" x2="1069" y2="229" stroke="#cc6666" stroke-width="1.2" marker-end="url(#arr-red)"/>
+
+  <!-- port 1782 line (HSM to KMS Server) -->
+  <line x1="1069" y1="320" x2="1069" y2="370" stroke="#cc8800" stroke-width="1.2"
+        stroke-dasharray="4,2" marker-end="url(#arr-gold)"/>
+  <text x="1075" y="348" font-size="8" fill="#885500">port: 1782</text>
+
+  <!-- == \1 == -->
+  <rect x="968" y="370" width="202" height="110" rx="6" fill="#fce4ec" stroke="#c62828" stroke-width="1.6"/>
+  <rect x="978" y="383" width="52" height="9" rx="2" fill="#ef9a9a" stroke="#c62828" stroke-width="0.8"/>
+  <rect x="978" y="395" width="52" height="9" rx="2" fill="#ef9a9a" stroke="#c62828" stroke-width="0.8"/>
+  <rect x="978" y="407" width="52" height="9" rx="2" fill="#ef9a9a" stroke="#c62828" stroke-width="0.8"/>
+  <text x="1040" y="387" font-size="8" font-weight="bold" fill="#7f0000">區域鏈相關模組</text>
+  <text x="1040" y="399" font-size="8" font-weight="bold" fill="#7f0000">KMS Server</text>
+  <text x="1040" y="412" font-size="7.5" fill="#333">Ubuntu</text>
+  <text x="1040" y="423" font-size="7" fill="#444">8vCPUs, 16GB RAM</text>
+  <text x="1040" y="434" font-size="7" fill="#444">200GB Storage</text>
+  <text x="1040" y="446" font-size="7.5" fill="#c62828">port: 5432 ▶</text>
+
+  <!-- arrow KMS Server → DB (goes down) -->
+  <line x1="1069" y1="480" x2="1069" y2="508" stroke="#444" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="1075" y="498" font-size="7.5" fill="#444">port: 5432</text>
+
+  <!-- == \1 == -->
+  <rect x="968" y="510" width="202" height="100" rx="6" fill="#fce4ec" stroke="#c62828" stroke-width="1.6"/>
+  <ellipse cx="1010" cy="528" rx="22" ry="8" fill="#ef9a9a" stroke="#c62828" stroke-width="1"/>
+  <rect x="988" y="528" width="44" height="30" fill="#ffcdd2" stroke="#c62828" stroke-width="1"/>
+  <ellipse cx="1010" cy="558" rx="22" ry="8" fill="#ef9a9a" stroke="#c62828" stroke-width="1"/>
+  <text x="1042" y="530" font-size="8" font-weight="bold" fill="#7f0000">區域鏈相關模組</text>
+  <text x="1042" y="543" font-size="8" font-weight="bold" fill="#7f0000">DB</text>
+  <text x="1042" y="557" font-size="7.5" fill="#333">Ubuntu</text>
+  <text x="1042" y="568" font-size="7" fill="#444">8vCPUs, 32GB RAM</text>
+  <text x="1042" y="580" font-size="7" fill="#444">300GB Storage</text>
+
+  <!-- ==================== BOTTOM EXTERNAL SERVICES ==================== -->
+
+  <!-- crypto-kv.aegiscustody.com -->
+  <g transform="translate(110,835)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="110" y="865" text-anchor="middle" font-size="8.5" fill="#333">crypto-kv.aegiscustody.com</text>
+  <text x="110" y="876" text-anchor="middle" font-size="7.5" fill="#666">(AEDF 外部觸發服務)</text>
+
+  <!-- mainnet.infura.io -->
+  <g transform="translate(400,835)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="400" y="865" text-anchor="middle" font-size="8.5" fill="#333">mainnet.infura.io</text>
+  <text x="400" y="876" text-anchor="middle" font-size="7.5" fill="#666">(Infura 服務)</text>
+
+  <!-- exp.host -->
+  <g transform="translate(680,835)">
+    <circle r="20" fill="none" stroke="#444" stroke-width="1.8"/>
+    <ellipse rx="11" ry="20" fill="none" stroke="#444" stroke-width="1.2"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="-11" x2="17" y2="-11" stroke="#444" stroke-width="1"/>
+    <line x1="-17" y1="11" x2="17" y2="11" stroke="#444" stroke-width="1"/>
+  </g>
+  <text x="680" y="865" text-anchor="middle" font-size="8.5" fill="#333">exp.host</text>
+  <text x="680" y="876" text-anchor="middle" font-size="7.5" fill="#666">(Auth App 服務)</text>
+
+  <!-- Lines from bottom services up to main box bottom -->
+  <line x1="110" y1="730" x2="110" y2="813" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <text x="114" y="780" font-size="7.5" fill="#555">port: 443, 4423</text>
+
+  <line x1="400" y1="730" x2="400" y2="813" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <text x="404" y="780" font-size="7.5" fill="#555">port: 443</text>
+
+  <line x1="680" y1="730" x2="680" y2="813" stroke="#555" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+  <text x="684" y="780" font-size="7.5" fill="#555">port: 443</text>
+
+  <!-- ==================== CROSS-BOX CONNECTIONS ==================== -->
+  <!-- Backend API Server ↔ Air-Gapped (KMS) via port 5432 line from main area to air-gapped -->
+  <line x1="590" y1="370" x2="966" y2="420" stroke="#c62828" stroke-width="1.2"
+        stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+  <text x="740" y="390" font-size="8" fill="#c62828">port: 5432</text>
+
+</svg>

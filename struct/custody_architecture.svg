@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 1440 1180" width="1440" height="1180" font-family="'Helvetica Neue', Arial, sans-serif">
+
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="layer1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#1a3354;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="layer2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a4731;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#163d29;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="layer3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a1942;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#3b1235;stop-opacity:0.95"/>
+    </linearGradient>
+    <linearGradient id="hotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:0.3"/>
+    </linearGradient>
+    <linearGradient id="coldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0369a1;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:0.3"/>
+    </linearGradient>
+    <linearGradient id="fwGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0"/>
+      <stop offset="20%" style="stop-color:#dc2626;stop-opacity:1"/>
+      <stop offset="80%" style="stop-color:#dc2626;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="serverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#334155"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="hsmGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7e22ce"/>
+      <stop offset="100%" style="stop-color:#581c87"/>
+    </linearGradient>
+    <linearGradient id="usbGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+
+    <!-- Glow filters -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="redGlow" x="-30%" y="-100%" width="160%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="strongGlow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="dropShadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+
+    <!-- Arrow markers -->
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+    <marker id="arrowYellow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f87171"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#c084fc"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fb923c"/>
+    </marker>
+    <marker id="arrowBlueBi" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto-start-reverse">
+      <polygon points="0 3.5, 10 0, 10 7" fill="#38bdf8"/>
+    </marker>
+
+    <!-- USB dashes animation -->
+    <style>
+      .usb-dash { stroke-dasharray: 8 4; animation: dash 1.5s linear infinite; }
+      @keyframes dash { to { stroke-dashoffset: -36; } }
+      .flow-arrow { animation: flowPulse 2s ease-in-out infinite; }
+      @keyframes flowPulse { 0%,100% { opacity:0.7; } 50% { opacity:1; } }
+    </style>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════
+       BACKGROUND
+  ══════════════════════════════════════════════════ -->
+  <rect width="1440" height="1180" fill="url(#bgGrad)"/>
+
+  <!-- Grid texture -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.15" opacity="0.15"/>
+  </pattern>
+  <rect width="1440" height="1180" fill="url(#grid)"/>
+
+  <!-- ═══════════════════════════════════════════════
+       TITLE
+  ══════════════════════════════════════════════════ -->
+  <text x="720" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#f1f5f9" letter-spacing="3">
+    虛擬資產託管系統架構圖
+  </text>
+  <text x="720" y="56" text-anchor="middle" font-size="13" fill="#94a3b8" letter-spacing="1">
+    Virtual Asset Custody System — Three-Layer Security Architecture with Network Isolation
+  </text>
+
+  <!-- ═══════════════════════════════════════════════
+       EXTERNAL INTERNET (TOP)
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="68" width="1380" height="72" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+  <text x="46" y="86" font-size="11" fill="#64748b" font-weight="600" letter-spacing="1">INTERNET / EXTERNAL APIs</text>
+
+  <!-- External API nodes -->
+  <!-- coinmarketcap -->
+  <g transform="translate(90,92)">
+    <circle cx="0" cy="0" r="18" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="16" fill="#38bdf8">🌐</text>
+    <text x="0" y="10" text-anchor="middle" font-size="7.5" fill="#93c5fd">CoinMarket</text>
+    <text x="0" y="20" text-anchor="middle" font-size="7.5" fill="#93c5fd">pro-api</text>
+  </g>
+  <!-- blasoin -->
+  <g transform="translate(220,92)">
+    <circle cx="0" cy="0" r="18" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="16" fill="#38bdf8">🌐</text>
+    <text x="0" y="10" text-anchor="middle" font-size="7.5" fill="#93c5fd">api.blasoin</text>
+    <text x="0" y="20" text-anchor="middle" font-size="7.5" fill="#93c5fd">KYT查詢</text>
+  </g>
+  <!-- malgun -->
+  <g transform="translate(350,92)">
+    <circle cx="0" cy="0" r="18" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="16" fill="#38bdf8">🌐</text>
+    <text x="0" y="10" text-anchor="middle" font-size="7.5" fill="#93c5fd">api.malgun</text>
+    <text x="0" y="20" text-anchor="middle" font-size="7.5" fill="#93c5fd">motor服務</text>
+  </g>
+  <!-- Alchemy -->
+  <g transform="translate(480,92)">
+    <circle cx="0" cy="0" r="18" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="16" fill="#38bdf8">🌐</text>
+    <text x="0" y="10" text-anchor="middle" font-size="7.5" fill="#93c5fd">Alchemy</text>
+    <text x="0" y="20" text-anchor="middle" font-size="7.5" fill="#93c5fd">eth-mainnet</text>
+  </g>
+  <!-- Auth App user -->
+  <g transform="translate(1300,92)">
+    <circle cx="0" cy="0" r="18" fill="#292524" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="16">📱</text>
+    <text x="0" y="10" text-anchor="middle" font-size="7.5" fill="#fdba74">User</text>
+    <text x="0" y="20" text-anchor="middle" font-size="7.5" fill="#fdba74">Auth App</text>
+  </g>
+  <!-- Web User -->
+  <g transform="translate(1370,92)">
+    <circle cx="0" cy="0" r="18" fill="#292524" stroke="#fb923c" stroke-width="1.5"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="16">💻</text>
+    <text x="0" y="10" text-anchor="middle" font-size="7.5" fill="#fdba74">User</text>
+    <text x="0" y="20" text-anchor="middle" font-size="7.5" fill="#fdba74">Web</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════════════
+       FIREWALL 1 — INTERNET → LAYER 1
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="148" width="1380" height="30" rx="4" fill="url(#fwGrad)" opacity="0.85" filter="url(#redGlow)"/>
+  <text x="720" y="167" text-anchor="middle" font-size="12" font-weight="700" fill="#fca5a5" letter-spacing="2">
+    🔥 FIREWALL 1 — 外網防火牆 (Internet Perimeter)  ·  Port 443 HTTPS Only
+  </text>
+  <!-- FW tick marks -->
+  <line x1="200" y1="148" x2="200" y2="178" stroke="#ef4444" stroke-width="0.5" opacity="0.4"/>
+  <line x1="400" y1="148" x2="400" y2="178" stroke="#ef4444" stroke-width="0.5" opacity="0.4"/>
+  <line x1="600" y1="148" x2="600" y2="178" stroke="#ef4444" stroke-width="0.5" opacity="0.4"/>
+  <line x1="800" y1="148" x2="800" y2="178" stroke="#ef4444" stroke-width="0.5" opacity="0.4"/>
+  <line x1="1000" y1="148" x2="1000" y2="178" stroke="#ef4444" stroke-width="0.5" opacity="0.4"/>
+  <line x1="1200" y1="148" x2="1200" y2="178" stroke="#ef4444" stroke-width="0.5" opacity="0.4"/>
+
+  <!-- ═══════════════════════════════════════════════
+       LAYER 1 — 虛擬資產託管系統
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="183" width="1380" height="195" rx="10" fill="url(#layer1Grad)" stroke="#3b82f6" stroke-width="1.5"/>
+  <!-- Layer label -->
+  <rect x="30" y="183" width="280" height="26" rx="10" fill="#1d4ed8"/>
+  <text x="46" y="200" font-size="12" font-weight="700" fill="#bfdbfe" letter-spacing="1">
+    第一層 · 虛擬資產託管系統
+  </text>
+  <text x="320" y="200" font-size="10" fill="#93c5fd">Virtual Asset Custody Platform  |  網段: 192.168.10.0/24</text>
+
+  <!-- DMZ badge -->
+  <rect x="1280" y="188" width="120" height="20" rx="10" fill="#1e40af" opacity="0.8"/>
+  <text x="1340" y="201" text-anchor="middle" font-size="9" fill="#93c5fd" font-weight="600">DMZ ZONE</text>
+
+  <!-- API Server box -->
+  <rect x="50" y="216" width="220" height="148" rx="8" fill="url(#serverGrad)" stroke="#60a5fa" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="50" y="216" width="220" height="22" rx="8" fill="#1e40af"/>
+  <text x="50" y="216" dx="0" dy="0">
+    <tspan x="160" y="231" text-anchor="middle" font-size="11" font-weight="700" fill="#bfdbfe">系統應用層 · API Server</tspan>
+  </text>
+  <text x="160" y="250" text-anchor="middle" font-size="9" fill="#94a3b8">aegis-vault-api (NestJS)</text>
+  <text x="160" y="264" text-anchor="middle" font-size="9" fill="#94a3b8">Ubuntu  8vCPUs 16GB RAM</text>
+  <text x="160" y="278" text-anchor="middle" font-size="9" fill="#94a3b8">200GB Storage</text>
+  <!-- Port badges -->
+  <rect x="68" y="288" width="72" height="16" rx="8" fill="#0f172a"/>
+  <text x="104" y="299" text-anchor="middle" font-size="8.5" fill="#38bdf8">port: 80, 443</text>
+  <rect x="152" y="288" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="178" y="299" text-anchor="middle" font-size="8.5" fill="#34d399">port: 5432</text>
+  <!-- Server icon -->
+  <rect x="132" y="308" width="56" height="42" rx="4" fill="#334155" stroke="#475569" stroke-width="1"/>
+  <rect x="136" y="312" width="48" height="6" rx="2" fill="#3b82f6"/>
+  <rect x="136" y="321" width="48" height="6" rx="2" fill="#3b82f6" opacity="0.6"/>
+  <rect x="136" y="330" width="48" height="6" rx="2" fill="#3b82f6" opacity="0.3"/>
+  <circle cx="248" cy="236" r="3" fill="#34d399"/>
+
+  <!-- DB box -->
+  <rect x="290" y="216" width="200" height="148" rx="8" fill="url(#serverGrad)" stroke="#60a5fa" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="290" y="216" width="200" height="22" rx="8" fill="#1e40af"/>
+  <text x="390" y="231" text-anchor="middle" font-size="11" font-weight="700" fill="#bfdbfe">系統應用層 · DB</text>
+  <text x="390" y="252" text-anchor="middle" font-size="9" fill="#94a3b8">PostgreSQL</text>
+  <text x="390" y="266" text-anchor="middle" font-size="9" fill="#94a3b8">Ubuntu  8vCPUs 16GB RAM</text>
+  <text x="390" y="280" text-anchor="middle" font-size="9" fill="#94a3b8">200GB Storage</text>
+  <rect x="330" y="292" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="356" y="303" text-anchor="middle" font-size="8.5" fill="#34d399">port: 5432</text>
+  <!-- DB cylinder -->
+  <ellipse cx="390" cy="320" rx="28" ry="8" fill="#334155" stroke="#475569" stroke-width="1"/>
+  <rect x="362" y="320" width="56" height="30" fill="#334155"/>
+  <ellipse cx="390" cy="350" rx="28" ry="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <ellipse cx="390" cy="320" rx="28" ry="8" fill="#3b82f6" opacity="0.4" stroke="#3b82f6" stroke-width="1"/>
+
+  <!-- User Portal & Admin Portal -->
+  <rect x="950" y="216" width="210" height="148" rx="8" fill="url(#serverGrad)" stroke="#60a5fa" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="950" y="216" width="210" height="22" rx="8" fill="#1e40af"/>
+  <text x="1055" y="231" text-anchor="middle" font-size="11" font-weight="700" fill="#bfdbfe">User / Admin Portal</text>
+  <text x="1055" y="250" text-anchor="middle" font-size="9" fill="#94a3b8">aegis-vault-app</text>
+  <text x="1055" y="264" text-anchor="middle" font-size="9" fill="#94a3b8">aegis-vault-admin</text>
+  <text x="1055" y="278" text-anchor="middle" font-size="9" fill="#94a3b8">digiquick-app</text>
+  <rect x="970" y="292" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="996" y="303" text-anchor="middle" font-size="8.5" fill="#38bdf8">HTTPS 443</text>
+  <!-- Browser icons -->
+  <rect x="1020" y="310" width="70" height="44" rx="6" fill="#334155" stroke="#475569" stroke-width="1"/>
+  <rect x="1024" y="314" width="62" height="8" rx="3" fill="#1d4ed8"/>
+  <text x="1055" y="321" text-anchor="middle" font-size="6" fill="#bfdbfe">https://</text>
+  <rect x="1024" y="325" width="62" height="22" rx="2" fill="#1e293b"/>
+  <text x="1055" y="339" text-anchor="middle" font-size="9" fill="#94a3b8">Web UI</text>
+
+  <!-- Auth App mobile -->
+  <rect x="1180" y="216" width="180" height="148" rx="8" fill="url(#serverGrad)" stroke="#fb923c" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="1180" y="216" width="180" height="22" rx="8" fill="#92400e"/>
+  <text x="1270" y="231" text-anchor="middle" font-size="11" font-weight="700" fill="#fed7aa">kv-auth-app</text>
+  <text x="1270" y="250" text-anchor="middle" font-size="9" fill="#94a3b8">Mobile Auth App</text>
+  <text x="1270" y="264" text-anchor="middle" font-size="9" fill="#94a3b8">生物識別 / Face ID</text>
+  <text x="1270" y="278" text-anchor="middle" font-size="9" fill="#94a3b8">多人審批 Multi-Approval</text>
+  <rect x="1200" y="292" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="1226" y="303" text-anchor="middle" font-size="8.5" fill="#fb923c">port: 9001</text>
+  <!-- Phone icon -->
+  <rect x="1244" y="310" width="52" height="40" rx="6" fill="#334155" stroke="#fb923c" stroke-width="1.5"/>
+  <rect x="1248" y="315" width="44" height="28" rx="2" fill="#1e293b"/>
+  <circle cx="1270" cy="346" r="3" fill="#fb923c" opacity="0.6"/>
+
+  <!-- ═══════════════════════════════════════════════
+       FIREWALL 2 — LAYER 1 → LAYER 2
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="383" width="1380" height="30" rx="4" fill="url(#fwGrad)" opacity="0.85" filter="url(#redGlow)"/>
+  <text x="720" y="402" text-anchor="middle" font-size="12" font-weight="700" fill="#fca5a5" letter-spacing="2">
+    🔥 FIREWALL 2 — 內網防火牆 (Internal Segment)  ·  Port 5001 / 9880 / 5432 Controlled
+  </text>
+
+  <!-- ═══════════════════════════════════════════════
+       LAYER 2 — HSM中介系統
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="418" width="1380" height="230" rx="10" fill="url(#layer2Grad)" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="30" y="418" width="240" height="26" rx="10" fill="#166534"/>
+  <text x="46" y="435" font-size="12" font-weight="700" fill="#bbf7d0" letter-spacing="1">第二層 · HSM 中介系統</text>
+  <text x="280" y="435" font-size="10" fill="#86efac">HSM Middleware Layer  |  網段: 192.168.20.0/24  |  Air-Gapped VLAN</text>
+
+  <!-- HOT WALLET sub-zone -->
+  <rect x="46" y="448" width="700" height="188" rx="8" fill="url(#hotGrad)" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="60" y="465" font-size="10" font-weight="600" fill="#c4b5fd">HOT WALLET ZONE (熱錢包)</text>
+
+  <!-- Backend Processor -->
+  <rect x="60" y="472" width="200" height="148" rx="8" fill="url(#serverGrad)" stroke="#a78bfa" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="60" y="472" width="200" height="22" rx="8" fill="#4c1d95"/>
+  <text x="160" y="487" text-anchor="middle" font-size="11" font-weight="700" fill="#ddd6fe">Backend Processor</text>
+  <text x="160" y="506" text-anchor="middle" font-size="9" fill="#94a3b8">後端處理模組 API Server</text>
+  <text x="160" y="520" text-anchor="middle" font-size="9" fill="#94a3b8">Ubuntu  8vCPUs 16GB RAM</text>
+  <rect x="78" y="532" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="104" y="543" text-anchor="middle" font-size="8.5" fill="#38bdf8">port: 5001</text>
+  <rect x="142" y="532" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="168" y="543" text-anchor="middle" font-size="8.5" fill="#34d399">port: 9880</text>
+  <rect x="112" y="556" width="96" height="52" rx="4" fill="#334155" stroke="#475569" stroke-width="1"/>
+  <rect x="116" y="560" width="88" height="8" rx="2" fill="#7c3aed" opacity="0.8"/>
+  <rect x="116" y="571" width="88" height="8" rx="2" fill="#7c3aed" opacity="0.5"/>
+  <rect x="116" y="582" width="88" height="8" rx="2" fill="#7c3aed" opacity="0.3"/>
+
+  <!-- keyvault-api-service -->
+  <rect x="278" y="472" width="200" height="148" rx="8" fill="url(#serverGrad)" stroke="#a78bfa" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="278" y="472" width="200" height="22" rx="8" fill="#4c1d95"/>
+  <text x="378" y="487" text-anchor="middle" font-size="11" font-weight="700" fill="#ddd6fe">keyvault-api-service</text>
+  <text x="378" y="506" text-anchor="middle" font-size="9" fill="#94a3b8">Go/Echo Framework</text>
+  <text x="378" y="520" text-anchor="middle" font-size="9" fill="#94a3b8">TX Construction  /  Chain Ops</text>
+  <rect x="296" y="532" width="52" height="16" rx="8" fill="#0f172a"/>
+  <text x="322" y="543" text-anchor="middle" font-size="8.5" fill="#38bdf8">port: 5001</text>
+  <rect x="116" y="556" width="96" height="52" rx="4" fill="#334155" stroke="#475569" stroke-width="1" transform="translate(162,0)"/>
+  <rect x="116" y="560" width="88" height="8" rx="2" fill="#7c3aed" opacity="0.8" transform="translate(162,0)"/>
+  <rect x="116" y="571" width="88" height="8" rx="2" fill="#7c3aed" opacity="0.5" transform="translate(162,0)"/>
+  <rect x="116" y="582" width="88" height="8" rx="2" fill="#7c3aed" opacity="0.3" transform="translate(162,0)"/>
+
+  <!-- keyvault-ethereum-service -->
+  <rect x="496" y="472" width="200" height="148" rx="8" fill="url(#serverGrad)" stroke="#a78bfa" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="496" y="472" width="200" height="22" rx="8" fill="#4c1d95"/>
+  <text x="596" y="487" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ddd6fe">keyvault-ethereum-service</text>
+  <text x="596" y="506" text-anchor="middle" font-size="9" fill="#94a3b8">walletos (Rust+Go / Bazel)</text>
+  <text x="596" y="520" text-anchor="middle" font-size="9" fill="#94a3b8">JSON-RPC  10+ chains</text>
+  <rect x="514" y="532" width="60" height="16" rx="8" fill="#0f172a"/>
+  <text x="544" y="543" text-anchor="middle" font-size="8.5" fill="#38bdf8">keyvault-gw</text>
+  <!-- Chain icons -->
+  <text x="520" y="575" font-size="9" fill="#94a3b8">ETH  BTC  BNB  SOL  TRX</text>
+  <text x="520" y="590" font-size="9" fill="#94a3b8">MATIC  AVAX  DOT  XRP...</text>
+
+  <!-- hotwallet (HSM-based) -->
+  <rect x="762" y="448" width="320" height="188" rx="8" fill="url(#coldGrad)" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="778" y="465" font-size="10" font-weight="600" fill="#7dd3fc">HOTWALLET ZONE (熱錢包-HSM)</text>
+  <rect x="778" y="472" width="288" height="148" rx="8" fill="url(#serverGrad)" stroke="#0ea5e9" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="778" y="472" width="288" height="22" rx="8" fill="#0c4a6e"/>
+  <text x="922" y="487" text-anchor="middle" font-size="11" font-weight="700" fill="#bae6fd">hotwallet (HSM custody)</text>
+  <text x="922" y="506" text-anchor="middle" font-size="9" fill="#94a3b8">Go  ·  SoftHSM / CloudHSM / Thales</text>
+  <text x="922" y="520" text-anchor="middle" font-size="9" fill="#94a3b8">PKCS#11 signing interface</text>
+  <text x="922" y="534" text-anchor="middle" font-size="9" fill="#94a3b8">Kafka event stream</text>
+  <rect x="796" y="546" width="78" height="16" rx="8" fill="#0f172a"/>
+  <text x="835" y="557" text-anchor="middle" font-size="8.5" fill="#38bdf8">port: 443/4423</text>
+  <!-- HSM chip icon -->
+  <rect x="886" y="566" width="72" height="46" rx="4" fill="#0c4a6e" stroke="#0ea5e9" stroke-width="1.5"/>
+  <rect x="892" y="572" width="60" height="34" rx="2" fill="#075985"/>
+  <text x="922" y="593" text-anchor="middle" font-size="10" fill="#38bdf8" font-weight="700">HSM</text>
+  <text x="922" y="606" text-anchor="middle" font-size="8" fill="#7dd3fc">PKCS#11</text>
+  <!-- Kafka stream indicator -->
+  <rect x="796" y="568" width="80" height="40" rx="4" fill="#334155" stroke="#475569" stroke-width="1"/>
+  <text x="836" y="584" text-anchor="middle" font-size="8" fill="#fbbf24">Kafka</text>
+  <text x="836" y="598" text-anchor="middle" font-size="7" fill="#94a3b8">Event Stream</text>
+
+  <!-- Kafka / crypto-event pipeline -->
+  <rect x="1100" y="448" width="298" height="188" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1" stroke-dasharray="5 3"/>
+  <text x="1116" y="465" font-size="10" font-weight="600" fill="#64748b">Blockchain Event Pipeline</text>
+  <!-- crypto-event-subscriber -->
+  <rect x="1114" y="472" width="130" height="56" rx="6" fill="url(#serverGrad)" stroke="#475569" stroke-width="1"/>
+  <text x="1179" y="489" text-anchor="middle" font-size="9" font-weight="600" fill="#94a3b8">crypto-event</text>
+  <text x="1179" y="502" text-anchor="middle" font-size="8" fill="#64748b">-subscriber</text>
+  <text x="1179" y="516" text-anchor="middle" font-size="8" fill="#64748b">Go service</text>
+  <!-- crypto-event-ws -->
+  <rect x="1256" y="472" width="130" height="56" rx="6" fill="url(#serverGrad)" stroke="#475569" stroke-width="1"/>
+  <text x="1321" y="489" text-anchor="middle" font-size="9" font-weight="600" fill="#94a3b8">crypto-event</text>
+  <text x="1321" y="502" text-anchor="middle" font-size="8" fill="#64748b">-ws (WebSocket)</text>
+  <text x="1321" y="516" text-anchor="middle" font-size="8" fill="#64748b">Go service</text>
+  <!-- aegisvault-transaction -->
+  <rect x="1114" y="540" width="272" height="56" rx="6" fill="url(#serverGrad)" stroke="#475569" stroke-width="1"/>
+  <text x="1250" y="558" text-anchor="middle" font-size="9" font-weight="600" fill="#94a3b8">aegisvault-transaction</text>
+  <text x="1250" y="571" text-anchor="middle" font-size="8" fill="#64748b">TX sync → PostgreSQL DB</text>
+  <text x="1250" y="584" text-anchor="middle" font-size="8" fill="#fbbf24">Kafka Consumer</text>
+  <!-- Kafka bus -->
+  <rect x="1114" y="606" width="272" height="20" rx="4" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+  <text x="1250" y="620" text-anchor="middle" font-size="8.5" fill="#fbbf24" font-weight="600">◄── KAFKA BUS ──►</text>
+
+  <!-- ═══════════════════════════════════════════════
+       FIREWALL 3 — LAYER 2 → LAYER 3 (AIR-GAP)
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="652" width="1380" height="30" rx="4" fill="url(#fwGrad)" opacity="0.9" filter="url(#redGlow)"/>
+  <text x="500" y="671" text-anchor="middle" font-size="12" font-weight="700" fill="#fca5a5" letter-spacing="2">
+    🔥 FIREWALL 3 — 斷網隔離防火牆 (Air-Gap Boundary)
+  </text>
+  <text x="1150" y="671" text-anchor="middle" font-size="11" fill="#fca5a5" letter-spacing="1">
+    ⚡ 物理斷網 / No Network Route
+  </text>
+
+  <!-- ═══════════════════════════════════════════════
+       LAYER 3 — HSM硬體加密機 (AIR-GAPPED)
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="686" width="1380" height="274" rx="10" fill="url(#layer3Grad)" stroke="#a855f7" stroke-width="2"/>
+  <rect x="30" y="686" width="260" height="26" rx="10" fill="#581c87"/>
+  <text x="46" y="703" font-size="12" font-weight="700" fill="#e9d5ff" letter-spacing="1">第三層 · HSM 硬體加密機</text>
+  <text x="300" y="703" font-size="10" fill="#c084fc">Hardware Security Module Layer  |  斷網Air-Gapped Zone  |  網段: 192.168.30.0/24 (isolated)</text>
+
+  <!-- Air-gap warning -->
+  <rect x="1260" y="690" width="140" height="20" rx="10" fill="#7f1d1d" opacity="0.9"/>
+  <text x="1330" y="703" text-anchor="middle" font-size="9" fill="#fca5a5" font-weight="700">⚡ AIR-GAPPED NETWORK</text>
+
+  <!-- WorkStation (断网) -->
+  <rect x="46" y="718" width="230" height="224" rx="8" fill="#1c1917" stroke="#d97706" stroke-width="2" filter="url(#dropShadow)"/>
+  <rect x="46" y="718" width="230" height="24" rx="8" fill="#92400e"/>
+  <text x="161" y="734" text-anchor="middle" font-size="11" font-weight="700" fill="#fed7aa">斷網操作 WorkStation</text>
+  <text x="161" y="754" text-anchor="middle" font-size="9" fill="#d97706">Air-Gapped Workstation</text>
+  <text x="161" y="768" text-anchor="middle" font-size="8.5" fill="#a78bfa">生物識別驗證 (Biometrics)</text>
+  <text x="161" y="782" text-anchor="middle" font-size="8.5" fill="#a78bfa">人臉識別 (Face Recognition)</text>
+  <text x="161" y="796" text-anchor="middle" font-size="8.5" fill="#94a3b8">Personnel Must Match:</text>
+  <text x="161" y="810" text-anchor="middle" font-size="8" fill="#94a3b8">• Biometrics  • Face ID  • Badge</text>
+  <!-- Laptop icon -->
+  <rect x="106" y="820" width="110" height="70" rx="6" fill="#292524" stroke="#d97706" stroke-width="1.5"/>
+  <rect x="112" y="826" width="98" height="56" rx="3" fill="#1c1917" stroke="#78716c" stroke-width="1"/>
+  <text x="161" y="860" text-anchor="middle" font-size="20">💻</text>
+  <rect x="96" y="890" width="130" height="8" rx="4" fill="#44403c" stroke="#78716c" stroke-width="1"/>
+  <ellipse cx="161" cy="917" rx="8" ry="3" fill="#44403c"/>
+
+  <!-- USB Transfer Zone -->
+  <rect x="294" y="718" width="220" height="224" rx="8" fill="#1c1917" stroke="#f59e0b" stroke-width="2.5" filter="url(#dropShadow)"/>
+  <rect x="294" y="718" width="220" height="24" rx="8" fill="#b45309"/>
+  <text x="404" y="734" text-anchor="middle" font-size="11" font-weight="700" fill="#fef3c7">USB 安全傳輸</text>
+  <text x="404" y="754" text-anchor="middle" font-size="9" fill="#fbbf24">Security USB Data Transfer</text>
+  <text x="404" y="770" text-anchor="middle" font-size="8.5" fill="#94a3b8">加密USB裝置 (Encrypted USB)</text>
+  <text x="404" y="784" text-anchor="middle" font-size="8.5" fill="#94a3b8">單向數據傳輸 (Unidirectional)</text>
+  <text x="404" y="798" text-anchor="middle" font-size="8.5" fill="#94a3b8">離線簽名文件傳遞</text>
+
+  <!-- USB icon -->
+  <g transform="translate(370, 820)">
+    <!-- USB body -->
+    <rect x="0" y="0" width="70" height="30" rx="4" fill="url(#usbGrad)" stroke="#b45309" stroke-width="1.5"/>
+    <rect x="4" y="4" width="44" height="22" rx="2" fill="#fef3c7" opacity="0.2"/>
+    <rect x="52" y="8" width="14" height="14" rx="2" fill="#1c1917"/>
+    <rect x="54" y="10" width="10" height="10" rx="1" fill="#f59e0b" opacity="0.8"/>
+    <!-- USB connector -->
+    <rect x="70" y="10" width="18" height="10" rx="1" fill="#d97706"/>
+    <rect x="72" y="12" width="14" height="6" rx="1" fill="#92400e"/>
+    <text x="27" y="20" text-anchor="middle" font-size="8" fill="#1c1917" font-weight="700">USB</text>
+  </g>
+
+  <!-- USB lock icon -->
+  <text x="404" y="880" text-anchor="middle" font-size="28">🔒</text>
+  <text x="404" y="900" text-anchor="middle" font-size="8" fill="#fbbf24">Hardware Encrypted</text>
+  <text x="404" y="914" text-anchor="middle" font-size="8" fill="#fbbf24">AES-256 + PIN Auth</text>
+  <text x="404" y="930" text-anchor="middle" font-size="8" fill="#94a3b8">離線PSBT/TX簽名</text>
+
+  <!-- KMS Service box -->
+  <rect x="534" y="718" width="250" height="224" rx="8" fill="url(#serverGrad)" stroke="#a855f7" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="534" y="718" width="250" height="24" rx="8" fill="#581c87"/>
+  <text x="659" y="734" text-anchor="middle" font-size="11" font-weight="700" fill="#e9d5ff">keyvault-kms-service</text>
+  <text x="659" y="754" text-anchor="middle" font-size="9" fill="#94a3b8">Key Management System</text>
+  <text x="659" y="768" text-anchor="middle" font-size="9" fill="#94a3b8">PKCS#11  /  Signing Ops</text>
+  <text x="659" y="782" text-anchor="middle" font-size="9" fill="#94a3b8">Ubuntu  16GB RAM  200GB</text>
+  <rect x="556" y="794" width="60" height="16" rx="8" fill="#0f172a"/>
+  <text x="586" y="805" text-anchor="middle" font-size="8.5" fill="#a855f7">port: 5432</text>
+  <!-- KMS DB -->
+  <rect x="628" y="792" width="140" height="16" rx="8" fill="#0f172a"/>
+  <text x="698" y="803" text-anchor="middle" font-size="8.5" fill="#34d399">KMS-DB port: 5432</text>
+  <!-- Server rack icon -->
+  <rect x="590" y="818" width="138" height="110" rx="4" fill="#1e1b4b" stroke="#4c1d95" stroke-width="1.5"/>
+  <rect x="596" y="824" width="126" height="14" rx="2" fill="#312e81"/>
+  <text x="659" y="835" text-anchor="middle" font-size="8" fill="#a5b4fc">KMS Controller</text>
+  <rect x="596" y="842" width="126" height="14" rx="2" fill="#1e1b4b" stroke="#4c1d95" stroke-width="0.5"/>
+  <text x="659" y="853" text-anchor="middle" font-size="8" fill="#6366f1">Signing Engine</text>
+  <rect x="596" y="860" width="126" height="14" rx="2" fill="#1e1b4b" stroke="#4c1d95" stroke-width="0.5"/>
+  <text x="659" y="871" text-anchor="middle" font-size="8" fill="#6366f1">Key Policy Engine</text>
+  <rect x="596" y="878" width="126" height="14" rx="2" fill="#1e1b4b" stroke="#4c1d95" stroke-width="0.5"/>
+  <text x="659" y="889" text-anchor="middle" font-size="8" fill="#6366f1">Audit Log</text>
+  <rect x="596" y="896" width="126" height="24" rx="2" fill="#3b0764" stroke="#7c3aed" stroke-width="0.5"/>
+  <text x="659" y="912" text-anchor="middle" font-size="9" fill="#c084fc" font-weight="700">hk-hsm-ops</text>
+
+  <!-- Thales HSM box -->
+  <rect x="804" y="718" width="280" height="224" rx="8" fill="url(#hsmGrad)" stroke="#c084fc" stroke-width="2" filter="url(#strongGlow)"/>
+  <rect x="804" y="718" width="280" height="24" rx="8" fill="#3b0764"/>
+  <text x="944" y="734" text-anchor="middle" font-size="11" font-weight="700" fill="#f3e8ff">Thales HSM 硬體加密機</text>
+  <text x="944" y="754" text-anchor="middle" font-size="9" fill="#d8b4fe">nShield / Luna HSM</text>
+  <text x="944" y="768" text-anchor="middle" font-size="9" fill="#d8b4fe">Config, Ca Pri, Slot ID, Corta</text>
+  <text x="944" y="782" text-anchor="middle" font-size="8.5" fill="#94a3b8">FIPS 140-2 Level 3 Certified</text>
+  <rect x="822" y="794" width="60" height="16" rx="8" fill="#0f172a"/>
+  <text x="852" y="805" text-anchor="middle" font-size="8.5" fill="#c084fc">port: 122</text>
+
+  <!-- HSM Hardware illustration -->
+  <rect x="844" y="820" width="200" height="110" rx="8" fill="#1e0a2e" stroke="#7c3aed" stroke-width="2.5"/>
+  <!-- HSM panel -->
+  <rect x="852" y="828" width="184" height="94" rx="4" fill="#0f0720"/>
+  <!-- LEDs -->
+  <circle cx="868" cy="844" r="5" fill="#22c55e" filter="url(#glow)"/>
+  <circle cx="884" cy="844" r="5" fill="#22c55e" filter="url(#glow)" opacity="0.6"/>
+  <circle cx="900" cy="844" r="5" fill="#f59e0b" filter="url(#glow)"/>
+  <text x="940" y="848" text-anchor="middle" font-size="8" fill="#7c3aed">THALES HSM</text>
+  <!-- HSM screen -->
+  <rect x="860" y="856" width="168" height="50" rx="3" fill="#0a0118" stroke="#581c87" stroke-width="1"/>
+  <text x="944" y="874" text-anchor="middle" font-size="8" fill="#a855f7">KEY STORE ACTIVE</text>
+  <text x="944" y="888" text-anchor="middle" font-size="7" fill="#6d28d9">PKCS#11  ·  Slots: OK</text>
+  <text x="944" y="901" text-anchor="middle" font-size="7" fill="#4c1d95">TAMPER DETECT: OFF</text>
+
+  <!-- NTP Server -->
+  <rect x="1104" y="718" width="290" height="224" rx="8" fill="url(#serverGrad)" stroke="#64748b" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <rect x="1104" y="718" width="290" height="24" rx="8" fill="#1e293b"/>
+  <text x="1249" y="734" text-anchor="middle" font-size="11" font-weight="700" fill="#cbd5e1">NTP Server + KMS-DB</text>
+  <text x="1249" y="754" text-anchor="middle" font-size="9" fill="#94a3b8">Time Sync Service (Air-Gapped)</text>
+  <text x="1249" y="768" text-anchor="middle" font-size="9" fill="#94a3b8">keyvault-kms DB  ·  200GB Storage</text>
+
+  <!-- Clock icon -->
+  <circle cx="1178" cy="830" r="38" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+  <circle cx="1178" cy="830" r="32" fill="#0f172a"/>
+  <line x1="1178" y1="808" x2="1178" y2="830" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+  <line x1="1178" y1="830" x2="1192" y2="836" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="1178" cy="830" r="3" fill="#38bdf8"/>
+  <text x="1178" y="880" text-anchor="middle" font-size="8" fill="#64748b">NTP Sync</text>
+  <text x="1178" y="892" text-anchor="middle" font-size="8" fill="#64748b">port: 123</text>
+
+  <!-- KMS DB cylinder -->
+  <ellipse cx="1320" cy="808" rx="42" ry="12" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+  <rect x="1278" y="808" width="84" height="50" fill="#334155"/>
+  <ellipse cx="1320" cy="858" rx="42" ry="12" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <ellipse cx="1320" cy="808" rx="42" ry="12" fill="#a855f7" opacity="0.3" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="1320" y="837" text-anchor="middle" font-size="9" fill="#94a3b8">KMS-DB</text>
+  <text x="1320" y="851" text-anchor="middle" font-size="8" fill="#64748b">PostgreSQL</text>
+  <text x="1320" y="876" text-anchor="middle" font-size="8" fill="#64748b">16GB RAM / 200GB</text>
+  <text x="1249" y="900" text-anchor="middle" font-size="8" fill="#64748b">Ubuntu Server  ·  Isolated VLAN</text>
+  <text x="1249" y="914" text-anchor="middle" font-size="8" fill="#64748b">port: 1792 (NTP) / 5432 (DB)</text>
+  <rect x="1148" y="920" width="202" height="16" rx="8" fill="#0f172a"/>
+  <text x="1249" y="931" text-anchor="middle" font-size="8" fill="#a855f7" font-weight="600">🔒 FIPS 140-2  ·  AES-256 Encrypted</text>
+
+  <!-- ═══════════════════════════════════════════════
+       BOTTOM — EXTERNAL BLOCKCHAIN NODES
+  ══════════════════════════════════════════════════ -->
+  <rect x="30" y="968" width="1380" height="72" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+  <text x="46" y="986" font-size="11" fill="#64748b" font-weight="600" letter-spacing="1">EXTERNAL BLOCKCHAIN / INFRASTRUCTURE</text>
+
+  <!-- crypto-event -->
+  <g transform="translate(130,1004)">
+    <circle cx="0" cy="0" r="20" fill="#1a3325" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="0" y="-6" text-anchor="middle" font-size="14">⛓️</text>
+    <text x="0" y="8" text-anchor="middle" font-size="7.5" fill="#86efac">crypto-event</text>
+    <text x="0" y="19" text-anchor="middle" font-size="7" fill="#64748b">aeglecustody</text>
+  </g>
+  <!-- mainnet -->
+  <g transform="translate(290,1004)">
+    <circle cx="0" cy="0" r="20" fill="#1a3325" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="0" y="-6" text-anchor="middle" font-size="14">🔗</text>
+    <text x="0" y="8" text-anchor="middle" font-size="7.5" fill="#86efac">mainnet.infura</text>
+    <text x="0" y="19" text-anchor="middle" font-size="7" fill="#64748b">Infura節點</text>
+  </g>
+  <!-- exp.host -->
+  <g transform="translate(450,1004)">
+    <circle cx="0" cy="0" r="20" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="0" y="-6" text-anchor="middle" font-size="14">📤</text>
+    <text x="0" y="8" text-anchor="middle" font-size="7.5" fill="#93c5fd">exp.host</text>
+    <text x="0" y="19" text-anchor="middle" font-size="7" fill="#64748b">Auth App推播</text>
+  </g>
+  <!-- Blockchain nodes label -->
+  <text x="800" y="990" text-anchor="middle" font-size="10" fill="#475569">Ethereum  ·  Bitcoin  ·  Solana  ·  BNB Chain  ·  Tron  ·  Polygon  ·  Avalanche  (via walletos + keyvault-gateway)</text>
+  <text x="800" y="1010" text-anchor="middle" font-size="9" fill="#334155">port: 443 outbound  |  Firewall allow-listed RPC endpoints only</text>
+
+  <!-- ═══════════════════════════════════════════════
+       FLOW ARROWS — HOT WALLET PATH (purple)
+  ══════════════════════════════════════════════════ -->
+  <!-- Web User → Layer1 API -->
+  <line x1="1370" y1="110" x2="1260" y2="183" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrowBlue)" opacity="0.8"/>
+  <!-- Auth App → kv-auth -->
+  <line x1="1300" y1="110" x2="1270" y2="216" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrowOrange)" opacity="0.8"/>
+  <!-- Layer1 API → Backend Processor -->
+  <line x1="160" y1="364" x2="160" y2="472" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowPurple)" stroke-dasharray="8 3" opacity="0.9"/>
+  <text x="170" y="420" font-size="8" fill="#a78bfa">hot wallet</text>
+  <text x="170" y="432" font-size="8" fill="#a78bfa">TX flow</text>
+  <!-- Backend → keyvault-api -->
+  <line x1="260" y1="555" x2="278" y2="555" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowPurple)" opacity="0.9"/>
+  <!-- keyvault-api → keyvault-eth -->
+  <line x1="478" y1="555" x2="496" y2="555" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowPurple)" opacity="0.9"/>
+  <!-- keyvault-eth → hotwallet -->
+  <line x1="696" y1="555" x2="762" y2="555" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowPurple)" opacity="0.9"/>
+  <text x="720" y="548" text-anchor="middle" font-size="8" fill="#a78bfa">keyvault-gw</text>
+  <!-- hotwallet → blockchain (external) -->
+  <path d="M 922 648 L 922 680 L 800 968" stroke="#a78bfa" stroke-width="1.5" fill="none" marker-end="url(#arrowPurple)" stroke-dasharray="6 3" opacity="0.6"/>
+
+  <!-- ═══════════════════════════════════════════════
+       FLOW ARROWS — COLD WALLET PATH (yellow/orange USB)
+  ══════════════════════════════════════════════════ -->
+  <!-- Layer2 backend → WorkStation (USB) -->
+  <path d="M 160 620 L 160 660 L 161 686" stroke="#f59e0b" stroke-width="2.5" fill="none" marker-end="url(#arrowYellow)" stroke-dasharray="6 3" filter="url(#glow)"/>
+  <text x="172" y="658" font-size="8" fill="#fbbf24">cold wallet</text>
+  <text x="172" y="668" font-size="8" fill="#fbbf24">offline req</text>
+
+  <!-- WorkStation → USB Transfer -->
+  <line x1="276" y1="830" x2="294" y2="830" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrowYellow)" class="usb-dash" filter="url(#glow)"/>
+  <text x="285" y="820" text-anchor="middle" font-size="8" fill="#fbbf24">USB</text>
+
+  <!-- USB Transfer → KMS Service -->
+  <line x1="514" y1="830" x2="534" y2="830" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrowYellow)" class="usb-dash" filter="url(#glow)"/>
+  <text x="524" y="820" text-anchor="middle" font-size="8" fill="#fbbf24">USB</text>
+
+  <!-- KMS Service → Thales HSM -->
+  <line x1="784" y1="830" x2="804" y2="830" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arrowPurple)" filter="url(#glow)"/>
+  <text x="794" y="820" text-anchor="middle" font-size="8" fill="#c084fc">PKCS#11</text>
+
+  <!-- Thales HSM → KMS Service (signed result) -->
+  <path d="M 944 830 Q 944 870 659 870" stroke="#c084fc" stroke-width="1.5" fill="none" marker-end="url(#arrowPurple)" stroke-dasharray="5 3" opacity="0.7"/>
+  <text x="800" y="880" text-anchor="middle" font-size="8" fill="#c084fc">Signed TX → USB return</text>
+
+  <!-- NTP → KMS -->
+  <line x1="1104" y1="830" x2="1084" y2="830" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowBlue)" opacity="0.6"/>
+  <text x="1094" y="820" text-anchor="middle" font-size="7" fill="#64748b">NTP</text>
+
+  <!-- ═══════════════════════════════════════════════
+       FLOW ARROWS — EVENT PIPELINE
+  ══════════════════════════════════════════════════ -->
+  <!-- hotwallet → crypto-event-subscriber -->
+  <line x1="1082" y1="500" x2="1114" y2="500" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowYellow)" stroke-dasharray="5 2" opacity="0.8"/>
+  <!-- crypto-event-sub → crypto-event-ws -->
+  <line x1="1244" y1="500" x2="1256" y2="500" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowYellow)" opacity="0.8"/>
+  <!-- crypto-event-ws → aegisvault-tx -->
+  <path d="M 1321 528 L 1321 555 L 1386 555 L 1386 570 L 1250 570" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arrowYellow)" opacity="0.6"/>
+  <!-- aegisvault-tx → Layer1 DB -->
+  <path d="M 1250 540 L 1250 470 L 1390 470 L 1390 380 L 390 380 L 390 364" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#arrowGreen)" stroke-dasharray="6 3" opacity="0.5"/>
+
+  <!-- External APIs → Layer1 API (port 443) -->
+  <line x1="90" y1="110" x2="130" y2="183" stroke="#38bdf8" stroke-width="1" marker-end="url(#arrowBlue)" opacity="0.5" stroke-dasharray="4 2"/>
+  <line x1="220" y1="110" x2="200" y2="183" stroke="#38bdf8" stroke-width="1" marker-end="url(#arrowBlue)" opacity="0.5" stroke-dasharray="4 2"/>
+  <line x1="350" y1="110" x2="220" y2="183" stroke="#38bdf8" stroke-width="1" marker-end="url(#arrowBlue)" opacity="0.5" stroke-dasharray="4 2"/>
+
+  <!-- ═══════════════════════════════════════════════
+       LEGEND
+  ══════════════════════════════════════════════════ -->
+  <rect x="560" y="972" width="850" height="52" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="580" y="990" font-size="10" font-weight="700" fill="#64748b">LEGEND:</text>
+  <!-- Hot wallet -->
+  <line x1="640" y1="987" x2="680" y2="987" stroke="#a78bfa" stroke-width="2.5" stroke-dasharray="6 2" marker-end="url(#arrowPurple)"/>
+  <text x="688" y="991" font-size="9" fill="#a78bfa">Hot Wallet Flow</text>
+  <!-- Cold wallet USB -->
+  <line x1="780" y1="987" x2="820" y2="987" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 2" marker-end="url(#arrowYellow)"/>
+  <text x="828" y="991" font-size="9" fill="#fbbf24">Cold Wallet (USB)</text>
+  <!-- PKCS11 -->
+  <line x1="930" y1="987" x2="970" y2="987" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+  <text x="978" y="991" font-size="9" fill="#c084fc">PKCS#11 / HSM Sign</text>
+  <!-- Kafka -->
+  <line x1="1080" y1="987" x2="1120" y2="987" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrowYellow)"/>
+  <text x="1128" y="991" font-size="9" fill="#fbbf24">Kafka Event</text>
+  <!-- DB sync -->
+  <line x1="1210" y1="987" x2="1250" y2="987" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowGreen)"/>
+  <text x="1258" y="991" font-size="9" fill="#34d399">DB Sync</text>
+
+  <!-- second legend line -->
+  <rect x="580" y="998" width="6" height="6" fill="#ef4444"/>
+  <text x="592" y="1007" font-size="9" fill="#fca5a5">Firewall</text>
+  <rect x="640" y="998" width="6" height="6" fill="#7c3aed" opacity="0.4"/>
+  <text x="652" y="1007" font-size="9" fill="#a78bfa">Hot Wallet Zone</text>
+  <rect x="740" y="998" width="6" height="6" fill="#0284c7" opacity="0.4"/>
+  <text x="752" y="1007" font-size="9" fill="#7dd3fc">HSM Hot Wallet Zone</text>
+  <rect x="870" y="998" width="6" height="6" fill="#4a1942" opacity="0.6"/>
+  <text x="882" y="1007" font-size="9" fill="#c084fc">Air-Gapped HSM Zone</text>
+  <rect x="1000" y="998" width="6" height="6" fill="#92400e"/>
+  <text x="1012" y="1007" font-size="9" fill="#fbbf24">WorkStation (Offline)</text>
+  <rect x="1130" y="998" width="6" height="6" fill="#d97706"/>
+  <text x="1142" y="1007" font-size="9" fill="#fed7aa">USB Secure Transfer</text>
+  <rect x="1260" y="998" width="6" height="6" fill="#334155"/>
+  <text x="1272" y="1007" font-size="9" fill="#64748b">Blockchain Event Pipeline</text>
+
+  <!-- ═══════════════════════════════════════════════
+       NETWORK SEGMENT LABELS (right side annotations)
+  ══════════════════════════════════════════════════ -->
+  <!-- VLAN labels on right side -->
+  <rect x="1400" y="183" width="10" height="195" fill="#1d4ed8" opacity="0.7"/>
+  <text x="1406" y="280" text-anchor="middle" font-size="9" fill="#93c5fd" transform="rotate(90,1406,280)" font-weight="600">VLAN 10</text>
+
+  <rect x="1400" y="418" width="10" height="230" fill="#166534" opacity="0.7"/>
+  <text x="1406" y="533" text-anchor="middle" font-size="9" fill="#86efac" transform="rotate(90,1406,533)" font-weight="600">VLAN 20</text>
+
+  <rect x="1400" y="686" width="10" height="274" fill="#581c87" opacity="0.7"/>
+  <text x="1406" y="823" text-anchor="middle" font-size="9" fill="#e9d5ff" transform="rotate(90,1406,823)" font-weight="600">VLAN 30 (Air-Gap)</text>
+
+  <!-- ═══════════════════════════════════════════════
+       COPYRIGHT / VERSION
+  ══════════════════════════════════════════════════ -->
+  <text x="720" y="1160" text-anchor="middle" font-size="9" fill="#334155">
+    DACC Virtual Asset Custody Platform · Architecture v2.0 · Confidential &amp; Proprietary · 2026
+  </text>
+</svg>
