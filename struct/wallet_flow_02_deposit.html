@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>幣流① 存入流程</title>
+<style>
+  body { margin:0; padding:20px; background:#fff;
+         font-family:'Microsoft JhengHei','PingFang TC','Noto Sans TC',Arial,sans-serif; }
+</style>
+</head>
+<body>
+<svg width="1200" height="760" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+  </marker>
+  <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#B71C1C"/>
+  </marker>
+  <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/>
+  </marker>
+  <marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#1A237E"/>
+  </marker>
+</defs>
+
+<!-- ========== TITLE ========== -->
+<text x="28" y="46" font-size="32" font-weight="bold" fill="#111">幣流① 存入流程</text>
+<line x1="28" y1="56" x2="250" y2="56" stroke="#C62828" stroke-width="3"/>
+
+<!-- 議題 (top right) -->
+<text x="660" y="26" font-size="12" font-weight="bold" fill="#333">議題：</text>
+<text x="660" y="42" font-size="11" fill="#555">• 請確認「通知」方式：如信件，電話照會等。</text>
+<text x="660" y="58" font-size="11" fill="#555">• 返還流程：建議皆由信託部執行，無需牽涉洗防部門。</text>
+
+<!-- ========== PHASE BANNERS ========== -->
+<polygon points="95,68 270,68 290,87 270,106 95,106" fill="#B71C1C"/>
+<text x="187" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">存幣申請</text>
+
+<polygon points="280,68 520,68 540,87 520,106 280,106 260,87" fill="#B71C1C"/>
+<text x="400" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">客戶存入流程</text>
+
+<polygon points="530,68 1165,68 1165,106 530,106 510,87" fill="#B71C1C"/>
+<text x="840" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">存入後稽核</text>
+
+<!-- ========== SWIM LANE BACKGROUNDS (6 lanes, h=103 each, y=110 to y=728) ========== -->
+<!-- 客戶: y=110-213 -->
+<rect x="0" y="110" width="1200" height="103" fill="#FFFFFF"/>
+<!-- 洗錢防治: y=213-316 -->
+<rect x="0" y="213" width="1200" height="103" fill="#F7F7F7"/>
+<!-- 信託部: y=316-419 -->
+<rect x="0" y="316" width="1200" height="103" fill="#FFFFFF"/>
+<!-- 經辦: y=419-522 -->
+<rect x="0" y="419" width="1200" height="103" fill="#EEF4FF"/>
+<!-- 簽核主管: y=522-625 -->
+<rect x="0" y="522" width="1200" height="103" fill="#F7F7F7"/>
+<!-- 執行人員: y=625-728 -->
+<rect x="0" y="625" width="1200" height="103" fill="#FFF7F7"/>
+
+<!-- Lane separators -->
+<line x1="0" y1="110" x2="1200" y2="110" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="213" x2="1200" y2="213" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="316" x2="1200" y2="316" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="419" x2="1200" y2="419" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="522" x2="1200" y2="522" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="625" x2="1200" y2="625" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="728" x2="1200" y2="728" stroke="#CCC" stroke-width="1"/>
+
+<!-- Lane labels (left col, w=90) -->
+<rect x="0" y="110" width="90" height="103" fill="#212121"/>
+<text x="45" y="166" font-size="12" font-weight="bold" fill="white" text-anchor="middle">客戶</text>
+
+<rect x="0" y="213" width="90" height="103" fill="#212121"/>
+<text x="45" y="268" font-size="11" font-weight="bold" fill="white" text-anchor="middle">洗錢防治</text>
+
+<rect x="0" y="316" width="90" height="103" fill="#212121"/>
+<text x="45" y="371" font-size="12" font-weight="bold" fill="white" text-anchor="middle">信託部</text>
+
+<rect x="0" y="419" width="90" height="103" fill="#BFD7EF"/>
+<text x="45" y="474" font-size="12" font-weight="bold" fill="#1A237E" text-anchor="middle">經辦</text>
+
+<rect x="0" y="522" width="90" height="103" fill="#E0E0E0"/>
+<text x="45" y="570" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">簽核主管</text>
+
+<rect x="0" y="625" width="90" height="103" fill="#E0E0E0"/>
+<text x="45" y="680" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">執行人員</text>
+
+<!-- Label col separator -->
+<line x1="90" y1="110" x2="90" y2="728" stroke="#999" stroke-width="1.5"/>
+
+<!-- ============================================================
+     FLOW NODES
+     Lane center ys:
+       客戶:      161
+       洗錢防治:  264
+       信託部:    367
+       經辦:      470
+       簽核主管:  573
+       執行人員:  676
+     ============================================================ -->
+
+<!-- [A] 紙本申請  (客戶, P1)  cx=185, cy=161 -->
+<rect x="130" y="139" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="185" y="166" font-size="12" fill="#333" text-anchor="middle">紙本申請</text>
+
+<!-- [B] 身份及內容審核  (信託部+經辦, P1)  rect spans from y=336 to y=510 -->
+<rect x="128" y="336" width="118" height="174" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="187" y="360" font-size="12" fill="#333" text-anchor="middle">身份及</text>
+<text x="187" y="378" font-size="12" fill="#333" text-anchor="middle">內容審核</text>
+<line x1="138" y1="388" x2="234" y2="388" stroke="#CCC" stroke-width="0.8"/>
+<text x="144" y="406" font-size="10" fill="#555">1. 核印</text>
+<text x="144" y="423" font-size="10" fill="#555">2. 電話照會</text>
+
+<!-- [C] 發起存幣  (客戶, P2)  cx=415, cy=161 -->
+<rect x="360" y="139" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="415" y="166" font-size="12" fill="#333" text-anchor="middle">發起存幣</text>
+
+<!-- [D] 確認存入內容  (經辦, P3)  cx=640, cy=470 -->
+<rect x="576" y="448" width="128" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="640" y="475" font-size="12" fill="#333" text-anchor="middle">確認存入內容</text>
+
+<!-- [E] KYT  (信託部, P3)  cx=810, cy=367 -->
+<rect x="770" y="345" width="80" height="44" rx="4" fill="white" stroke="#333" stroke-width="2"/>
+<text x="810" y="372" font-size="13" font-weight="bold" fill="#333" text-anchor="middle">KYT</text>
+
+<!-- [F] 核決  (簽核主管, P3)  cx=960, cy=573 -->
+<rect x="905" y="551" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="960" y="578" font-size="12" fill="#333" text-anchor="middle">核決</text>
+
+<!-- [G] 返還  (執行人員, P3)  cx=675, cy=676 -->
+<rect x="620" y="654" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="675" y="681" font-size="12" fill="#333" text-anchor="middle">返還</text>
+
+<!-- [H] 客戶錢包  (執行人員, P3)  cx=870, cy=676 -->
+<rect x="810" y="654" width="120" height="44" rx="4" fill="white" stroke="#2E7D32" stroke-width="2"/>
+<text x="840" y="680" font-size="18" text-anchor="middle">👛</text>
+<text x="898" y="680" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="middle">客戶錢包</text>
+
+<!-- [I] 可疑資金錢包  (執行人員, P3)  cx=1075, cy=676 -->
+<rect x="1005" y="654" width="145" height="44" rx="4" fill="white" stroke="#C62828" stroke-width="2"/>
+<text x="1077" y="681" font-size="12" fill="#C62828" font-weight="bold" text-anchor="middle">可疑資金錢包</text>
+
+<!-- [J] 風險審核  (洗錢防治, P3)  cx=1077, cy=264 -->
+<rect x="1017" y="242" width="120" height="44" rx="4" fill="white" stroke="#555" stroke-width="1.5"/>
+<text x="1077" y="269" font-size="12" fill="#333" text-anchor="middle">風險審核</text>
+
+<!-- ============================================================
+     BADGES
+     ============================================================ -->
+
+<!-- 台新通知客戶 (navy) — between P1 and P2 in 經辦 lane -->
+<rect x="248" y="460" width="108" height="22" rx="3" fill="#1A237E"/>
+<text x="302" y="475" font-size="10" font-weight="bold" fill="white" text-anchor="middle">台新通知客戶</text>
+
+<!-- 客戶通知台新 (navy) — above 發起存幣 in 客戶 lane -->
+<rect x="448" y="120" width="108" height="22" rx="3" fill="#1A237E"/>
+<text x="502" y="135" font-size="10" font-weight="bold" fill="white" text-anchor="middle">客戶通知台新</text>
+
+<!-- 金額有誤 (red) — loop label on left of 確認存入內容 -->
+<rect x="540" y="456" width="72" height="20" rx="3" fill="#C62828"/>
+<text x="576" y="470" font-size="10" fill="white" text-anchor="middle">金額有誤</text>
+
+<!-- 通過 (green) — on path D→E -->
+<rect x="724" y="408" width="48" height="20" rx="3" fill="#2E7D32"/>
+<text x="748" y="422" font-size="10" fill="white" text-anchor="middle">通過</text>
+
+<!-- 台新通知客戶 (navy, 2nd) — below 核決 going to 客戶 -->
+<rect x="896" y="600" width="108" height="22" rx="3" fill="#1A237E"/>
+<text x="950" y="615" font-size="10" font-weight="bold" fill="white" text-anchor="middle">台新通知客戶</text>
+
+<!-- 通過KYT (green) — path F→H -->
+<rect x="853" y="640" width="74" height="20" rx="3" fill="#2E7D32"/>
+<text x="890" y="654" font-size="10" fill="white" text-anchor="middle">通過KYT</text>
+
+<!-- 通過KYT, 內容有誤 (red) — path F→G -->
+<rect x="752" y="555" width="114" height="20" rx="3" fill="#C62828"/>
+<text x="809" y="569" font-size="10" fill="white" text-anchor="middle">通過KYT, 內容有誤</text>
+
+<!-- 未通過KYT (red) — path F→I -->
+<rect x="982" y="555" width="84" height="20" rx="3" fill="#C62828"/>
+<text x="1024" y="569" font-size="10" fill="white" text-anchor="middle">未通過KYT</text>
+
+<!-- ============================================================
+     ARROWS
+     ============================================================ -->
+
+<!-- [A] 紙本申請 ↓ → [B] 身份及內容審核 -->
+<path d="M185,183 L185,316 L187,316 L187,336"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [B] 右 → badge台新通知客戶 → [C] 發起存幣 (up) -->
+<!-- From right of B (246,423) → right to 302 → up line → then continue to C -->
+<path d="M246,423 L302,423 L302,482"
+      stroke="#333" stroke-width="1.5" fill="none"/>
+<!-- arrow from badge up area to 發起存幣 -->
+<path d="M302,460 L302,405 L415,405 L415,183"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [C] 發起存幣 右 → [D] 確認存入內容 (route: right→down→right) -->
+<path d="M470,161 L555,161 L555,470 L576,470"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- 金額有誤 loop: from left of D, loop back via dashed line -->
+<path d="M576,470 L540,470 L540,456"
+      stroke="#C62828" stroke-width="1.5" fill="none"/>
+<path d="M540,456 L540,430 L576,430 L576,448"
+      stroke="#C62828" stroke-width="1.5" stroke-dasharray="4,3" fill="none"
+      marker-end="url(#arr-red)"/>
+
+<!-- [D] 右→up → [E] KYT (通過 badge on route) -->
+<path d="M704,470 L770,470 L770,367 L770,367"
+      stroke="#333" stroke-width="1.8" fill="none"/>
+<path d="M770,367 L770,367 L770,367"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+<!-- Simpler path: -->
+<path d="M704,470 L748,470 L748,367 L770,367"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+<!-- 通過 badge at (724,408) on the path -->
+
+<!-- [E] KYT ↓ → [F] 核決 (down through lanes) -->
+<path d="M810,389 L810,573 L905,573"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [F] 核決 → [G] 返還 (通過KYT, 內容有誤: left then down) -->
+<path d="M905,573 L752,573 L675,573 L675,654"
+      stroke="#C62828" stroke-width="1.8" fill="none" marker-end="url(#arr-red)"/>
+
+<!-- [F] 核決 → [H] 客戶錢包 (通過KYT: down) -->
+<path d="M960,595 L960,643 L870,643 L870,654"
+      stroke="#2E7D32" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+
+<!-- [F] 核決 → [I] 可疑資金錢包 (未通過: right-down) -->
+<path d="M1015,573 L1077,573 L1077,654"
+      stroke="#C62828" stroke-width="1.8" fill="none" marker-end="url(#arr-red)"/>
+
+<!-- [I] 可疑資金錢包 → [J] 風險審核 (up through lanes) -->
+<path d="M1150,654 L1165,654 L1165,264 L1137,264"
+      stroke="#555" stroke-width="1.5" fill="none" marker-end="url(#arr)"
+      stroke-dasharray="5,3"/>
+
+<!-- ============================================================
+     PAGE NUMBER
+     ============================================================ -->
+<text x="1180" y="750" font-size="11" fill="#999" text-anchor="end">2</text>
+</svg>
+</body>
+</html>

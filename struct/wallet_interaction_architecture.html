@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>錢包互動架構設計</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px 28px;
+      background: white;
+      font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+<svg width="1180" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C62828"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2E7D32"/>
+    </marker>
+    <marker id="arr-green-dash" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2E7D32"/>
+    </marker>
+  </defs>
+
+  <!-- ========== TITLE ========== -->
+  <text x="28" y="52" font-size="34" font-weight="bold" fill="#111" font-family="inherit">錢包互動架構設計</text>
+
+  <!-- Legend row -->
+  <text x="490" y="68" font-size="11" fill="#888">錢包種類</text>
+  <line x1="556" y1="64" x2="600" y2="64" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="606" y="68" font-size="11" fill="#888">虛擬資產流</text>
+
+  <!-- Colour chips -->
+  <rect x="690" y="56" width="12" height="12" rx="2" fill="#1A237E"/>
+  <text x="706" y="67" font-size="11" fill="#555">冷錢包</text>
+  <rect x="770" y="56" width="12" height="12" rx="2" fill="#C62828"/>
+  <text x="786" y="67" font-size="11" fill="#555">風控隔離</text>
+  <rect x="858" y="56" width="12" height="12" rx="2" fill="#2E7D32"/>
+  <text x="874" y="67" font-size="11" fill="#555">Gas Fee 熱錢包</text>
+
+  <!-- ========== HOT WALLET LABEL ========== -->
+  <text x="28" y="96" font-size="15" font-weight="bold" fill="#E53935">熱錢包</text>
+
+  <!-- ===== CUSTOMER (EXCHANGE) BIG BOX ===== -->
+  <!-- bg: light blue -->
+  <rect x="28" y="103" width="465" height="172" rx="5"
+        fill="#E8F4FD" stroke="#90CAF9" stroke-width="1.5"/>
+  <text x="44" y="123" font-size="13" font-weight="bold" fill="#1565C0">客戶（交易所）</text>
+
+  <!-- 客戶約定付款地址 -->
+  <rect x="52" y="132" width="185" height="125" rx="4"
+        fill="#FFB300" stroke="#E65100" stroke-width="1"/>
+  <text x="144" y="186" font-size="13" font-weight="bold" fill="#3E2723"
+        text-anchor="middle">客戶約定</text>
+  <text x="144" y="206" font-size="13" font-weight="bold" fill="#3E2723"
+        text-anchor="middle">付款地址</text>
+
+  <!-- 客戶約定收款地址 -->
+  <rect x="272" y="132" width="185" height="125" rx="4"
+        fill="#FFB300" stroke="#E65100" stroke-width="1"/>
+  <text x="364" y="186" font-size="13" font-weight="bold" fill="#3E2723"
+        text-anchor="middle">客戶約定</text>
+  <text x="364" y="206" font-size="13" font-weight="bold" fill="#3E2723"
+        text-anchor="middle">收款地址</text>
+
+  <!-- ===== EXCHANGE VAULT BOX ===== -->
+  <rect x="558" y="103" width="188" height="133" rx="5"
+        fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <text x="652" y="123" font-size="13" font-weight="bold" fill="#333"
+        text-anchor="middle">交易所</text>
+  <!-- 交易所金庫 -->
+  <rect x="574" y="132" width="156" height="85" rx="4"
+        fill="#BDBDBD" stroke="#757575" stroke-width="1"/>
+  <text x="652" y="180" font-size="13" font-weight="bold" fill="#333"
+        text-anchor="middle">交易所金庫</text>
+
+  <!-- ===== D. GAS FEE (hot, green) ===== -->
+  <rect x="558" y="252" width="188" height="78" rx="5"
+        fill="#2E7D32" stroke="#1B5E20" stroke-width="1.5"/>
+  <text x="652" y="283" font-size="13" font-weight="bold" fill="white"
+        text-anchor="middle">D. Gas Fee 錢包地址</text>
+  <text x="652" y="303" font-size="10" fill="#C8E6C9"
+        text-anchor="middle">熱錢包 · Hotwallet HSM</text>
+
+  <!-- ===== COLD WALLET LABEL ===== -->
+  <text x="28" y="360" font-size="15" font-weight="bold" fill="#1565C0">冷錢包</text>
+
+  <!-- Cold wallet dashed border -->
+  <rect x="28" y="368" width="714" height="155" rx="5"
+        fill="none" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="7,4"/>
+
+  <!-- A. 收款暫存 -->
+  <rect x="52" y="385" width="188" height="120" rx="4"
+        fill="#1A237E" stroke="#0D1B6E" stroke-width="1"/>
+  <text x="146" y="435" font-size="12" font-weight="bold" fill="white"
+        text-anchor="middle">A. 收款暫存</text>
+  <text x="146" y="453" font-size="11" fill="#C5CAE9"
+        text-anchor="middle">錢包地址</text>
+  <text x="146" y="471" font-size="9" fill="#9FA8DA"
+        text-anchor="middle">Keyvault · Cold · KMS Sign</text>
+
+  <!-- B. 客戶獨立 -->
+  <rect x="268" y="385" width="188" height="120" rx="4"
+        fill="#1A237E" stroke="#0D1B6E" stroke-width="1"/>
+  <text x="362" y="435" font-size="12" font-weight="bold" fill="white"
+        text-anchor="middle">B. 客戶獨立</text>
+  <text x="362" y="453" font-size="11" fill="#C5CAE9"
+        text-anchor="middle">錢包地址</text>
+  <text x="362" y="471" font-size="9" fill="#9FA8DA"
+        text-anchor="middle">Keyvault · Cold · Thales HSM</text>
+
+  <!-- C. 可疑金流 -->
+  <rect x="490" y="385" width="218" height="120" rx="4"
+        fill="#C62828" stroke="#B71C1C" stroke-width="1.5"/>
+  <text x="599" y="428" font-size="12" font-weight="bold" fill="white"
+        text-anchor="middle">C. 可疑金流</text>
+  <text x="599" y="447" font-size="11" fill="#FFCDD2"
+        text-anchor="middle">暫存錢包地址</text>
+  <text x="599" y="466" font-size="9" fill="#EF9A9A"
+        text-anchor="middle">風控隔離 · 可汰換 · 人工審核</text>
+
+  <!-- ===== BLOCKCHAIN ===== -->
+  <rect x="28" y="549" width="714" height="48" rx="4"
+        fill="#ECEFF1" stroke="#90A4AE" stroke-width="1"/>
+  <text x="385" y="578" font-size="12" fill="#37474F"
+        text-anchor="middle">⛓  區塊鏈網路（Ethereum Mainnet / 公鏈）</text>
+
+  <!-- ============================================================ -->
+  <!--                          ARROWS                              -->
+  <!-- ============================================================ -->
+
+  <!-- ① 客戶約定付款地址 → A  入金 -->
+  <!-- 付款地址 bottom-center: (144, 259);  A top: (146, 383) -->
+  <line x1="144" y1="259" x2="146" y2="381"
+        stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+  <circle cx="145" cy="320" r="11" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="145" y="324" font-size="12" font-weight="bold" fill="#333"
+        text-anchor="middle">①</text>
+
+  <!-- ② A → B  歸集/歸戶 -->
+  <!-- A right: (242, 445);  B left: (268, 445) -->
+  <line x1="242" y1="445" x2="266" y2="445"
+        stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+  <circle cx="253" cy="445" r="11" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="253" y="449" font-size="12" font-weight="bold" fill="#333"
+        text-anchor="middle">②</text>
+
+  <!-- ③ B → 客戶約定收款地址  出金 -->
+  <!-- B top-center: (362, 383);  收款地址 bottom-center: (364, 259) -->
+  <line x1="362" y1="383" x2="364" y2="261"
+        stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+  <circle cx="363" cy="322" r="11" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="363" y="326" font-size="12" font-weight="bold" fill="#333"
+        text-anchor="middle">③</text>
+
+  <!-- ④ B → C  可疑金流隔離 (red) -->
+  <!-- B right: (458, 445);  C left: (490, 445) -->
+  <line x1="458" y1="445" x2="488" y2="445"
+        stroke="#C62828" stroke-width="2" marker-end="url(#arr-red)"/>
+  <circle cx="472" cy="445" r="11" fill="white" stroke="#C62828" stroke-width="1.5"/>
+  <text x="472" y="449" font-size="12" font-weight="bold" fill="#C62828"
+        text-anchor="middle">④</text>
+
+  <!-- ⑤ C → blockchain  審核後退款/廣播 (green) -->
+  <!-- C bottom-center: (599, 507);  blockchain top: (599, 549) -->
+  <line x1="599" y1="507" x2="599" y2="547"
+        stroke="#2E7D32" stroke-width="2" marker-end="url(#arr-green)"/>
+  <circle cx="599" cy="527" r="11" fill="white" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="599" y="531" font-size="12" font-weight="bold" fill="#2E7D32"
+        text-anchor="middle">⑤</text>
+
+  <!-- ⑥ D Gas Fee → A / cold wallets  Gas 補充 (green) -->
+  <!-- D left: (558, 291);  turn at x=146;  A top: (146, 383) -->
+  <path d="M 556 291 L 146 291 L 146 383"
+        stroke="#2E7D32" stroke-width="2" fill="none" marker-end="url(#arr-green)"/>
+  <circle cx="348" cy="291" r="11" fill="white" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="348" y="295" font-size="12" font-weight="bold" fill="#2E7D32"
+        text-anchor="middle">⑥</text>
+
+  <!-- ⑦ 交易所金庫 → D Gas Fee  Gas 充值 -->
+  <!-- 交易所 box bottom: (652, 238);  D Gas Fee top: (652, 252) -->
+  <line x1="652" y1="238" x2="652" y2="250"
+        stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+  <circle cx="652" cy="244" r="11" fill="white" stroke="#333" stroke-width="1.5"/>
+  <text x="652" y="248" font-size="12" font-weight="bold" fill="#333"
+        text-anchor="middle">⑦</text>
+
+  <!-- A → blockchain  鏈上廣播 (dashed green) -->
+  <line x1="146" y1="507" x2="146" y2="547"
+        stroke="#2E7D32" stroke-width="1.5" stroke-dasharray="5,3"
+        marker-end="url(#arr-green-dash)"/>
+
+  <!-- B → blockchain  鏈上廣播 (dashed green) -->
+  <line x1="362" y1="507" x2="362" y2="547"
+        stroke="#2E7D32" stroke-width="1.5" stroke-dasharray="5,3"
+        marker-end="url(#arr-green-dash)"/>
+
+  <!-- ============================================================ -->
+  <!--                      RIGHT PANEL                             -->
+  <!-- ============================================================ -->
+  <rect x="778" y="82" width="378" height="525" rx="5"
+        fill="#FAFAFA" stroke="#E0E0E0" stroke-width="1"/>
+
+  <!-- Panel title -->
+  <text x="967" y="108" font-size="14" font-weight="bold" fill="#212121"
+        text-anchor="middle">保管業務錢包設計 – 基本架構</text>
+  <line x1="793" y1="116" x2="1141" y2="116" stroke="#DDEEFF" stroke-width="1.5"/>
+
+  <text x="793" y="136" font-size="12" fill="#444">針對虛擬資產保管業務，設計 4 種不同功能的</text>
+  <text x="793" y="154" font-size="12" fill="#444">錢包，以確保：</text>
+  <text x="804" y="174" font-size="12" fill="#444">• VA 流程足夠安全且乾淨</text>
+  <text x="804" y="192" font-size="12" fill="#444">• VA 流程可被稽核</text>
+  <text x="804" y="210" font-size="12" fill="#444">• 角色及權責明確</text>
+
+  <line x1="793" y1="224" x2="1141" y2="224" stroke="#E0E0E0" stroke-width="1"/>
+
+  <!-- A -->
+  <rect x="793" y="233" width="13" height="13" rx="2" fill="#1A237E"/>
+  <text x="811" y="244" font-size="12" font-weight="bold" fill="#1A237E">A. 收款暫存錢包地址：</text>
+  <text x="793" y="261" font-size="11" fill="#555">防堵風險資產的第一道防線，為可汰換的</text>
+  <text x="793" y="277" font-size="11" fill="#555">錢包地址。確保收受客戶 VA 時，能有效防</text>
+  <text x="793" y="293" font-size="11" fill="#555">止有風險 VA 直接進入客戶獨立錢包地址，</text>
+  <text x="793" y="309" font-size="11" fill="#555">保護其乾淨，亦具備可稽核性。</text>
+
+  <!-- B -->
+  <rect x="793" y="325" width="13" height="13" rx="2" fill="#1A237E"/>
+  <text x="811" y="336" font-size="12" font-weight="bold" fill="#1A237E">B. 客戶獨立錢包地址：</text>
+  <text x="793" y="353" font-size="11" fill="#555">為每個客戶存入的 VA 幣種，分別設立對</text>
+  <text x="793" y="369" font-size="11" fill="#555">應的專屬客戶錢包地址，儲存客戶資產。</text>
+  <text x="793" y="385" font-size="11" fill="#555">亦是 VA 出金錢包，可汰換。</text>
+
+  <!-- C -->
+  <rect x="793" y="401" width="13" height="13" rx="2" fill="#C62828"/>
+  <text x="811" y="412" font-size="12" font-weight="bold" fill="#C62828">C. 可疑金流暫存錢包地址：</text>
+  <text x="793" y="429" font-size="11" fill="#555">儲存任何安全機制識別具風險、未經授</text>
+  <text x="793" y="445" font-size="11" fill="#555">權的 VA，風控完全隔離，可汰換。</text>
+
+  <!-- D -->
+  <rect x="793" y="461" width="13" height="13" rx="2" fill="#2E7D32"/>
+  <text x="811" y="472" font-size="12" font-weight="bold" fill="#2E7D32">D. Gas Fee 錢包地址：</text>
+  <text x="793" y="489" font-size="11" fill="#555">內存屬於本系統的虛擬貨幣，用於補充</text>
+  <text x="793" y="505" font-size="11" fill="#555">各錢包於交易時所消耗的 Gas Fee。</text>
+
+  <line x1="793" y1="521" x2="1141" y2="521" stroke="#E0E0E0" stroke-width="1"/>
+
+  <!-- Four principles -->
+  <text x="967" y="542" font-size="12" font-weight="bold" fill="#333"
+        text-anchor="middle">四大設計原則</text>
+  <text x="967" y="562" font-size="12" fill="#1565C0"
+        text-anchor="middle">資產分離 ·  風控隔離 ·  可汰換 ·  可稽核</text>
+
+  <!-- System impl note -->
+  <text x="967" y="588" font-size="10" fill="#888"
+        text-anchor="middle">冷錢包簽名：Keyvault-KMS-Service → Thales HSM（Air-Gapped）</text>
+  <text x="967" y="603" font-size="10" fill="#888"
+        text-anchor="middle">熱錢包簽名：Hotwallet → SoftHSM / CloudHSM</text>
+
+  <!-- ===== FLOW LEGEND BELOW ===== -->
+  <!-- arrows legend at bottom center -->
+  <text x="28" y="620" font-size="11" font-weight="bold" fill="#333">幣流說明：</text>
+
+  <line x1="100" y1="616" x2="128" y2="616" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="132" y="620" font-size="11" fill="#555">① 入金（客戶付款→A暫存）</text>
+
+  <line x1="320" y1="616" x2="348" y2="616" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="352" y="620" font-size="11" fill="#555">② 歸集（A→B客戶獨立）</text>
+
+  <line x1="510" y1="616" x2="538" y2="616" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="542" y="620" font-size="11" fill="#555">③ 出金（B→客戶收款地址）</text>
+
+  <line x1="100" y1="641" x2="128" y2="641" stroke="#C62828" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <text x="132" y="645" font-size="11" fill="#555">④ 風控隔離（可疑VA→C暫存）</text>
+
+  <line x1="370" y1="641" x2="398" y2="641" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="402" y="645" font-size="11" fill="#555">⑤ 審核後退款/廣播（C→鏈）</text>
+
+  <line x1="100" y1="666" x2="128" y2="666" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="132" y="670" font-size="11" fill="#555">⑥ Gas 補充（D→冷錢包）</text>
+
+  <line x1="370" y1="666" x2="398" y2="666" stroke="#333" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="402" y="670" font-size="11" fill="#555">⑦ Gas 充值（交易所金庫→D）</text>
+
+  <!-- Page number -->
+  <text x="1168" y="710" font-size="11" fill="#999" text-anchor="end">1</text>
+</svg>
+</body>
+</html>

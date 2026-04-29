@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>幣流②③ 安全提領流程設計</title>
+<style>
+  body { margin:0; padding:20px; background:#fff;
+         font-family:'Microsoft JhengHei','PingFang TC','Noto Sans TC',Arial,sans-serif; }
+</style>
+</head>
+<body>
+<svg width="1200" height="820" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+  </marker>
+  <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#B71C1C"/>
+  </marker>
+  <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/>
+  </marker>
+</defs>
+
+<!-- ========== TITLE ========== -->
+<text x="28" y="46" font-size="30" font-weight="bold" fill="#111">幣流②③ 安全提領流程設計</text>
+<line x1="28" y1="54" x2="420" y2="54" stroke="#C62828" stroke-width="3"/>
+
+<!-- 議題 -->
+<text x="480" y="26" font-size="12" font-weight="bold" fill="#333">議題：</text>
+<text x="480" y="42" font-size="11" fill="#555">• 核決人員職級待定：Layer 1: 2/3，Layer 2: 1/2</text>
+<text x="480" y="58" font-size="11" fill="#555">• 需要至少 7 位人員、2 個部門、3 個作業單位才能完成交易提領。</text>
+
+<!-- ===== NOTE BOX top right ===== -->
+<rect x="820" y="14" width="368" height="48" rx="4" fill="#FFF8E1" stroke="#F9A825" stroke-width="1"/>
+<text x="830" y="33" font-size="11" fill="#555">⚠  本流程遵循 Maker-Checker-Signer 職責分離原則</text>
+<text x="830" y="53" font-size="11" fill="#555">   私鑰簽章需 Thales HSM 環境（Air-Gapped）</text>
+
+<!-- ========== PHASE BANNERS ========== -->
+<!-- 4 phases across x=95 to x=780 (flow area) -->
+<!-- P1: 提幣申請 -->
+<polygon points="95,68 225,68 245,87 225,106 95,106" fill="#B71C1C"/>
+<text x="167" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">提幣申請</text>
+
+<!-- P2: 交易簽核流程 -->
+<polygon points="235,68 445,68 465,87 445,106 235,106 215,87" fill="#B71C1C"/>
+<text x="337" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">交易簽核流程</text>
+
+<!-- P3: 實體簽章 -->
+<polygon points="455,68 620,68 640,87 620,106 455,106 435,87" fill="#B71C1C"/>
+<text x="545" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">實體簽章</text>
+
+<!-- P4: 廣播交易 -->
+<polygon points="630,68 790,68 790,106 630,106 610,87" fill="#B71C1C"/>
+<text x="706" y="91" font-size="12" font-weight="bold" fill="white" text-anchor="middle">廣播交易</text>
+
+<!-- ========== SWIM LANE BACKGROUNDS (6 lanes, h=100 each, y=110 to y=710) ========== -->
+<rect x="0" y="110" width="800" height="100" fill="#FFFFFF"/>
+<rect x="0" y="210" width="800" height="100" fill="#F5F5F5"/>
+<rect x="0" y="310" width="800" height="100" fill="#FFFFFF"/>
+<rect x="0" y="410" width="800" height="100" fill="#EEF5FF"/>
+<rect x="0" y="510" width="800" height="100" fill="#F5F5F5"/>
+<rect x="0" y="610" width="800" height="100" fill="#FFF8F8"/>
+
+<!-- Lane grid lines -->
+<line x1="0" y1="110" x2="800" y2="110" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="210" x2="800" y2="210" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="310" x2="800" y2="310" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="410" x2="800" y2="410" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="510" x2="800" y2="510" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="610" x2="800" y2="610" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="710" x2="800" y2="710" stroke="#CCC" stroke-width="1"/>
+
+<!-- LANE LABELS -->
+<rect x="0" y="110" width="90" height="100" fill="#212121"/>
+<text x="45" y="164" font-size="12" font-weight="bold" fill="white" text-anchor="middle">客戶</text>
+
+<rect x="0" y="210" width="90" height="100" fill="#212121"/>
+<text x="45" y="263" font-size="11" font-weight="bold" fill="white" text-anchor="middle">洗錢防治</text>
+
+<rect x="0" y="310" width="90" height="100" fill="#212121"/>
+<text x="45" y="363" font-size="12" font-weight="bold" fill="white" text-anchor="middle">信託部</text>
+
+<rect x="0" y="410" width="90" height="100" fill="#BFD7EF"/>
+<text x="45" y="463" font-size="12" font-weight="bold" fill="#1A237E" text-anchor="middle">經辦</text>
+
+<rect x="0" y="510" width="90" height="100" fill="#EEEEEE"/>
+<text x="45" y="556" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">簽核主管</text>
+
+<rect x="0" y="610" width="90" height="100" fill="#EEEEEE"/>
+<text x="45" y="656" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">執行人員</text>
+
+<line x1="90" y1="110" x2="90" y2="710" stroke="#999" stroke-width="1.5"/>
+<line x1="800" y1="68" x2="800" y2="710" stroke="#DDD" stroke-width="1" stroke-dasharray="4,3"/>
+
+<!-- ========== FLOW NODES ========== -->
+
+<!-- [A] 紙本申請 (客戶, P1, cx=165, cy=160) -->
+<rect x="110" y="138" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="165" y="165" font-size="12" fill="#333" text-anchor="middle">紙本申請</text>
+
+<!-- [B] 身份及內容審核 (信託部+經辦 spanning, P1) -->
+<rect x="110" y="328" width="116" height="175" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="168" y="354" font-size="12" fill="#333" text-anchor="middle">身份及</text>
+<text x="168" y="370" font-size="12" fill="#333" text-anchor="middle">內容審核</text>
+<line x1="122" y1="380" x2="214" y2="380" stroke="#CCC" stroke-width="0.8"/>
+<text x="128" y="396" font-size="10" fill="#555">1. 核印</text>
+<text x="128" y="412" font-size="10" fill="#555">2. 電話照會</text>
+
+<!-- [C] 發起交易 (經辦, P2, cx=300, cy=460) -->
+<rect x="245" y="438" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="300" y="465" font-size="12" fill="#333" text-anchor="middle">發起交易</text>
+
+<!-- [D] 確認內容/KYT (經辦, P2, cx=410, cy=460) -->
+<rect x="348" y="438" width="120" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="408" y="458" font-size="11" fill="#333" text-anchor="middle">確認內容</text>
+<text x="408" y="474" font-size="11" fill="#333" text-anchor="middle">/ KYT</text>
+
+<!-- [E] 可疑資金錢包 (洗錢防治, P2, cx=530, cy=260) -->
+<rect x="465" y="238" width="130" height="44" rx="4" fill="white" stroke="#C62828" stroke-width="2"/>
+<text x="530" y="265" font-size="12" fill="#C62828" font-weight="bold" text-anchor="middle">可疑資金錢包</text>
+
+<!-- [F] 風險審核 (洗錢防治, right of P2, cx=490, cy=160) -->
+<rect x="434" y="138" width="112" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="490" y="165" font-size="12" fill="#333" text-anchor="middle">風險審核</text>
+
+<!-- [G] 核決 (簽核主管, P2, cx=408, cy=560) -->
+<rect x="353" y="538" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="408" y="565" font-size="12" fill="#333" text-anchor="middle">核決</text>
+
+<!-- [H] 下載交易摘要 (執行人員, P3, cx=570, cy=660) -->
+<rect x="505" y="638" width="130" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="570" y="665" font-size="12" fill="#333" text-anchor="middle">下載交易摘要</text>
+
+<!-- [I] 私鑰簽章 (執行人員, P3-P4, cx=680, cy=660) -->
+<rect x="645" y="638" width="100" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="695" y="665" font-size="12" fill="#333" text-anchor="middle">私鑰簽章</text>
+
+<!-- [J] 廣播上鏈 (執行人員, P4, cx=775, cy=660) -->
+<rect x="730" y="638" width="100" height="44" rx="4" fill="white" stroke="#2E7D32" stroke-width="2"/>
+<text x="780" y="665" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="middle">廣播上鏈</text>
+
+<!-- ========== BADGES ========== -->
+<!-- 未通過 (red, from [D] to [E]) -->
+<rect x="448" y="446" width="58" height="20" rx="3" fill="#C62828"/>
+<text x="477" y="460" font-size="10" fill="white" text-anchor="middle">未通過</text>
+
+<!-- 通過 (green, from [D] to [G]) -->
+<rect x="370" y="500" width="46" height="20" rx="3" fill="#2E7D32"/>
+<text x="393" y="514" font-size="10" fill="white" text-anchor="middle">通過</text>
+
+<!-- ========== ARROWS ========== -->
+
+<!-- [A] → [B]: 紙本申請 down → 身份及內容審核 -->
+<path d="M165,182 L165,310 L168,310 L168,328"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [B] → [C]: 身份及內容審核 right → 發起交易 -->
+<path d="M226,460 L245,460"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [C] → [D]: 發起交易 right → 確認內容/KYT -->
+<path d="M355,460 L348,460"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [D] → [E]: 未通過 → 可疑資金錢包 (up) -->
+<path d="M468,460 L468,260 L465,260"
+      stroke="#C62828" stroke-width="1.8" fill="none" marker-end="url(#arr-red)"/>
+
+<!-- [E] 可疑資金錢包 → [F] 風險審核 (left, same horizontal level roughly) -->
+<path d="M465,260 L430,260 L430,182 L546,182"
+      stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arr)" stroke-dasharray="5,3"/>
+
+<!-- [D] → [G]: 通過 → 核決 (down) -->
+<path d="M408,482 L408,538"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [G] → [H]: 核決 → 下載交易摘要 (down to 執行人員) -->
+<path d="M408,582 L408,638 L505,638"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+<!-- Also connect KMS system note -->
+
+<!-- [H] → [I]: 下載交易摘要 → 私鑰簽章 -->
+<path d="M635,660 L645,660"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [I] → [J]: 私鑰簽章 → 廣播上鏈 -->
+<path d="M745,660 L730,660"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- KMS connection note for 私鑰簽章 -->
+<rect x="648" y="595" width="95" height="38" rx="3" fill="#FFF3E0" stroke="#E65100" stroke-width="1"/>
+<text x="695" y="611" font-size="9" fill="#E65100" text-anchor="middle">Thales HSM</text>
+<text x="695" y="624" font-size="9" fill="#E65100" text-anchor="middle">Air-Gapped KMS</text>
+<line x1="695" y1="633" x2="695" y2="638" stroke="#E65100" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- =============================================
+     RIGHT PANEL: Role Descriptions (from _2.png)
+     ============================================= -->
+<rect x="820" y="68" width="368" height="646" rx="5" fill="#FAFAFA" stroke="#E0E0E0" stroke-width="1"/>
+
+<text x="1004" y="95" font-size="14" font-weight="bold" fill="#212121" text-anchor="middle">角色職責說明</text>
+<text x="1004" y="113" font-size="11" fill="#777" text-anchor="middle">需要至少 7 位人員、4 個部門、3 個作業單位完成</text>
+<line x1="832" y1="120" x2="1176" y2="120" stroke="#E0E0E0" stroke-width="1"/>
+
+<!-- Role 1: 交易發起者 -->
+<rect x="832" y="128" width="14" height="14" rx="2" fill="#1565C0"/>
+<text x="850" y="140" font-size="12" font-weight="bold" fill="#1565C0">交易發起者</text>
+<text x="832" y="157" font-size="11" fill="#444">• 負責接收客戶方指示並發起交易</text>
+<text x="832" y="173" font-size="11" fill="#444">• 確認客戶交易明細</text>
+<text x="832" y="189" font-size="11" fill="#444">• 核對客戶身份（2FA 機制）</text>
+<text x="832" y="205" font-size="11" fill="#444">• 確認無誤後發起交易</text>
+<line x1="832" y1="216" x2="1176" y2="216" stroke="#EEEEEE" stroke-width="1"/>
+
+<!-- Role 2: 交易核決者 -->
+<rect x="832" y="224" width="14" height="14" rx="2" fill="#F57F17"/>
+<text x="850" y="236" font-size="12" font-weight="bold" fill="#F57F17">交易核決者</text>
+<text x="832" y="253" font-size="11" fill="#444">• 不可與 Maker、Signer 相同</text>
+<text x="832" y="269" font-size="11" fill="#444">• 確認客戶交易明細後核決交易</text>
+<text x="832" y="285" font-size="11" fill="#444">• 依據 Approval Matrix 授權交易許可</text>
+<text x="860" y="301" font-size="11" fill="#C62828">• Layer 1: 2/3 核決</text>
+<text x="860" y="317" font-size="11" fill="#C62828">• Layer 2: 1/2 核決</text>
+<line x1="832" y1="328" x2="1176" y2="328" stroke="#EEEEEE" stroke-width="1"/>
+
+<!-- Role 3: 交易簽章人員 -->
+<rect x="832" y="336" width="14" height="14" rx="2" fill="#C62828"/>
+<text x="850" y="348" font-size="12" font-weight="bold" fill="#C62828">交易簽章人員</text>
+<text x="832" y="365" font-size="11" fill="#444">• 不可與 Maker、Checker、Observer 身份重疊</text>
+<text x="832" y="381" font-size="11" fill="#444">• 使用 HSM 中之金鑰簽署持含交易明細摘要之硬體</text>
+<text x="832" y="397" font-size="11" fill="#444">• 於離線狀態下，確認交易明細無誤後利用 HSM 簽章</text>
+<text x="832" y="413" font-size="11" fill="#444">• 將簽章後的交易摘要存入硬碟，並妥善保存</text>
+<line x1="832" y1="424" x2="1176" y2="424" stroke="#EEEEEE" stroke-width="1"/>
+
+<!-- Role 4: 監督人員 -->
+<rect x="832" y="432" width="14" height="14" rx="2" fill="#6A1B9A"/>
+<text x="850" y="444" font-size="12" font-weight="bold" fill="#6A1B9A">監督人員</text>
+<text x="832" y="461" font-size="11" fill="#444">• 不可與 Maker、Signer 身份重疊</text>
+<text x="832" y="477" font-size="11" fill="#444">• 於實體簽章流程確保傳輸過程中的公正性及安全性</text>
+<text x="832" y="493" font-size="11" fill="#444">• 於實體簽章流程確保交易簽章的公正性及安全性</text>
+<line x1="832" y1="504" x2="1176" y2="504" stroke="#EEEEEE" stroke-width="1"/>
+
+<!-- Role 5: 機房管理人員 -->
+<rect x="832" y="512" width="14" height="14" rx="2" fill="#2E7D32"/>
+<text x="850" y="524" font-size="12" font-weight="bold" fill="#2E7D32">機房管理人員</text>
+<text x="832" y="541" font-size="11" fill="#444">• 不可與 Signer、Observer 重疊</text>
+<text x="832" y="557" font-size="11" fill="#444">• 保管 HSM 機櫃鑰匙，並維護 HSM 基本可用性</text>
+<text x="832" y="573" font-size="11" fill="#444">• 確保 HSM 保管機櫃的訪問安全性</text>
+<text x="832" y="589" font-size="11" fill="#444">• 確認啟使用 HSM 人員的身份</text>
+<line x1="832" y1="600" x2="1176" y2="600" stroke="#EEEEEE" stroke-width="1"/>
+
+<!-- Approval Matrix box -->
+<rect x="832" y="608" width="336" height="92" rx="4" fill="#FFF3E0" stroke="#E65100" stroke-width="1.5"/>
+<text x="1000" y="628" font-size="12" font-weight="bold" fill="#E65100" text-anchor="middle">Approval Matrix</text>
+<text x="1000" y="648" font-size="11" fill="#333" text-anchor="middle">Layer 1（一般提領）：至少 2/3 核決者通過</text>
+<text x="1000" y="665" font-size="11" fill="#333" text-anchor="middle">Layer 2（大額提領）：至少 1/2 核決者通過</text>
+<text x="1000" y="682" font-size="10" fill="#777" text-anchor="middle">核決者不可為 Maker 或 Signer 本人</text>
+
+<!-- ========== PAGE NUMBER ========== -->
+<text x="1188" y="810" font-size="11" fill="#999" text-anchor="end">3</text>
+</svg>
+</body>
+</html>

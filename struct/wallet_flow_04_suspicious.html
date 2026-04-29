@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>幣流④⑤ 可疑資產處理流程</title>
+<style>
+  body { margin:0; padding:20px; background:#fff;
+         font-family:'Microsoft JhengHei','PingFang TC','Noto Sans TC',Arial,sans-serif; }
+</style>
+</head>
+<body>
+<svg width="1200" height="700" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+  </marker>
+  <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#B71C1C"/>
+  </marker>
+  <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#1565C0"/>
+  </marker>
+</defs>
+
+<!-- ========== TITLE ========== -->
+<text x="28" y="46" font-size="30" font-weight="bold" fill="#111">幣流④⑤ 可疑資產處理流程</text>
+<line x1="28" y1="54" x2="460" y2="54" stroke="#C62828" stroke-width="3"/>
+
+<!-- 議題 -->
+<text x="600" y="24" font-size="12" font-weight="bold" fill="#333">議題：</text>
+<text x="600" y="40" font-size="11" fill="#555">• 確認後續洗防相關策略與制定政策</text>
+<text x="600" y="56" font-size="11" fill="#555">• 與法遵、洗防討論「風險審核機制」</text>
+<text x="600" y="72" font-size="11" fill="#555">• 確認試辦計畫內執行方式與後續執行方式</text>
+
+<!-- ========== PHASE BANNERS ========== -->
+<!-- P1: 風險資產存入 -->
+<polygon points="95,76 250,76 270,95 250,114 95,114" fill="#B71C1C"/>
+<text x="180" y="99" font-size="12" font-weight="bold" fill="white" text-anchor="middle">風險資產存入</text>
+
+<!-- P2: 風險評判流程 -->
+<polygon points="260,76 470,76 490,95 470,114 260,114 240,95" fill="#B71C1C"/>
+<text x="368" y="99" font-size="12" font-weight="bold" fill="white" text-anchor="middle">風險評判流程</text>
+
+<!-- P3: 通報流程 -->
+<polygon points="480,76 660,76 680,95 660,114 480,114 460,95" fill="#B71C1C"/>
+<text x="572" y="99" font-size="12" font-weight="bold" fill="white" text-anchor="middle">通報流程</text>
+
+<!-- P4: 資產後續處置 -->
+<polygon points="670,76 1160,76 1160,114 670,114 650,95" fill="#B71C1C"/>
+<text x="908" y="99" font-size="12" font-weight="bold" fill="white" text-anchor="middle">資產後續處置</text>
+
+<!-- ========== SWIM LANE BACKGROUNDS (5 lanes, h=108 each, y=118 to y=658) ========== -->
+<rect x="0" y="118" width="1200" height="108" fill="#F5F5F5"/>
+<rect x="0" y="226" width="1200" height="108" fill="#FFFFFF"/>
+<rect x="0" y="334" width="1200" height="108" fill="#EEF5FF"/>
+<rect x="0" y="442" width="1200" height="108" fill="#F5F5F5"/>
+<rect x="0" y="550" width="1200" height="108" fill="#FFF8F8"/>
+
+<!-- Lane grid lines -->
+<line x1="0" y1="118" x2="1200" y2="118" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="226" x2="1200" y2="226" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="334" x2="1200" y2="334" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="442" x2="1200" y2="442" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="550" x2="1200" y2="550" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="658" x2="1200" y2="658" stroke="#CCC" stroke-width="1"/>
+
+<!-- LANE LABELS (5 lanes) -->
+<rect x="0" y="118" width="90" height="108" fill="#212121"/>
+<text x="45" y="164" font-size="11" font-weight="bold" fill="white" text-anchor="middle">洗錢防治</text>
+
+<rect x="0" y="226" width="90" height="108" fill="#212121"/>
+<text x="45" y="283" font-size="12" font-weight="bold" fill="white" text-anchor="middle">信託部</text>
+
+<rect x="0" y="334" width="90" height="108" fill="#BFD7EF"/>
+<text x="45" y="391" font-size="12" font-weight="bold" fill="#1A237E" text-anchor="middle">經辦</text>
+
+<rect x="0" y="442" width="90" height="108" fill="#EEEEEE"/>
+<text x="45" y="491" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">簽核主管</text>
+
+<rect x="0" y="550" width="90" height="108" fill="#EEEEEE"/>
+<text x="45" y="599" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">執行人員</text>
+
+<line x1="90" y1="118" x2="90" y2="658" stroke="#999" stroke-width="1.5"/>
+
+<!-- ========== FLOW NODES ========== -->
+
+<!-- [A] 風險資產存入 (洗錢防治, P1, cx=185, cy=172) -->
+<rect x="120" y="150" width="130" height="44" rx="4" fill="white" stroke="#C62828" stroke-width="2"/>
+<text x="185" y="177" font-size="12" fill="#C62828" font-weight="bold" text-anchor="middle">風險資產存入</text>
+
+<!-- [B] 風險評判 dashed box (洗錢防治, P2) -->
+<rect x="260" y="124" width="210" height="200" rx="5" fill="#FFF9F9" stroke="#C62828"
+      stroke-width="1.5" stroke-dasharray="6,3"/>
+<text x="365" y="148" font-size="11" font-weight="bold" fill="#C62828" text-anchor="middle">風險資產可能來源：</text>
+<line x1="270" y1="154" x2="460" y2="154" stroke="#FFCDD2" stroke-width="1"/>
+<text x="270" y="172" font-size="11" fill="#444">① 外部份數（&lt;0.0001 原生幣種）</text>
+<text x="270" y="190" font-size="11" fill="#444">② 不明來源幣流（可自定義）</text>
+<text x="270" y="208" font-size="11" fill="#444">③ 來自客戶風險資產</text>
+<line x1="270" y1="218" x2="460" y2="218" stroke="#FFCDD2" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="270" y="235" font-size="10" fill="#777">依據不同來源資產自定義</text>
+<text x="270" y="250" font-size="10" fill="#777">處理方式</text>
+<text x="270" y="268" font-size="10" fill="#C62828" font-weight="bold">↳ 系統可配置風控規則</text>
+<text x="270" y="283" font-size="10" fill="#777">（KYT / AML 引擎觸發）</text>
+<text x="270" y="298" font-size="10" fill="#777">（可對接 Chainalysis / Elliptic）</text>
+
+<!-- [C] 通報OO單位 (洗錢防治, P3, cx=580, cy=172) -->
+<rect x="510" y="150" width="140" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="580" y="177" font-size="12" fill="#333" text-anchor="middle">通報 OO 單位</text>
+
+<!-- [D] 凍結資產 (洗錢防治, P4, cx=750, cy=172) -->
+<rect x="685" y="150" width="130" height="44" rx="4" fill="white" stroke="#C62828" stroke-width="2"/>
+<text x="750" y="177" font-size="12" fill="#C62828" font-weight="bold" text-anchor="middle">凍結資產</text>
+
+<!-- [E] 法定收納地址 (洗錢防治, P4, cx=920, cy=172) -->
+<rect x="850" y="150" width="140" height="44" rx="4" fill="white" stroke="#1A237E" stroke-width="2"/>
+<text x="920" y="177" font-size="12" fill="#1A237E" font-weight="bold" text-anchor="middle">法定收納地址</text>
+
+<!-- [F] 發起後續處置交易 (經辦, P4, cx=780, cy=388) -->
+<rect x="700" y="366" width="160" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="780" y="386" font-size="11" fill="#333" text-anchor="middle">發起後續</text>
+<text x="780" y="402" font-size="11" fill="#333" text-anchor="middle">處置交易</text>
+
+<!-- [G] 核決 (簽核主管, P4, cx=900, cy=496) -->
+<rect x="845" y="474" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="900" y="501" font-size="12" fill="#333" text-anchor="middle">核決</text>
+
+<!-- [H] 下載交易摘要 (執行人員, P4, cx=900, cy=604) -->
+<rect x="830" y="582" width="140" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="900" y="609" font-size="12" fill="#333" text-anchor="middle">下載交易摘要</text>
+
+<!-- [I] 私鑰簽章 (執行人員, P4, cx=1040, cy=604) -->
+<rect x="985" y="582" width="110" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="1040" y="609" font-size="12" fill="#333" text-anchor="middle">私鑰簽章</text>
+
+<!-- [J] 返還 (執行人員, P4, cx=1140, cy=496+108=604 or different lane) -->
+<!-- 返還 goes to final destination; it's at the end of chain -->
+<rect x="1100" y="474" width="80" height="44" rx="4" fill="white" stroke="#2E7D32" stroke-width="2"/>
+<text x="1140" y="501" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="middle">返還</text>
+
+<!-- KMS note -->
+<rect x="990" y="540" width="105" height="36" rx="3" fill="#FFF3E0" stroke="#E65100" stroke-width="1"/>
+<text x="1042" y="556" font-size="9" fill="#E65100" text-anchor="middle">Thales HSM</text>
+<text x="1042" y="569" font-size="9" fill="#E65100" text-anchor="middle">Air-Gapped</text>
+<line x1="1040" y1="576" x2="1040" y2="582" stroke="#E65100" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- ========== ARROWS ========== -->
+
+<!-- [A] → [B]: 風險資產存入 right → 風險評判 box -->
+<path d="M250,172 L260,172"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [B] → [C]: 通報OO單位 -->
+<path d="M470,172 L510,172"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [C] → [D]: 通報 → 凍結資產 -->
+<path d="M650,172 L685,172"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [D] → [E]: 凍結資產 → 法定收納地址 (alternate outcome) -->
+<path d="M815,172 L850,172"
+      stroke="#1A237E" stroke-width="1.5" fill="none" marker-end="url(#arr-blue)"
+      stroke-dasharray="5,3"/>
+
+<!-- [B] → [F]: 評判後 → 發起後續處置交易 (down through lanes) -->
+<path d="M365,324 L365,388 L700,388"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [F] → [G]: 發起 → 核決 -->
+<path d="M860,388 L900,388 L900,474"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [G] → [H]: 核決 → 下載交易摘要 -->
+<path d="M900,518 L900,582"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [H] → [I]: 下載 → 私鑰簽章 -->
+<path d="M970,604 L985,604"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [I] → 返還 (go up from 執行人員 to 簽核主管 area? or same lane) -->
+<!-- [J] 返還 is in 簽核主管 lane at right side -->
+<path d="M1095,604 L1140,604 L1140,518"
+      stroke="#2E7D32" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [D/E] → [F]: 凍結/法定收納 路由到 發起後續處置 -->
+<path d="M750,194 L750,388 L700,388"
+      stroke="#555" stroke-width="1.2" fill="none" marker-end="url(#arr)"
+      stroke-dasharray="4,3"/>
+
+<!-- Label: 處置方式分歧 -->
+<rect x="750" y="258" width="82" height="20" rx="3" fill="#E3F2FD" stroke="#1565C0" stroke-width="1"/>
+<text x="791" y="272" font-size="10" fill="#1565C0" text-anchor="middle">依規定處置</text>
+
+<!-- ========== PAGE NUMBER ========== -->
+<text x="1180" y="690" font-size="11" fill="#999" text-anchor="end">4</text>
+</svg>
+</body>
+</html>

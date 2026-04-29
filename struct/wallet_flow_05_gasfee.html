@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>幣流⑦ Gas Fee 購買流程</title>
+<style>
+  body { margin:0; padding:20px; background:#fff;
+         font-family:'Microsoft JhengHei','PingFang TC','Noto Sans TC',Arial,sans-serif; }
+</style>
+</head>
+<body>
+<svg width="1200" height="680" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+  </marker>
+  <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/>
+  </marker>
+  <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#C62828"/>
+  </marker>
+</defs>
+
+<!-- ========== TITLE ========== -->
+<text x="28" y="46" font-size="30" font-weight="bold" fill="#111">幣流⑦ Gas Fee 購買流程</text>
+<line x1="28" y1="54" x2="370" y2="54" stroke="#C62828" stroke-width="3"/>
+
+<!-- 議題 -->
+<text x="520" y="26" font-size="12" font-weight="bold" fill="#333">議題：</text>
+<text x="520" y="42" font-size="11" fill="#555">• 待與信託部確認購買 Gas Fee 流程。</text>
+<text x="520" y="58" font-size="11" fill="#555">• 待確認 Gas fee 購買、補充之角色權責。</text>
+
+<!-- ========== PHASE BANNERS ========== -->
+<!-- P1: 法幣購買虛幣 -->
+<polygon points="95,70 315,70 335,89 315,108 95,108" fill="#B71C1C"/>
+<text x="212" y="93" font-size="13" font-weight="bold" fill="white" text-anchor="middle">法幣購買虛幣</text>
+
+<!-- P2: 虛幣存入Gas Fee錢包 -->
+<polygon points="325,70 600,70 620,89 600,108 325,108 305,89" fill="#B71C1C"/>
+<text x="460" y="93" font-size="13" font-weight="bold" fill="white" text-anchor="middle">虛幣存入 Gas Fee 錢包</text>
+
+<!-- P3: 後續對帳作業 -->
+<polygon points="610,70 1160,70 1160,108 610,108 590,89" fill="#B71C1C"/>
+<text x="880" y="93" font-size="13" font-weight="bold" fill="white" text-anchor="middle">後續對帳作業</text>
+
+<!-- ========== SWIM LANE BACKGROUNDS (5 lanes, h=108 each, y=112 to y=652) ========== -->
+<rect x="0" y="112" width="1200" height="108" fill="#F5F9FF"/>
+<rect x="0" y="220" width="1200" height="108" fill="#FFFFFF"/>
+<rect x="0" y="328" width="1200" height="108" fill="#EEF5FF"/>
+<rect x="0" y="436" width="1200" height="108" fill="#F5F5F5"/>
+<rect x="0" y="544" width="1200" height="108" fill="#FFF8F8"/>
+
+<!-- Lane grid lines -->
+<line x1="0" y1="112" x2="1200" y2="112" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="220" x2="1200" y2="220" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="328" x2="1200" y2="328" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="436" x2="1200" y2="436" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="544" x2="1200" y2="544" stroke="#CCC" stroke-width="1"/>
+<line x1="0" y1="652" x2="1200" y2="652" stroke="#CCC" stroke-width="1"/>
+
+<!-- LANE LABELS (5 lanes) -->
+<rect x="0" y="112" width="90" height="108" fill="#1565C0"/>
+<text x="45" y="162" font-size="11" font-weight="bold" fill="white" text-anchor="middle">外部</text>
+<text x="45" y="178" font-size="11" font-weight="bold" fill="white" text-anchor="middle">交易所</text>
+
+<rect x="0" y="220" width="90" height="108" fill="#212121"/>
+<text x="45" y="277" font-size="12" font-weight="bold" fill="white" text-anchor="middle">信託部</text>
+
+<rect x="0" y="328" width="90" height="108" fill="#BFD7EF"/>
+<text x="45" y="385" font-size="12" font-weight="bold" fill="#1A237E" text-anchor="middle">經辦</text>
+
+<rect x="0" y="436" width="90" height="108" fill="#EEEEEE"/>
+<text x="45" y="485" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">簽核主管</text>
+
+<rect x="0" y="544" width="90" height="108" fill="#EEEEEE"/>
+<text x="45" y="593" font-size="11" font-weight="bold" fill="#333" text-anchor="middle">執行人員</text>
+
+<line x1="90" y1="112" x2="90" y2="652" stroke="#999" stroke-width="1.5"/>
+
+<!-- ========== FLOW NODES ========== -->
+
+<!-- [A] 虛幣購入流程 dashed box (外部交易所 lane, P1) -->
+<rect x="100" y="118" width="210" height="200" rx="5" fill="white" stroke="#1565C0"
+      stroke-width="1.5" stroke-dasharray="6,3"/>
+<text x="205" y="142" font-size="12" font-weight="bold" fill="#1565C0" text-anchor="middle">虛幣購入流程：</text>
+<line x1="110" y1="148" x2="300" y2="148" stroke="#BBDEFB" stroke-width="1"/>
+<text x="115" y="166" font-size="11" fill="#333">① 書面指示約定買幣</text>
+<text x="115" y="184" font-size="11" fill="#333">② 約定帳戶轉帳</text>
+<text x="115" y="202" font-size="11" fill="#333">③ 執行白名單地址驗證</text>
+<text x="115" y="220" font-size="11" fill="#333">④ 虛幣打入</text>
+<line x1="110" y1="230" x2="300" y2="230" stroke="#BBDEFB" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="205" y="248" font-size="10" fill="#1565C0" text-anchor="middle" font-weight="bold">↳ 白名單地址驗證</text>
+<text x="205" y="263" font-size="10" fill="#777" text-anchor="middle">（對接本系統 Gas Fee 錢包地址）</text>
+<text x="205" y="278" font-size="10" fill="#777" text-anchor="middle">（防止誤轉、釣魚攻擊）</text>
+<text x="205" y="295" font-size="10" fill="#555" text-anchor="middle" font-style="italic">（由外部交易所負責執行）</text>
+
+<!-- [B] 定期確認 Gas Fee 水位 (經辦+簽核主管, left side under P1) -->
+<!-- In 經辦 lane, P1 area -->
+<rect x="100" y="346" width="185" height="60" rx="4" fill="white" stroke="#333" stroke-width="1.5"
+      stroke-dasharray="5,3"/>
+<text x="192" y="370" font-size="11" fill="#333" text-anchor="middle" font-weight="bold">定期確認</text>
+<text x="192" y="386" font-size="11" fill="#333" text-anchor="middle">Gas Fee 水位</text>
+
+<!-- [C] 虛幣存入 Gas Fee 錢包 (信託部/執行人員, P2) -->
+<rect x="370" y="240" width="180" height="60" rx="4" fill="white" stroke="#2E7D32" stroke-width="2"/>
+<text x="460" y="263" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="middle">虛幣存入</text>
+<text x="460" y="281" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="middle">Gas Fee 錢包</text>
+
+<!-- D icon: Gas Fee wallet -->
+<circle cx="460" cy="346" r="30" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="460" y="337" font-size="20" text-anchor="middle">⛽</text>
+<text x="460" y="356" font-size="10" fill="#2E7D32" text-anchor="middle" font-weight="bold">D. Gas Fee</text>
+<text x="460" y="369" font-size="10" fill="#2E7D32" text-anchor="middle">Hotwallet HSM</text>
+
+<!-- [E] 後續對帳作業 dashed box (執行人員, P3) -->
+<rect x="640" y="556" width="240" height="82" rx="5" fill="white" stroke="#555"
+      stroke-width="1.5" stroke-dasharray="6,3"/>
+<text x="760" y="578" font-size="12" font-weight="bold" fill="#333" text-anchor="middle">後續對帳作業：</text>
+<line x1="650" y1="584" x2="870" y2="584" stroke="#DDD" stroke-width="1"/>
+<text x="655" y="601" font-size="11" fill="#444">• 執行後續對帳作業</text>
+<text x="655" y="618" font-size="11" fill="#444">• 其他因應內部要求的作業</text>
+
+<!-- [F] Gas Fee 補充監控 (信託部, P3) -->
+<rect x="640" y="238" width="200" height="60" rx="4" fill="white" stroke="#555" stroke-width="1.5"/>
+<text x="740" y="261" font-size="12" fill="#333" text-anchor="middle">Gas Fee 補充監控</text>
+<text x="740" y="279" font-size="10" fill="#777" text-anchor="middle">（餘額低於閾值時自動觸發）</text>
+
+<!-- [G] 系統自動補充 (執行人員, P3) -->
+<rect x="640" y="454" width="200" height="60" rx="4" fill="white" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="740" y="477" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="middle">系統自動補充</text>
+<text x="740" y="495" font-size="10" fill="#555" text-anchor="middle">Gas Fee → 各冷/熱錢包</text>
+
+<!-- [H] 申報合規 (信託部, P3) -->
+<rect x="900" y="238" width="180" height="60" rx="4" fill="white" stroke="#555" stroke-width="1.5"/>
+<text x="990" y="261" font-size="12" fill="#333" text-anchor="middle">法遵申報</text>
+<text x="990" y="279" font-size="10" fill="#777" text-anchor="middle">（虛擬資產購入備案）</text>
+
+<!-- [I] 核決 (簽核主管, P1 area for Gas Fee purchase authorization) -->
+<rect x="100" y="454" width="185" height="44" rx="4" fill="white" stroke="#333" stroke-width="1.5"/>
+<text x="192" y="481" font-size="12" fill="#333" text-anchor="middle">核決（購買授權）</text>
+
+<!-- ========== ARROWS ========== -->
+
+<!-- [A] 虛幣購入 → [C] 虛幣存入Gas Fee錢包 -->
+<path d="M310,166 L350,166 L350,270 L370,270"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [C] 虛幣存入 → Gas Fee 圖示 (down) -->
+<path d="M460,300 L460,316"
+      stroke="#2E7D32" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+
+<!-- [B] 定期確認水位 → trigger 採購 -->
+<path d="M192,346 L192,330 L115,330 L115,318"
+      stroke="#555" stroke-width="1.5" fill="none" marker-end="url(#arr)"
+      stroke-dasharray="4,3"/>
+
+<!-- [I] 核決 → [A] 授權購買 (up) -->
+<path d="M192,454 L192,420 L205,420"
+      stroke="#555" stroke-width="1.5" fill="none" marker-end="url(#arr)"
+      stroke-dasharray="4,3"/>
+<!-- "採購授權" badge -->
+<rect x="195" y="416" width="80" height="18" rx="3" fill="#E8EAF6"/>
+<text x="235" y="429" font-size="9" fill="#3949AB" text-anchor="middle">採購授權</text>
+
+<!-- [C] → [F] Gas Fee補充監控 (right) -->
+<path d="M570,270 L620,270 L640,268"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [F] → [H] 法遵申報 -->
+<path d="M840,268 L900,268"
+      stroke="#555" stroke-width="1.5" fill="none" marker-end="url(#arr)"
+      stroke-dasharray="5,3"/>
+
+<!-- [G] 系統自動補充 → [E] 後續對帳 -->
+<path d="M740,514 L740,556"
+      stroke="#333" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
+
+<!-- [F] → [G] 補充監控觸發補充 -->
+<path d="M740,298 L740,380 L740,454"
+      stroke="#2E7D32" stroke-width="1.5" fill="none" marker-end="url(#arr-green)"
+      stroke-dasharray="5,3"/>
+<!-- "低於閾值觸發" badge -->
+<rect x="744" y="366" width="88" height="18" rx="3" fill="#E8F5E9"/>
+<text x="788" y="379" font-size="9" fill="#2E7D32" text-anchor="middle">低於閾值自動觸發</text>
+
+<!-- ========== SYSTEM NOTES ========== -->
+<!-- Hotwallet system note -->
+<rect x="940" y="454" width="230" height="90" rx="4" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1"/>
+<text x="1055" y="475" font-size="12" font-weight="bold" fill="#2E7D32" text-anchor="middle">系統實作對應</text>
+<line x1="950" y1="482" x2="1160" y2="482" stroke="#C8E6C9" stroke-width="1"/>
+<text x="950" y="498" font-size="10" fill="#444">Gas Fee 錢包 → Hotwallet 管理</text>
+<text x="950" y="514" font-size="10" fill="#444">簽名 → SoftHSM / CloudHSM</text>
+<text x="950" y="530" font-size="10" fill="#444">補充策略 → 可設置閾值自動補充</text>
+
+<!-- ========== ROLE BOX (dashed, 信託部+經辦+簽核主管) ========== -->
+<rect x="95" y="332" width="200" height="170" rx="4" fill="none" stroke="#999"
+      stroke-width="1" stroke-dasharray="5,3"/>
+<text x="195" y="428" font-size="9" fill="#999" text-anchor="middle">⋯ 信託部內部協作區域 ⋯</text>
+
+<!-- ========== PAGE NUMBER ========== -->
+<text x="1180" y="672" font-size="11" fill="#999" text-anchor="end">5</text>
+</svg>
+</body>
+</html>
