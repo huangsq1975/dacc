@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chain Fusion — 人民幣數字債券 · 跨境多鏈流程說明</title>
+<style>
+  :root {
+    --blue-dark:   #1a3a5c;
+    --blue:        #2563eb;
+    --blue-light:  #dbeafe;
+    --blue-pale:   #eff6ff;
+    --cyan:        #0891b2;
+    --green:       #059669;
+    --green-light: #d1fae5;
+    --amber:       #d97706;
+    --amber-light: #fef3c7;
+    --red:         #dc2626;
+    --red-light:   #fee2e2;
+    --purple:      #7c3aed;
+    --purple-light:#ede9fe;
+    --teal:        #0f766e;
+    --teal-light:  #ccfbf1;
+    --rose:        #be185d;
+    --rose-light:  #ffe4e6;
+    --indigo:      #4338ca;
+    --indigo-light:#e0e7ff;
+    --orange:      #c2410c;
+    --orange-light:#ffedd5;
+    --gray-50:     #f8fafc;
+    --gray-100:    #f1f5f9;
+    --gray-200:    #e2e8f0;
+    --gray-400:    #94a3b8;
+    --gray-600:    #475569;
+    --gray-700:    #374151;
+    --gray-800:    #1e293b;
+    --gray-900:    #0f172a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'PingFang TC','Noto Sans TC','Microsoft JhengHei', sans-serif;
+    background: var(--gray-50); color: var(--gray-800); line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0c1e35 0%, #1a3a5c 50%, #1e4d8c 100%);
+    color: white; padding: 56px 40px 48px; position: relative; overflow: hidden;
+  }
+  .header::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:360px; height:360px; border-radius:50%; background:rgba(255,255,255,0.04);
+  }
+  .header::after {
+    content:''; position:absolute; bottom:-100px; left:25%;
+    width:280px; height:280px; border-radius:50%; background:rgba(255,255,255,0.03);
+  }
+  .header-inner { max-width:980px; margin:0 auto; position:relative; z-index:1; }
+  .logo-row { display:flex; align-items:center; gap:16px; margin-bottom:22px; }
+  .logo-badge {
+    width:54px; height:54px; border-radius:14px;
+    background:rgba(255,255,255,0.15); display:flex; align-items:center;
+    justify-content:center; font-size:21px; font-weight:900; color:white;
+    border:1.5px solid rgba(255,255,255,0.3);
+  }
+  .logo-meta { font-size:12px; opacity:.65; letter-spacing:2px; text-transform:uppercase; margin-top:3px; }
+  .header h1 { font-size:clamp(22px,4vw,32px); font-weight:900; margin-bottom:10px; line-height:1.3; }
+  .header h1 em { color:#60d8fa; font-style:normal; }
+  .header p  { font-size:15px; opacity:.8; max-width:640px; }
+  .meta-pills { display:flex; gap:8px; margin-top:20px; flex-wrap:wrap; }
+  .pill {
+    background:rgba(255,255,255,0.11); border:1px solid rgba(255,255,255,0.2);
+    border-radius:20px; padding:3px 13px; font-size:11.5px; color:rgba(255,255,255,0.82);
+  }
+  .pill.hot { background:rgba(96,216,250,0.18); border-color:rgba(96,216,250,0.4); color:#60d8fa; }
+
+  /* ── LAYOUT ── */
+  .container { max-width:980px; margin:0 auto; padding:36px 22px 80px; }
+
+  /* ── SECTION TITLE ── */
+  .section-title { display:flex; align-items:center; gap:12px; margin:52px 0 18px; }
+  .section-num {
+    width:34px; height:34px; border-radius:9px;
+    background:var(--blue); color:white;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:15px; flex-shrink:0;
+  }
+  .section-title h2 { font-size:19px; font-weight:700; color:var(--blue-dark); }
+  .divider { height:2px; background:linear-gradient(90deg,var(--blue) 0%,transparent 100%); margin-bottom:22px; }
+
+  /* ── ROLE CARDS ── */
+  .role-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin-bottom:6px; }
+  .role-card { border-radius:13px; padding:18px; border:1.5px solid transparent; transition:transform .2s; }
+  .role-card:hover { transform:translateY(-3px); }
+  .role-card.bank   { background:var(--blue-pale);   border-color:#bfdbfe; }
+  .role-card.sec    { background:var(--purple-light); border-color:#c4b5fd; }
+  .role-card.cips   { background:var(--amber-light);  border-color:#fcd34d; }
+  .role-card.cf     { background:var(--green-light);  border-color:#6ee7b7; }
+  .role-card.chain  { background:#fce7f3;             border-color:#f9a8d4; }
+  .role-icon { font-size:26px; margin-bottom:8px; }
+  .role-name { font-weight:700; font-size:14px; margin-bottom:5px; }
+  .role-card.bank  .role-name { color:var(--blue); }
+  .role-card.sec   .role-name { color:var(--purple); }
+  .role-card.cips  .role-name { color:var(--amber); }
+  .role-card.cf    .role-name { color:var(--green); }
+  .role-card.chain .role-name { color:#be185d; }
+  .role-desc { font-size:12.5px; color:var(--gray-600); line-height:1.55; }
+
+  /* ── CHAIN CARDS ── */
+  .chain-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:20px 0; }
+  .chain-card {
+    border-radius:13px; padding:16px 18px;
+    border:1.5px solid; position:relative; overflow:hidden;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .chain-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.08); }
+  .chain-card.changan  { background:#fff7ed; border-color:#fed7aa; }
+  .chain-card.bcos     { background:#f0fdf4; border-color:#bbf7d0; }
+  .chain-card.base     { background:#eff6ff; border-color:#bfdbfe; }
+  .chain-card.solana   { background:#f5f3ff; border-color:#ddd6fe; }
+  .chain-card.conflux  { background:#fdf4ff; border-color:#e9d5ff; }
+  .chain-card.eth      { background:#ecfeff; border-color:#a5f3fc; }
+  .chain-badge {
+    position:absolute; top:12px; right:12px;
+    font-size:10px; font-weight:700; letter-spacing:.5px;
+    padding:2px 7px; border-radius:4px;
+  }
+  .chain-card.changan .chain-badge  { background:#fed7aa; color:#c2410c; }
+  .chain-card.bcos    .chain-badge  { background:#bbf7d0; color:#065f46; }
+  .chain-card.base    .chain-badge  { background:#bfdbfe; color:#1d4ed8; }
+  .chain-card.solana  .chain-badge  { background:#ddd6fe; color:#5b21b6; }
+  .chain-card.conflux .chain-badge  { background:#e9d5ff; color:#6b21a8; }
+  .chain-card.eth     .chain-badge  { background:#a5f3fc; color:#0e7490; }
+  .chain-logo { font-size:28px; margin-bottom:8px; }
+  .chain-name { font-size:14px; font-weight:800; margin-bottom:3px; }
+  .chain-card.changan .chain-name  { color:#c2410c; }
+  .chain-card.bcos    .chain-name  { color:#065f46; }
+  .chain-card.base    .chain-name  { color:#1d4ed8; }
+  .chain-card.solana  .chain-name  { color:#5b21b6; }
+  .chain-card.conflux .chain-name  { color:#6b21a8; }
+  .chain-card.eth     .chain-name  { color:#0e7490; }
+  .chain-sub  { font-size:11px; color:var(--gray-600); margin-bottom:8px; }
+  .chain-use  { font-size:12px; color:var(--gray-700); line-height:1.55; }
+  .chain-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+  .ctag {
+    font-size:10px; font-weight:600; padding:2px 7px;
+    border-radius:4px; border:1px solid currentColor; opacity:.8;
+  }
+
+  /* ── DIAGRAM ── */
+  .diagram-box {
+    background:white; border:1.5px solid var(--gray-200);
+    border-radius:16px; padding:26px; margin:22px 0; overflow-x:auto;
+  }
+  .diagram-box pre {
+    font-family:'Courier New',Consolas,monospace; font-size:12.5px;
+    line-height:1.6; color:var(--gray-800); white-space:pre;
+  }
+
+  /* ── ROUTING TABLE ── */
+  .route-table {
+    width:100%; border-collapse:collapse; font-size:13px; margin:16px 0;
+    border-radius:12px; overflow:hidden; border:1.5px solid var(--gray-200);
+  }
+  .route-table th {
+    background:var(--gray-900); color:white;
+    padding:10px 13px; text-align:left; font-size:11.5px; letter-spacing:.5px;
+  }
+  .route-table td { padding:10px 13px; border-bottom:1px solid var(--gray-100); vertical-align:top; }
+  .route-table tr:last-child td { border-bottom:none; }
+  .route-table tr:nth-child(even) td { background:var(--gray-50); }
+  .chain-tag {
+    display:inline-block; border-radius:5px; padding:2px 8px;
+    font-size:11px; font-weight:700;
+  }
+  .ct-changan  { background:#fff7ed; color:#c2410c; }
+  .ct-bcos     { background:#f0fdf4; color:#065f46; }
+  .ct-base     { background:#eff6ff; color:#1d4ed8; }
+  .ct-solana   { background:#f5f3ff; color:#5b21b6; }
+  .ct-conflux  { background:#fdf4ff; color:#6b21a8; }
+  .ct-eth      { background:#ecfeff; color:#0e7490; }
+  .ct-cips     { background:#fef3c7; color:#92400e; }
+  .ct-mbridge  { background:#fce7f3; color:#be185d; }
+
+  /* ── PHASE BLOCK ── */
+  .phase { background:white; border-radius:16px; border:1.5px solid var(--gray-200); margin-bottom:22px; overflow:hidden; }
+  .phase-header { padding:16px 22px; display:flex; align-items:center; gap:14px; }
+  .phase-header.p1 { background:linear-gradient(135deg,var(--blue-pale),#e0f2fe); border-bottom:2px solid #bfdbfe; }
+  .phase-header.p2 { background:linear-gradient(135deg,var(--green-light),#ecfdf5); border-bottom:2px solid #6ee7b7; }
+  .phase-header.p3 { background:linear-gradient(135deg,var(--amber-light),#fffbeb); border-bottom:2px solid #fcd34d; }
+  .phase-header.p4 { background:linear-gradient(135deg,var(--purple-light),#f5f3ff); border-bottom:2px solid #c4b5fd; }
+  .phase-num {
+    width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:17px; color:white; flex-shrink:0;
+  }
+  .p1 .phase-num { background:var(--blue); }
+  .p2 .phase-num { background:var(--green); }
+  .p3 .phase-num { background:var(--amber); }
+  .p4 .phase-num { background:var(--purple); }
+  .phase-title { font-size:16px; font-weight:700; }
+  .p1 .phase-title { color:var(--blue-dark); }
+  .p2 .phase-title { color:#065f46; }
+  .p3 .phase-title { color:#92400e; }
+  .p4 .phase-title { color:#4c1d95; }
+  .phase-sub { font-size:12.5px; color:var(--gray-600); margin-top:2px; }
+  .phase-body { padding:22px; }
+
+  /* ── FLOW STEPS ── */
+  .flow { display:flex; flex-direction:column; }
+  .flow-step { display:flex; align-items:flex-start; gap:15px; padding:13px 0; border-bottom:1px dashed var(--gray-200); }
+  .flow-step:last-child { border-bottom:none; padding-bottom:0; }
+  .step-dot {
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; color:white; flex-shrink:0; margin-top:2px;
+  }
+  .sd-blue   { background:var(--blue); }
+  .sd-green  { background:var(--green); }
+  .sd-amber  { background:var(--amber); }
+  .sd-purple { background:var(--purple); }
+  .sd-cyan   { background:var(--cyan); }
+  .sd-teal   { background:var(--teal); }
+  .sd-rose   { background:var(--rose); }
+  .sd-indigo { background:var(--indigo); }
+  .step-content { flex:1; }
+  .step-actor {
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.5px;
+    padding:2px 7px; border-radius:4px; margin-bottom:5px; margin-right:3px;
+  }
+  .sa-bank   { background:var(--blue-light);   color:var(--blue); }
+  .sa-sec    { background:var(--purple-light);  color:var(--purple); }
+  .sa-cips   { background:var(--amber-light);   color:var(--amber); }
+  .sa-cf     { background:var(--green-light);   color:var(--green); }
+  .sa-chain  { background:#fce7f3;              color:#be185d; }
+  .sa-changan{ background:#fff7ed;              color:#c2410c; }
+  .sa-bcos   { background:#f0fdf4;              color:#065f46; }
+  .sa-base   { background:#eff6ff;              color:#1d4ed8; }
+  .sa-solana { background:#f5f3ff;              color:#5b21b6; }
+  .step-title { font-size:13.5px; font-weight:700; color:var(--gray-800); margin-bottom:4px; }
+  .step-desc  { font-size:12.5px; color:var(--gray-600); line-height:1.6; }
+  .step-chains { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+  .arrow-down { text-align:center; font-size:18px; color:var(--gray-400); padding:1px 0; }
+
+  /* ── DVP BOX ── */
+  .dvp-box { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+  .dvp-side { border-radius:11px; padding:15px; border:1.5px solid; }
+  .dvp-side.money { background:var(--blue-pale);  border-color:#93c5fd; }
+  .dvp-side.token { background:#fce7f3;            border-color:#f9a8d4; }
+  .dvp-label { font-size:10.5px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:9px; }
+  .dvp-side.money .dvp-label { color:var(--blue); }
+  .dvp-side.token .dvp-label { color:#be185d; }
+  .dvp-item { font-size:12.5px; color:var(--gray-700); margin-bottom:4px; display:flex; gap:6px; }
+  .dvp-item::before { content:'→'; color:var(--gray-400); flex-shrink:0; }
+
+  /* ── FORMAT TABLE ── */
+  .fmt-table {
+    width:100%; border-collapse:collapse; font-size:12.5px; margin:14px 0;
+    border-radius:10px; overflow:hidden; border:1.5px solid var(--gray-200);
+  }
+  .fmt-table th { background:var(--blue-dark); color:white; padding:9px 13px; text-align:left; font-size:11.5px; letter-spacing:.5px; }
+  .fmt-table td { padding:9px 13px; border-bottom:1px solid var(--gray-100); vertical-align:middle; }
+  .fmt-table tr:last-child td { border-bottom:none; }
+  .fmt-table tr:nth-child(even) td { background:var(--gray-50); }
+  .code-tag {
+    display:inline-block; background:var(--gray-100); border:1px solid var(--gray-200);
+    border-radius:4px; padding:1px 6px; font-family:'Courier New',monospace;
+    font-size:11.5px; color:var(--red);
+  }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-table {
+    width:100%; border-collapse:collapse; font-size:13px;
+    border-radius:12px; overflow:hidden; border:1.5px solid var(--gray-200); margin-top:12px;
+  }
+  .summary-table th { background:var(--blue-dark); color:white; padding:11px 15px; text-align:left; }
+  .summary-table td { padding:11px 15px; border-bottom:1px solid var(--gray-100); vertical-align:top; }
+  .summary-table tr:last-child td { border-bottom:none; }
+  .summary-table tr:nth-child(even) td { background:var(--gray-50); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius:12px; padding:16px 18px; margin:18px 0;
+    border-left:4px solid;
+  }
+  .callout.green  { background:var(--green-light); border-color:var(--green); }
+  .callout.amber  { background:var(--amber-light); border-color:var(--amber); }
+  .callout.blue   { background:var(--blue-pale);   border-color:var(--blue); }
+  .callout.purple { background:var(--purple-light); border-color:var(--purple); }
+  .callout strong { color:var(--gray-800); }
+  .callout span, .callout p { font-size:13px; color:var(--gray-700); }
+
+  /* ── HIGHLIGHT BANNER ── */
+  .highlight-banner {
+    background:linear-gradient(135deg,#0c1e35,#1a3a5c);
+    color:white; border-radius:14px; padding:22px 26px; margin:28px 0;
+  }
+  .highlight-banner h3 { font-size:16px; font-weight:800; color:#60d8fa; margin-bottom:10px; }
+  .highlight-banner p  { font-size:13.5px; color:rgba(255,255,255,.78); line-height:1.75; }
+  .highlight-banner strong { color:white; }
+
+  /* ── INSIGHT ── */
+  .insight {
+    background:linear-gradient(135deg,var(--blue-pale),#e0f2fe);
+    border:1.5px solid #93c5fd; border-radius:14px; padding:22px 24px; margin-top:36px;
+  }
+  .insight-title { font-size:15px; font-weight:700; color:var(--blue-dark); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .insight p { font-size:13.5px; color:var(--gray-700); line-height:1.8; }
+  .insight strong { color:var(--blue-dark); }
+
+  /* ── FOOTER ── */
+  .footer { background:var(--gray-900); color:var(--gray-400); text-align:center; padding:26px; font-size:12px; line-height:1.8; }
+  .footer strong { color:white; }
+
+  @media(max-width:640px){
+    .header { padding:38px 18px; }
+    .dvp-box { grid-template-columns:1fr; }
+    .chain-grid { grid-template-columns:1fr 1fr; }
+    .role-grid  { grid-template-columns:1fr 1fr; }
+    .diagram-box pre { font-size:10.5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo-badge">CF</div>
+      <div>
+        <div style="font-size:17px;font-weight:800;">Chain Fusion</div>
+        <div class="logo-meta">分布式多鏈融合網關 · 跨境多鏈版</div>
+      </div>
+    </div>
+    <h1>人民幣數字債券發行流程說明<br><em>跨境 × 多鏈：長安鏈、BCOS、Base、Solana</em></h1>
+    <p>以「銀行在多條區塊鏈上跨境發行人民幣計價數字債券」為例，說明各參與方在 Chain Fusion 中的位置、六條鏈的路由邏輯與完整數據流程。</p>
+    <div class="meta-pills">
+      <span class="pill">文件編號：CF-SW-DOC-2026-002</span>
+      <span class="pill">版本：v2.0</span>
+      <span class="pill">日期：2026 年 4 月</span>
+      <span class="pill">密級：內部保密</span>
+      <span class="pill hot">🆕 多鏈 · 跨境更新版</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1：參與方角色
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">1</div>
+  <h2>各參與方在系統中的角色</h2>
+</div>
+<div class="divider"></div>
+
+<div class="role-grid">
+  <div class="role-card bank">
+    <div class="role-icon">🏦</div>
+    <div class="role-name">發行 / 結算銀行</div>
+    <div class="role-desc">資金托管、KYC 審核、人民幣帳戶管理，通過 CIPS 發送跨境清算指令</div>
+  </div>
+  <div class="role-card sec">
+    <div class="role-icon">📊</div>
+    <div class="role-name">證券公司（如國泰君安）</div>
+    <div class="role-desc">債券承銷配售、投資者認購管理、二級市場撮合；通過 REST API 接入網關，長安鏈是主要技術基礎設施</div>
+  </div>
+  <div class="role-card cips">
+    <div class="role-icon">💱</div>
+    <div class="role-name">CIPS</div>
+    <div class="role-desc">人民幣跨境清算結算的唯一合規通道，所有 CNY 跨境資金流必須經過</div>
+  </div>
+  <div class="role-card cf">
+    <div class="role-icon">⚙️</div>
+    <div class="role-name">Chain Fusion 網關</div>
+    <div class="role-desc">核心樞紐：協議翻譯、合規校驗、<strong>跨境多鏈智能路由</strong>、鏈上執行、雙向數據同步</div>
+  </div>
+  <div class="role-card chain">
+    <div class="role-icon">🔗</div>
+    <div class="role-name">多條區塊鏈</div>
+    <div class="role-desc">長安鏈、FISCO BCOS、Base Chain、Solana、Conflux、ETH——各有適用場景，Chain Fusion 統一插件接入</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2：六條鏈的角色與適用場景
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">2</div>
+  <h2>六條鏈：各有定位，Chain Fusion 統一插件接入</h2>
+</div>
+<div class="divider"></div>
+
+<div class="highlight-banner">
+  <h3>🔌 插件化架構：新增一條鏈，≤ 2 週完成接入</h3>
+  <p>Chain Fusion 的鏈適配器採用 <strong>SPI（Service Provider Interface）插件注冊表</strong>設計——每條鏈實現同一套標準接口（GetBalance / SendTransaction / GetTransactionStatus / HealthCheck），注冊後即可熱插拔使用。銀行和證券公司對接的始終是同一套 REST API，<strong>無需感知後端走哪條鏈</strong>。</p>
+</div>
+
+<div class="chain-grid">
+  <div class="chain-card changan">
+    <div class="chain-badge">境內合規首選</div>
+    <div class="chain-logo">🏛</div>
+    <div class="chain-name">長安鏈 ChainMaker</div>
+    <div class="chain-sub">國泰君安主用 · 國家級聯盟鏈</div>
+    <div class="chain-use">由清華大學、微眾銀行等聯合開發，國泰君安等頭部券商已接入。支持國密 SM2/SM4，可接入企業身份體系，適合境內機構投資者認購和存証。</div>
+    <div class="chain-tags">
+      <span class="ctag" style="color:#c2410c;border-color:#c2410c;">國密SM2/SM4</span>
+      <span class="ctag" style="color:#c2410c;border-color:#c2410c;">聯盟鏈</span>
+      <span class="ctag" style="color:#c2410c;border-color:#c2410c;">境內機構</span>
+    </div>
+  </div>
+  <div class="chain-card bcos">
+    <div class="chain-badge">企業聯盟鏈</div>
+    <div class="chain-logo">🏗</div>
+    <div class="chain-name">FISCO BCOS</div>
+    <div class="chain-sub">微眾銀行 · 金鏈盟開源</div>
+    <div class="chain-use">廣泛用於境內貿易融資、供應鏈金融、存証場景。隱私保護完善，與銀行核心系統對接成熟，適合發行方後台數據存証和對賬。</div>
+    <div class="chain-tags">
+      <span class="ctag" style="color:#065f46;border-color:#065f46;">隱私保護</span>
+      <span class="ctag" style="color:#065f46;border-color:#065f46;">存証對賬</span>
+      <span class="ctag" style="color:#065f46;border-color:#065f46;">貿易融資</span>
+    </div>
+  </div>
+  <div class="chain-card base">
+    <div class="chain-badge">境外DeFi投資者</div>
+    <div class="chain-logo">🔵</div>
+    <div class="chain-name">Base Chain</div>
+    <div class="chain-sub">Coinbase L2 · OP Stack · EVM 兼容</div>
+    <div class="chain-use">Coinbase 旗下 L2，EVM 完全兼容，Gas 費極低（約 $0.01/筆），合規性強（Coinbase 受 SEC 監管）。適合境外美元計價 RWA 和國際機構 DeFi 投資者。</div>
+    <div class="chain-tags">
+      <span class="ctag" style="color:#1d4ed8;border-color:#1d4ed8;">EVM兼容</span>
+      <span class="ctag" style="color:#1d4ed8;border-color:#1d4ed8;">低Gas</span>
+      <span class="ctag" style="color:#1d4ed8;border-color:#1d4ed8;">境外DeFi</span>
+    </div>
+  </div>
+  <div class="chain-card solana">
+    <div class="chain-badge">AI錢包 · 高頻</div>
+    <div class="chain-logo">◎</div>
+    <div class="chain-name">Solana + AI Wallet</div>
+    <div class="chain-sub">65,000 TPS · 毫秒確認 · AI 自動交易</div>
+    <div class="chain-use">極高吞吐量（65K TPS）、毫秒級確認。AI 錢包（如 Phantom AI Agent）可自動執行策略、觸發認購和轉讓。適合全球高頻小額轉讓和 AI 自動化投資場景。</div>
+    <div class="chain-tags">
+      <span class="ctag" style="color:#5b21b6;border-color:#5b21b6;">AI錢包</span>
+      <span class="ctag" style="color:#5b21b6;border-color:#5b21b6;">65K TPS</span>
+      <span class="ctag" style="color:#5b21b6;border-color:#5b21b6;">高頻小額</span>
+    </div>
+  </div>
+  <div class="chain-card conflux">
+    <div class="chain-badge">跨境CBDC首選</div>
+    <div class="chain-logo">🌀</div>
+    <div class="chain-name">Conflux</div>
+    <div class="chain-sub">樹圖共識 · 中國出海公鏈</div>
+    <div class="chain-use">支持 eCNY / 數字人民幣與 mBridge 跨境結算，已與多個金磚國家項目合作。適合跨境 CBDC 結算和 RWA 代幣發行。</div>
+    <div class="chain-tags">
+      <span class="ctag" style="color:#6b21a8;border-color:#6b21a8;">eCNY</span>
+      <span class="ctag" style="color:#6b21a8;border-color:#6b21a8;">mBridge</span>
+      <span class="ctag" style="color:#6b21a8;border-color:#6b21a8;">跨境CBDC</span>
+    </div>
+  </div>
+  <div class="chain-card eth">
+    <div class="chain-badge">全球流通</div>
+    <div class="chain-logo">⟠</div>
+    <div class="chain-name">Ethereum / BSC</div>
+    <div class="chain-sub">全球最大公鏈生態 · EVM 標準</div>
+    <div class="chain-use">全球流動性最深，DeFi 協議最完善。適合跨鏈橋接、大額機構之間的債券代幣跨鏈流通，以及二級市場撮合。</div>
+    <div class="chain-tags">
+      <span class="ctag" style="color:#0e7490;border-color:#0e7490;">跨鏈橋</span>
+      <span class="ctag" style="color:#0e7490;border-color:#0e7490;">DeFi流動性</span>
+      <span class="ctag" style="color:#0e7490;border-color:#0e7490;">機構大額</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3：跨境多鏈路由對照表
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">3</div>
+  <h2>跨境 × 多鏈路由對照：誰的錢走哪條鏈</h2>
+</div>
+<div class="divider"></div>
+
+<table class="route-table">
+  <thead>
+    <tr>
+      <th>投資者類型 / 場景</th>
+      <th>資金清算通道</th>
+      <th>代幣所在鏈</th>
+      <th>Chain Fusion 路由理由</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>境內機構投資者</strong><br><small>基金、保險、券商自營（國泰君安等）</small></td>
+      <td><span class="chain-tag ct-cips">CIPS 直連清算</span></td>
+      <td><span class="chain-tag ct-changan">長安鏈</span></td>
+      <td>長安鏈已是國泰君安核心基礎設施，國密合規，境內監管認可</td>
+    </tr>
+    <tr>
+      <td><strong>境內企業 / 貿易融資場景</strong><br><small>關聯單據存証、供應鏈金融</small></td>
+      <td><span class="chain-tag ct-cips">CIPS 清算</span></td>
+      <td><span class="chain-tag ct-bcos">FISCO BCOS</span></td>
+      <td>BCOS 隱私保護完善，已被大量境內銀行採用，適合企業存証場景</td>
+    </tr>
+    <tr>
+      <td><strong>境外 DeFi / 美元計價投資者</strong><br><small>歐美機構、RWA 協議方</small></td>
+      <td><span class="chain-tag ct-mbridge">SWIFT / mBridge</span></td>
+      <td><span class="chain-tag ct-base">Base Chain</span></td>
+      <td>Base 受 Coinbase 合規背書，EVM 兼容，Gas 費極低，境外 DeFi 生態最完整</td>
+    </tr>
+    <tr>
+      <td><strong>AI 錢包 / 高頻小額轉讓</strong><br><small>AI Agent 自動交易、全球散戶</small></td>
+      <td><span class="chain-tag ct-mbridge">多幣種結算</span></td>
+      <td><span class="chain-tag ct-solana">Solana</span></td>
+      <td>65K TPS 支持 AI 策略高頻觸發，毫秒確認，極低費用適合小額自動化場景</td>
+    </tr>
+    <tr>
+      <td><strong>金磚國家 CBDC 跨境結算</strong><br><small>eCNY / 數字盧比 / 數字盧布</small></td>
+      <td><span class="chain-tag ct-mbridge">mBridge 多邊央行橋</span></td>
+      <td><span class="chain-tag ct-conflux">Conflux</span></td>
+      <td>Conflux 已對接 mBridge，支持 eCNY 跨境流通，金磚國家合規優先</td>
+    </tr>
+    <tr>
+      <td><strong>跨鏈二級市場大額流通</strong><br><small>機構間跨鏈交割</small></td>
+      <td><span class="chain-tag ct-cips">CIPS</span> <span class="chain-tag ct-mbridge">SWIFT</span></td>
+      <td><span class="chain-tag ct-eth">ETH / BSC</span></td>
+      <td>ETH 流動性最深，跨鏈橋最完善，適合大額機構間跨鏈代幣交割</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4：系統架構圖（多鏈版）
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">4</div>
+  <h2>系統架構圖（跨境多鏈全景）</h2>
+</div>
+<div class="divider"></div>
+
+<div class="diagram-box">
+<pre>
+┌──────────────────────────────── 傳統金融世界（鏈下）───────────────────────────────┐
+│                                                                                    │
+│  🏦 發行/結算銀行          📊 證券公司（國泰君安）       💱 CIPS 跨境人民幣清算      │
+│  ├ KYC / AML              ├ 長安鏈已接入                ├ ISO 20022 pacs.008       │
+│  ├ 帳戶管理                ├ 承銷、認購、撮合             ├ SM2 國密簽名              │
+│  └ CIPS 清算指令            └ REST API → CF 網關          └ 跨境行間結算              │
+│                                                                                    │
+└──────────────────────────────────┬─────────────────────────────────────────────────┘
+                                   │ 六種格式請求同時進入
+                                   ▼
+┌──────────────────────── ⚙️ Chain Fusion 分布式多鏈融合網關 ─────────────────────────┐
+│                                                                                    │
+│  ┌────────────┐  ┌────────────┐  ┌─────────────┐  ┌──────────────────────────┐  │
+│  │  接入層    │→ │ 協議轉換   │→ │  合規校驗   │→ │  跨境多鏈智能路由         │  │
+│  │ APISIX     │  │ 統一       │  │ AML/KYC     │  │                          │  │
+│  │ TLS 1.3   │  │ Standard   │  │ 制裁名單    │  │  幣種+場景+投資者地區     │  │
+│  │ SM2 驗簽  │  │ Message    │  │ FATF 旅行   │  │  → 自動選鏈 + 清算通道   │  │
+│  └────────────┘  └────────────┘  └─────────────┘  └──────────┬───────────────┘  │
+│                                                               │                  │
+│  ┌────────────────────────────────────────────────────────────▼──────────────┐  │
+│  │  執行層（同步觸發）：鏈上代幣操作 ‖ 鏈下清算轉發 ‖ CMU/EuroClear 登記更新 │  │
+│  └────────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                   │
+│  ┌────────────────────────────────────────────────────────────────────────────┐  │
+│  │  數據同步：鏈上哈希存証 ↔ 推回銀行/券商系統 ↔ 監管自動上報（7年留存）     │  │
+│  └────────────────────────────────────────────────────────────────────────────┘  │
+└──────┬──────────┬──────────┬──────────┬──────────┬──────────┬─────────────────────┘
+       │          │          │          │          │          │
+       ▼          ▼          ▼          ▼          ▼          ▼
+ ┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+ │🏛 長安鏈 ││🏗 BCOS   ││🔵 Base   ││◎ Solana  ││🌀Conflux ││⟠ ETH/BSC│
+ │境內機構  ││企業存証  ││境外DeFi  ││AI錢包    ││eCNY/CBDC ││跨鏈流通  │
+ │國泰君安  ││貿易融資  ││低Gas     ││65K TPS   ││mBridge   ││大額機構  │
+ └──────────┘└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
+</pre>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5：數據格式對照
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">5</div>
+  <h2>各方接入格式對照</h2>
+</div>
+<div class="divider"></div>
+
+<table class="fmt-table">
+  <thead>
+    <tr>
+      <th>參與方 / 通道</th>
+      <th>向 CF 發送格式</th>
+      <th>CF 內部格式</th>
+      <th>CF 向鏈 / 系統發送格式</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>🏦 發行銀行</td>
+      <td><span class="code-tag">CIPS pacs.008 XML</span></td>
+      <td rowspan="7" style="text-align:center;background:#f0fdf4;font-weight:700;color:#065f46;font-size:13px;">
+        StandardMessage<br><span style="font-size:11px;color:#94a3b8;font-weight:400;">（Protobuf 統一內部格式）</span>
+      </td>
+      <td><span class="code-tag">長安鏈 SDK</span> / <span class="code-tag">BCOS RPC</span></td>
+    </tr>
+    <tr>
+      <td>📊 證券公司（國泰君安）</td>
+      <td><span class="code-tag">REST JSON</span></td>
+      <td><span class="code-tag">長安鏈 gRPC</span></td>
+    </tr>
+    <tr>
+      <td>💱 CIPS 回執</td>
+      <td><span class="code-tag">camt.028 XML</span></td>
+      <td><span class="code-tag">Base eth_sendRawTransaction</span></td>
+    </tr>
+    <tr>
+      <td>🔵 Base Chain 投資者</td>
+      <td><span class="code-tag">EIP-712 Signed JSON</span></td>
+      <td><span class="code-tag">Solana sendTransaction</span></td>
+    </tr>
+    <tr>
+      <td>◎ Solana AI 錢包</td>
+      <td><span class="code-tag">Solana Transaction（Base58）</span></td>
+      <td><span class="code-tag">Conflux cfx_sendRawTransaction</span></td>
+    </tr>
+    <tr>
+      <td>🌀 Conflux / mBridge</td>
+      <td><span class="code-tag">cfx JSON-RPC</span></td>
+      <td><span class="code-tag">CIPS pacs.008 XML + SM2</span></td>
+    </tr>
+    <tr>
+      <td>⟠ ETH / BSC</td>
+      <td><span class="code-tag">eth_sendRawTransaction</span></td>
+      <td><span class="code-tag">SWIFT MT103 / ISO 20022 MX</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 6：四階段完整流程
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">6</div>
+  <h2>完整業務流程（四個階段）</h2>
+</div>
+<div class="divider"></div>
+
+<!-- 第一階段 -->
+<div class="phase">
+  <div class="phase-header p1">
+    <div class="phase-num">一</div>
+    <div>
+      <div class="phase-title">發行準備 — 多鏈同步鑄造</div>
+      <div class="phase-sub">一次發行，同步部署到多條鏈，不同投資者群體各取所需</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-dot sd-purple">1</div>
+        <div class="step-content">
+          <span class="step-actor sa-sec">證券公司（國泰君安）</span>
+          <div class="step-title">發送多鏈發行申請</div>
+          <div class="step-desc">通過 REST API 提交：債券名稱、10 億元面值、3 年期、票面利率 4.5%、目標鏈列表（長安鏈主鏈 + Conflux CBDC + Base 境外）、幣種 CNY。</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">2</div>
+        <div class="step-content">
+          <span class="step-actor sa-cf">Chain Fusion — 合規校驗</span>
+          <div class="step-title">KYC + AML + 多辖区合規審核</div>
+          <div class="step-desc">發行方身份映射（銀行帳號 → DID → 各鏈合規錢包）；跨境發行需同時通過中國 AML 法規、香港 SFC、FATF 旅行規則；制裁名單（OFAC/UNSC）篩查。全部通過才繼續。</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">3</div>
+        <div class="step-content">
+          <span class="step-actor sa-cf">Chain Fusion — 多鏈路由決策</span>
+          <div class="step-title">按目標市場分配目標鏈</div>
+          <div class="step-desc">境內機構份額 → 長安鏈（國泰君安主基礎設施）<br>CBDC 跨境份額 → Conflux（mBridge 通道）<br>境外 DeFi 份額 → Base Chain（Coinbase 合規生態）<br>AI 錢包份額 → Solana（高頻低延遲）</div>
+          <div class="step-chains">
+            <span class="chain-tag ct-changan">長安鏈</span>
+            <span class="chain-tag ct-conflux">Conflux</span>
+            <span class="chain-tag ct-base">Base</span>
+            <span class="chain-tag ct-solana">Solana</span>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-teal">4</div>
+        <div class="step-content">
+          <span class="step-actor sa-changan">長安鏈</span>
+          <span class="step-actor sa-chain">Conflux</span>
+          <span class="step-actor sa-base">Base Chain</span>
+          <span class="step-actor sa-solana">Solana</span>
+          <div class="step-title">四條鏈同步部署智能合約 + 分批鑄造代幣</div>
+          <div class="step-desc">
+            長安鏈：6 億份（境內機構）— 國密 SM2 簽名，國泰君安節點背書<br>
+            Conflux：2 億份（CBDC 跨境）— eCNY / mBridge 通道<br>
+            Base Chain：1.5 億份（境外 DeFi）— ERC-20 標準，Coinbase KYC<br>
+            Solana：0.5 億份（AI 錢包 / 高頻小額）— SPL Token 標準
+          </div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">5</div>
+        <div class="step-content">
+          <span class="step-actor sa-cf">Chain Fusion — 數據同步</span>
+          <div class="step-title">四鏈合約地址統一同步 + 存証 + 上報</div>
+          <div class="step-desc">四條鏈的合約地址、代幣 ID、總量 → 統一推回國泰君安系統；FISCO BCOS 同步存証發行記錄（鏈下數據存証）；向人行 / HKMA 自動上報發行備案。</div>
+          <div class="step-chains"><span class="chain-tag ct-bcos">BCOS 存証</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 第二階段 -->
+<div class="phase">
+  <div class="phase-header p2">
+    <div class="phase-num">二</div>
+    <div>
+      <div class="phase-title">跨境認購 — 按投資者類型路由到不同鏈（DvP）</div>
+      <div class="phase-sub">CIPS + 長安鏈（境內）‖ mBridge + Conflux（CBDC）‖ SWIFT + Base（境外）‖ AI + Solana（自動化）</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="callout green">
+      <strong>⚡ DvP 跨鏈保障：</strong>
+      <span>無論走哪條鏈，Chain Fusion 都確保「CIPS/mBridge/SWIFT 清算確認」和「鏈上代幣到帳」同時發生，任一失敗自動全鏈回滾。</span>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-dot sd-indigo">A</div>
+        <div class="step-content">
+          <span class="step-actor sa-changan">境內機構投資者（如某基金）</span>
+          <div class="step-title">認購 3 億元 → CIPS + 長安鏈</div>
+          <div class="step-desc">資金：銀行生成 CIPS pacs.008，SM2 簽名，跨境人民幣劃帳<br>代幣：CIPS 確認後，長安鏈上 3 億份代幣轉入機構合規錢包<br>存証：FISCO BCOS 記錄認購流水</div>
+          <div class="step-chains">
+            <span class="chain-tag ct-cips">CIPS</span>
+            <span class="chain-tag ct-changan">長安鏈</span>
+            <span class="chain-tag ct-bcos">BCOS 存証</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot sd-indigo">B</div>
+        <div class="step-content">
+          <span class="step-actor sa-chain">金磚國家 CBDC 投資者（如數字盧比）</span>
+          <div class="step-title">認購 1 億元 → mBridge + Conflux</div>
+          <div class="step-desc">資金：mBridge 多邊央行數字貨幣橋，數字盧比兌換 eCNY<br>代幣：mBridge 確認後，Conflux 鏈 1 億份代幣到帳</div>
+          <div class="step-chains">
+            <span class="chain-tag ct-mbridge">mBridge</span>
+            <span class="chain-tag ct-conflux">Conflux</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot sd-indigo">C</div>
+        <div class="step-content">
+          <span class="step-actor sa-base">境外 DeFi 機構（美元計價）</span>
+          <div class="step-title">認購 5,000 萬元 → SWIFT + Base Chain</div>
+          <div class="step-desc">資金：SWIFT MT103，美元到人民幣結算，通過代理行清算<br>代幣：SWIFT 確認後，Base Chain ERC-20 代幣轉入 Coinbase Wallet</div>
+          <div class="step-chains">
+            <span class="chain-tag ct-mbridge">SWIFT</span>
+            <span class="chain-tag ct-base">Base Chain</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-dot sd-indigo">D</div>
+        <div class="step-content">
+          <span class="step-actor sa-solana">AI 錢包投資者（Phantom AI Agent）</span>
+          <div class="step-title">AI 自動觸發小額認購 → Solana</div>
+          <div class="step-desc">AI 錢包監測到收益率合適，自動簽名提交認購指令（無需人工）<br>Solana 毫秒確認，SPL Token 到帳；Chain Fusion 完成多幣種結算對接</div>
+          <div class="step-chains">
+            <span class="chain-tag ct-solana">Solana</span>
+            <span style="font-size:11px;color:var(--gray-600);">✦ AI 自動簽名，無需人工干預</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dvp-box" style="margin-top:18px;">
+      <div class="dvp-side money">
+        <div class="dvp-label">💰 資金流（多通道並行）</div>
+        <div class="dvp-item">境內：CIPS pacs.008 + SM2 簽名</div>
+        <div class="dvp-item">CBDC：mBridge 多邊央行橋</div>
+        <div class="dvp-item">境外：SWIFT MT103 代理行清算</div>
+        <div class="dvp-item">AI：多幣種自動結算</div>
+        <div class="dvp-item">全部等待各自通道的確認回執</div>
+      </div>
+      <div class="dvp-side token">
+        <div class="dvp-label">🔗 代幣流（各鏈獨立執行）</div>
+        <div class="dvp-item">長安鏈：境內機構份額到帳</div>
+        <div class="dvp-item">Conflux：CBDC 跨境份額到帳</div>
+        <div class="dvp-item">Base Chain：境外 DeFi 份額到帳</div>
+        <div class="dvp-item">Solana：AI 錢包份額到帳</div>
+        <div class="dvp-item"><strong>均等待清算確認後才執行</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 第三階段 -->
+<div class="phase">
+  <div class="phase-header p3">
+    <div class="phase-num">三</div>
+    <div>
+      <div class="phase-title">跨鏈付息 — 智能合約 × 多通道批量分發</div>
+      <div class="phase-sub">各鏈合約按持倉快照計算 → CF 統一調度 → CIPS / mBridge / SWIFT 同步分發</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-dot sd-teal">1</div>
+        <div class="step-content">
+          <span class="step-actor sa-changan">長安鏈</span>
+          <span class="step-actor sa-chain">Conflux</span>
+          <span class="step-actor sa-base">Base</span>
+          <span class="step-actor sa-solana">Solana</span>
+          <div class="step-title">各鏈智能合約同步觸發付息計算</div>
+          <div class="step-desc">四條鏈各自根據鏈上持倉快照計算應付利息，結果推送給 Chain Fusion。CF 匯總後生成統一付息清單，自動去重和對賬。</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">2</div>
+        <div class="step-content">
+          <span class="step-actor sa-cf">Chain Fusion — 跨境多鏈路由</span>
+          <div class="step-title">自動選擇每位投資者的付息通道</div>
+          <div class="step-desc">
+            長安鏈持倉 → CIPS 境內人民幣清算<br>
+            Conflux 持倉（境外 CBDC）→ mBridge 反向划付<br>
+            Base Chain 持倉（美元投資者）→ SWIFT + 外匯結算<br>
+            Solana AI 錢包 → 自動多幣種到帳，AI 錢包自動記帳
+          </div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-amber">3</div>
+        <div class="step-content">
+          <span class="step-actor sa-cips">CIPS</span>
+          <span class="step-actor sa-chain">mBridge</span>
+          <span class="step-actor sa-base">SWIFT</span>
+          <div class="step-title">三條清算通道同步批量執行</div>
+          <div class="step-desc">Bank 批量生成付息報文，CF 統一調度；三通道同步發出，各自確認後 CF 收集回執，FISCO BCOS 存証全部付息記錄，人行 / HKMA 自動上報。</div>
+          <div class="step-chains"><span class="chain-tag ct-bcos">BCOS 全量存証</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 第四階段 -->
+<div class="phase">
+  <div class="phase-header p4">
+    <div class="phase-num">四</div>
+    <div>
+      <div class="phase-title">跨鏈二級流轉 — AI 錢包自動撮合 × 跨鏈 DvP</div>
+      <div class="phase-sub">Solana AI 錢包自動賣出 → CF 跨鏈橋接到長安鏈 → CIPS 資金對付</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="callout purple">
+      <strong>🤖 典型跨鏈場景：</strong>
+      <p>境外 Solana AI 錢包持有人，AI 策略判斷需要套現，自動在 Solana 掛單；境內長安鏈機構投資者接盤。這是一筆跨鏈、跨境、AI 自動觸發的 DvP 交易。</p>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-dot sd-purple">1</div>
+        <div class="step-content">
+          <span class="step-actor sa-solana">Solana AI 錢包（賣方）</span>
+          <div class="step-title">AI 策略自動生成賣出指令</div>
+          <div class="step-desc">AI Agent 監測收益率變化，無需人工確認，自動對 Chain Fusion 提交賣出 500 萬份代幣的指令，簽名格式：Solana 交易（Base58）。</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">2</div>
+        <div class="step-content">
+          <span class="step-actor sa-sec">證券公司撮合系統</span>
+          <div class="step-title">撮合境內長安鏈機構接盤</div>
+          <div class="step-desc">CF 通知證券公司有 Solana 端賣盤；撮合系統匹配到長安鏈境內機構買家；確認交易：跨鏈（Solana → 長安鏈）+ 跨境（境外 → 境內）。</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">3</div>
+        <div class="step-content">
+          <span class="step-actor sa-cf">Chain Fusion — 跨鏈 DvP 執行</span>
+          <div class="step-title">四件事同步完成</div>
+          <div class="step-desc">
+            ① Solana 鏈上：賣方 AI 錢包 → 跨鏈橋鎖定帳戶，500 萬份 SPL Token 鎖定<br>
+            ② 長安鏈：買方機構錢包 + 500 萬份代幣鑄造（跨鏈橋映射）<br>
+            ③ CIPS：買方人民幣帳戶 → 賣方外匯結算帳戶（跨境人民幣劃帳）<br>
+            ④ Solana：收到 CIPS 確認後，SPL Token 銷毀（完成跨鏈轉移）<br>
+            全部成功才宣告完成，任一失敗全部回滾。
+          </div>
+          <div class="step-chains">
+            <span class="chain-tag ct-solana">Solana 鎖定/銷毀</span>
+            <span class="chain-tag ct-changan">長安鏈 鑄造</span>
+            <span class="chain-tag ct-cips">CIPS 清算</span>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-step">
+        <div class="step-dot sd-blue">4</div>
+        <div class="step-content">
+          <span class="step-actor sa-cf">Chain Fusion — 存証 + 上報</span>
+          <div class="step-title">跨鏈交易全流水 BCOS 存証</div>
+          <div class="step-desc">Solana 鎖定記錄 + 跨鏈橋映射記錄 + 長安鏈到帳記錄 + CIPS 清算記錄，四筆流水統一打包，FISCO BCOS 存証，人行 / HKMA 自動上報跨境跨鏈交易。</div>
+          <div class="step-chains"><span class="chain-tag ct-bcos">BCOS 全流程存証</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 7：總結
+══════════════════════════════════════════════ -->
+<div class="section-title">
+  <div class="section-num">7</div>
+  <h2>各方分工總結（含多鏈）</h2>
+</div>
+<div class="divider"></div>
+
+<table class="summary-table">
+  <thead>
+    <tr>
+      <th>參與方</th>
+      <th>核心職責</th>
+      <th>接入格式</th>
+      <th>在哪條鏈上操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>🏦 發行銀行</strong></td>
+      <td>資金托管、KYC、向 CIPS 發出清算指令</td>
+      <td>CIPS pacs.008 XML</td>
+      <td>不直接操作鏈，通過 CF 間接觸發</td>
+    </tr>
+    <tr>
+      <td><strong>📊 國泰君安</strong></td>
+      <td>承銷、投資者管理、撮合，長安鏈基礎設施</td>
+      <td>REST JSON</td>
+      <td>長安鏈（主）+ 其他鏈（通過 CF）</td>
+    </tr>
+    <tr>
+      <td><strong>💱 CIPS</strong></td>
+      <td>人民幣跨境清算，境內外資金劃帳</td>
+      <td>ISO 20022 XML + SM2</td>
+      <td>CIPS 聯盟鏈（清算存証）</td>
+    </tr>
+    <tr>
+      <td><strong>🏛 長安鏈</strong></td>
+      <td>境內機構代幣登記、持倉管理、付息執行</td>
+      <td>長安鏈 SDK / gRPC</td>
+      <td>長安鏈</td>
+    </tr>
+    <tr>
+      <td><strong>🏗 FISCO BCOS</strong></td>
+      <td>全流程存証（發行、認購、付息、轉讓）</td>
+      <td>BCOS JSON-RPC</td>
+      <td>FISCO BCOS（存証鏈）</td>
+    </tr>
+    <tr>
+      <td><strong>🔵 Base Chain</strong></td>
+      <td>境外 DeFi 投資者份額，ERC-20 代幣</td>
+      <td>EIP-712 Signed JSON</td>
+      <td>Base Chain（Coinbase L2）</td>
+    </tr>
+    <tr>
+      <td><strong>◎ Solana</strong></td>
+      <td>AI 錢包 / 高頻小額 / 自動化認購轉讓</td>
+      <td>Solana Transaction</td>
+      <td>Solana（SPL Token）</td>
+    </tr>
+    <tr>
+      <td><strong>🌀 Conflux</strong></td>
+      <td>CBDC 跨境份額，mBridge 通道結算</td>
+      <td>cfx JSON-RPC</td>
+      <td>Conflux + mBridge</td>
+    </tr>
+    <tr>
+      <td><strong>⚙️ Chain Fusion</strong></td>
+      <td>統一翻譯、合規強制、跨境多鏈路由、DvP 保障、存証上報</td>
+      <td>對所有方提供統一 REST API</td>
+      <td>路由到所有上述鏈，自身不存數據</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- INSIGHT -->
+<div class="insight">
+  <div class="insight-title">💡 跨境多鏈的核心設計理念</div>
+  <p>
+    <strong>銀行只管資金、證券公司只管投資者、CIPS 只管人民幣清算、每條鏈只管自己的代幣。</strong>
+    Chain Fusion 是讓這六個世界同步運轉的調度中心——無論投資者是境內機構用長安鏈、金磚國家用 mBridge + Conflux、境外 DeFi 用 Base Chain，還是 AI 錢包用 Solana，從銀行和證券公司的視角看，對接的都是同一套 REST API，後面走哪條鏈、哪個清算通道，全部由 Chain Fusion 自動決策。
+    <br><br>
+    新增一條鏈（如未來的某國 CBDC 鏈），只需開發一個實現 <strong>ChainAdapter 接口</strong>的插件，注冊到插件注冊表，≤ 2 週完成接入，<strong>不需要改動任何現有業務代碼</strong>。
+  </p>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Chain Fusion · 分布式多鏈融合網關</strong><br>
+  文件編號：CF-SW-DOC-2026-002 · 版本：v2.0 · 2026 年 4 月 · 跨境多鏈更新版<br>
+  本文件屬內部保密資料，未經授權不得對外披露 · © DACC 2026
+</div>
+
+</body>
+</html>

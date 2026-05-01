@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chain Fusion — RMB Digital Bonds: Why Do We Need It?</title>
+<style>
+  :root {
+    --ink:        #1a1a2e;
+    --ink-soft:   #374151;
+    --ink-dim:    #6b7280;
+    --paper:      #fafaf8;
+    --paper-warm: #fffbf5;
+    --line:       #e5e7eb;
+
+    --red:        #c0392b;
+    --red-pale:   #fef2f2;
+    --red-border: #fca5a5;
+
+    --blue:       #1d4ed8;
+    --blue-pale:  #eff6ff;
+    --blue-border:#93c5fd;
+
+    --green:      #059669;
+    --green-pale: #f0fdf4;
+    --green-border:#6ee7b7;
+
+    --amber:      #b45309;
+    --amber-pale: #fffbeb;
+    --amber-border:#fcd34d;
+
+    --purple:     #6d28d9;
+    --purple-pale:#f5f3ff;
+    --purple-border:#c4b5fd;
+
+    --teal:       #0f766e;
+    --teal-pale:  #f0fdfa;
+    --teal-border:#5eead4;
+
+    --rose:       #be185d;
+    --rose-pale:  #fff1f2;
+    --rose-border:#fda4af;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', 'Noto Serif', serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.85;
+    font-size: 16px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 55%, #0e4d6d 100%);
+    color: white;
+    padding: 70px 32px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display:inline-block;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:20px;
+    padding:5px 18px;
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:22px;
+    color:rgba(255,255,255,0.8);
+  }
+  .hero h1 {
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 18px;
+  }
+  .hero h1 span { color: #60d8fa; }
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.72);
+    max-width: 600px;
+    margin: 0 auto 28px;
+  }
+  .hero-pills { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; }
+  .hero-pill {
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:6px; padding:4px 14px;
+    font-size:13px; color:rgba(255,255,255,0.8);
+  }
+
+  /* ─── LAYOUT ─── */
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ─── CHAPTER ─── */
+  .chapter { margin-top: 64px; }
+  .chapter-label {
+    font-size:11px; font-weight:700; letter-spacing:3px;
+    text-transform:uppercase; color:var(--ink-dim);
+    margin-bottom:6px;
+  }
+  .chapter h2 {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 800;
+    color: var(--ink);
+    border-left: 5px solid var(--blue);
+    padding-left: 16px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .chapter-intro {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    padding-left: 21px;
+    border-left: 2px solid var(--line);
+  }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .callout {
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin: 24px 0;
+    border-left: 5px solid;
+  }
+  .callout.red    { background:var(--red-pale);    border-color:var(--red); }
+  .callout.blue   { background:var(--blue-pale);   border-color:var(--blue); }
+  .callout.green  { background:var(--green-pale);  border-color:var(--green); }
+  .callout.amber  { background:var(--amber-pale);  border-color:var(--amber); }
+  .callout.purple { background:var(--purple-pale); border-color:var(--purple); }
+
+  .callout-label {
+    font-size:11px; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; margin-bottom:8px;
+  }
+  .callout.red    .callout-label { color:var(--red); }
+  .callout.blue   .callout-label { color:var(--blue); }
+  .callout.green  .callout-label { color:var(--green); }
+  .callout.amber  .callout-label { color:var(--amber); }
+  .callout.purple .callout-label { color:var(--purple); }
+
+  .callout p { font-size:15px; color:var(--ink-soft); line-height:1.8; }
+  .callout p + p { margin-top:10px; }
+  .callout strong { color:var(--ink); }
+
+  /* ─── CORE PROBLEM: SILO DIAGRAM ─── */
+  .silo-wrap {
+    margin: 32px 0;
+    text-align: center;
+  }
+  .silo-title {
+    font-size:13px; font-weight:700; color:var(--red);
+    letter-spacing:1px; text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  .silo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .silo-box {
+    background: white;
+    border: 2px dashed var(--red-border);
+    border-radius: 12px;
+    padding: 14px 8px;
+    position: relative;
+  }
+  .silo-icon { font-size: 26px; margin-bottom: 6px; }
+  .silo-name { font-size: 12px; font-weight: 700; color: var(--red); margin-bottom:4px; }
+  .silo-sys  { font-size: 11px; color: var(--ink-dim); line-height:1.4; }
+  .silo-barrier {
+    background: var(--red-pale);
+    border: 1.5px solid var(--red-border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .no-connect { font-size: 20px; color: var(--red); margin: 0 4px; }
+  .silo-arrows {
+    display: flex; align-items: center; justify-content: center;
+    gap: 4px; flex-wrap: wrap;
+    margin: 8px 0;
+    font-size: 13px; color: var(--red-border);
+    font-weight: 600;
+  }
+
+  /* ─── ANALOGY CARD ─── */
+  .analogy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .analogy-side {
+    border-radius: 14px;
+    padding: 20px;
+    border: 1.5px solid;
+  }
+  .analogy-side.before {
+    background: var(--red-pale); border-color: var(--red-border);
+  }
+  .analogy-side.after {
+    background: var(--green-pale); border-color: var(--green-border);
+  }
+  .analogy-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .analogy-side.before .analogy-label { color: var(--red); }
+  .analogy-side.after  .analogy-label { color: var(--green); }
+  .analogy-text { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+
+  /* ─── PLAYER GRID ─── */
+  .player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .player {
+    border-radius: 14px;
+    padding: 18px;
+    border: 1.5px solid;
+    transition: transform .2s;
+  }
+  .player:hover { transform: translateY(-2px); }
+  .player.bank    { background:var(--blue-pale);   border-color:var(--blue-border); }
+  .player.sec     { background:var(--purple-pale);  border-color:var(--purple-border); }
+  .player.cips    { background:var(--amber-pale);   border-color:var(--amber-border); }
+  .player.cmu     { background:var(--teal-pale);    border-color:var(--teal-border); }
+  .player.euro    { background:var(--rose-pale);    border-color:var(--rose-border); }
+  .player.cf      { background:var(--green-pale);   border-color:var(--green-border); }
+  .player.chain   { background:#fdf4ff;             border-color:#e9d5ff; }
+
+  .player-icon { font-size: 30px; margin-bottom: 10px; }
+  .player-name { font-weight: 800; font-size: 15px; margin-bottom: 3px; }
+  .player.bank  .player-name { color:var(--blue); }
+  .player.sec   .player-name { color:var(--purple); }
+  .player.cips  .player-name { color:var(--amber); }
+  .player.cmu   .player-name { color:var(--teal); }
+  .player.euro  .player-name { color:var(--rose); }
+  .player.cf    .player-name { color:var(--green); }
+  .player.chain .player-name { color:#7e22ce; }
+  .player-sub   { font-size: 11px; color:var(--ink-dim); margin-bottom:8px; font-style:italic; }
+  .player-desc  { font-size: 13px; color:var(--ink-soft); line-height:1.6; }
+
+  /* ─── STORY FLOW ─── */
+  .story { margin: 28px 0; }
+  .story-step {
+    display: flex;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: flex-start;
+  }
+  .story-step:last-child { border-bottom: none; }
+  .step-circle {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 900; color: white; flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .sc-blue   { background: var(--blue); }
+  .sc-green  { background: var(--green); }
+  .sc-amber  { background: var(--amber); }
+  .sc-purple { background: var(--purple); }
+  .sc-teal   { background: var(--teal); }
+  .sc-rose   { background: var(--rose); }
+  .sc-red    { background: var(--red); }
+
+  .step-body { flex: 1; }
+  .step-who {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: .5px;
+    padding: 2px 9px; border-radius: 4px; margin-bottom: 6px;
+  }
+  .sw-bank   { background:var(--blue-pale);   color:var(--blue); }
+  .sw-sec    { background:var(--purple-pale);  color:var(--purple); }
+  .sw-cips   { background:var(--amber-pale);   color:var(--amber); }
+  .sw-cmu    { background:var(--teal-pale);    color:var(--teal); }
+  .sw-euro   { background:var(--rose-pale);    color:var(--rose); }
+  .sw-cf     { background:var(--green-pale);   color:var(--green); }
+  .sw-chain  { background:#fdf4ff;             color:#7e22ce; }
+
+  .step-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+  .step-text  { font-size: 14px; color: var(--ink-soft); line-height: 1.75; }
+  .step-note  {
+    margin-top: 10px;
+    background: var(--paper-warm);
+    border: 1px solid var(--amber-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px; color: var(--amber); line-height: 1.6;
+  }
+
+  /* ─── PROBLEM MATRIX ─── */
+  .matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--line);
+    margin: 20px 0;
+  }
+  .matrix th {
+    background: #0f172a; color: white;
+    padding: 11px 14px; text-align: left;
+    font-size: 12px; letter-spacing: .5px;
+  }
+  .matrix td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .matrix tr:last-child td { border-bottom: none; }
+  .matrix tr:nth-child(even) td { background: var(--paper); }
+  .tag {
+    display:inline-block; border-radius:5px;
+    padding:2px 8px; font-size:11px; font-weight:700;
+  }
+  .tag-red    { background:var(--red-pale);    color:var(--red); }
+  .tag-green  { background:var(--green-pale);  color:var(--green); }
+  .tag-blue   { background:var(--blue-pale);   color:var(--blue); }
+  .tag-amber  { background:var(--amber-pale);  color:var(--amber); }
+  .tag-purple { background:var(--purple-pale); color:var(--purple); }
+
+  /* ─── QUOTE ─── */
+  .bigquote {
+    border-left: 6px solid var(--blue);
+    margin: 36px 0;
+    padding: 20px 28px;
+    background: var(--blue-pale);
+    border-radius: 0 14px 14px 0;
+  }
+  .bigquote p {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-style: italic;
+    color: var(--blue);
+    font-weight: 600;
+    line-height: 1.7;
+  }
+  .bigquote cite {
+    display:block; margin-top:10px;
+    font-size:13px; color:var(--ink-dim);
+    font-style:normal;
+  }
+
+  /* ─── BRIDGE DIAGRAM ─── */
+  .bridge {
+    background: white;
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 20px;
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  .bridge pre {
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    white-space: pre;
+  }
+  .bridge-caption {
+    font-size: 12px; color: var(--ink-dim);
+    text-align: center; margin-top: 12px;
+  }
+
+  /* ─── PHASE HEADER ─── */
+  .phase-hd {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--blue-pale);
+    border: 1.5px solid var(--blue-border);
+    border-radius: 14px 14px 0 0;
+    padding: 16px 22px;
+    margin-top: 32px;
+  }
+  .phase-hd.p2 { background:var(--green-pale); border-color:var(--green-border); }
+  .phase-hd.p3 { background:var(--amber-pale);  border-color:var(--amber-border); }
+  .phase-hd.p4 { background:var(--purple-pale); border-color:var(--purple-border); }
+  .phase-hd.p5 { background:var(--teal-pale);   border-color:var(--teal-border); }
+
+  .pnum {
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:18px; color:white; flex-shrink:0;
+  }
+  .p1 .pnum { background:var(--blue); }
+  .p2 .pnum { background:var(--green); }
+  .p3 .pnum { background:var(--amber); }
+  .p4 .pnum { background:var(--purple); }
+  .p5 .pnum { background:var(--teal); }
+
+  .phase-title-text { font-size:16px; font-weight:800; }
+  .p1 .phase-title-text { color:#1e3a8a; }
+  .p2 .phase-title-text { color:#064e3b; }
+  .p3 .phase-title-text { color:#78350f; }
+  .p4 .phase-title-text { color:#3b0764; }
+  .p5 .phase-title-text { color:#134e4a; }
+  .phase-sub-text { font-size:13px; color:var(--ink-dim); margin-top:2px; }
+
+  .phase-body {
+    background:white;
+    border:1.5px solid var(--line);
+    border-top:none;
+    border-radius:0 0 14px 14px;
+    padding:24px;
+  }
+
+  /* ─── INSIGHT ─── */
+  .insight {
+    margin-top: 48px;
+    background: linear-gradient(135deg, #0f172a, #1e3a5f);
+    color: white;
+    border-radius: 18px;
+    padding: 36px 32px;
+  }
+  .insight h3 {
+    font-size: 20px; font-weight: 800; margin-bottom: 16px;
+    color: #60d8fa;
+  }
+  .insight p { font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.85; margin-bottom: 14px; }
+  .insight strong { color: white; }
+  .insight-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; margin-top: 20px;
+  }
+  .insight-item {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .insight-item .ii-icon { font-size: 24px; margin-bottom: 6px; }
+  .insight-item .ii-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .insight-item .ii-val { font-size: 15px; font-weight: 700; color: #60d8fa; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0f172a;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 28px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  @media(max-width:600px){
+    .silo-grid { grid-template-columns: repeat(3,1fr); }
+    .analogy { grid-template-columns: 1fr; }
+    .player-grid { grid-template-columns: 1fr 1fr; }
+    .bridge pre { font-size: 10.5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Chain Fusion · Plain English Edition</div>
+  <h1>Money, Bonds, Custody, Clearing, Regulation —<br><span>Why Are They All Disconnected?</span></h1>
+  <p class="hero-sub">A step-by-step walkthrough of buying and selling one RMB digital bond — showing how six separate worlds finally connect inside Chain Fusion.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">🏦 Banks</span>
+    <span class="hero-pill">📊 Securities Firms</span>
+    <span class="hero-pill">💱 CIPS</span>
+    <span class="hero-pill">🏛 CMU / EuroClear</span>
+    <span class="hero-pill">🏗 Multi-bank Clearing</span>
+    <span class="hero-pill">🔗 Blockchain</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 0: The Core Problem
+═══════════════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-label">The Core Problem</div>
+  <h2>"The money arrived — but nobody knows if the bond did."</h2>
+  <p class="chapter-intro">Before explaining Chain Fusion, let's understand why today's world is so complicated.</p>
+
+  <div class="bigquote">
+    <p>"Because many entities — <strong>wallets, assets, funds, regulation, and cross-border transfers</strong> — are fragmented. Each lives in its own world, speaks its own language, runs on its own clock, and has no single coordinator."</p>
+    <cite>— Chain Fusion core design thesis</cite>
+  </div>
+
+  <p style="font-size:15px;color:var(--ink-soft);">Imagine you buy an RMB-denominated infrastructure bond in Hong Kong. Behind the scenes, five completely independent systems are all set in motion at once:</p>
+
+  <div class="silo-wrap" style="margin-top:24px;">
+    <div class="silo-title">⚠️ Today's World: Five Silos, Zero Connections</div>
+    <div class="silo-grid">
+      <div class="silo-box">
+        <div class="silo-icon">💼</div>
+        <div class="silo-name">Wallet</div>
+        <div class="silo-sys">Your on-chain address<br>Conflux / ETH</div>
+      </div>
+      <div class="silo-box">
+        <div class="silo-icon">📜</div>
+        <div class="silo-name">Asset Registry</div>
+        <div class="silo-sys">CMU (Hong Kong)<br>EuroClear (Europe)</div>
+      </div>
+      <div class="silo-box">
+        <div class="silo-icon">💴</div>
+        <div class="silo-name">Cash Account</div>
+        <div class="silo-sys">Bank account<br>RMB / CNY</div>
+      </div>
+      <div class="silo-box">
+        <div class="silo-icon">🏛</div>
+        <div class="silo-name">Regulatory Report</div>
+        <div class="silo-sys">PBOC / HKMA<br>Local regulators</div>
+      </div>
+      <div class="silo-box">
+        <div class="silo-icon">🌐</div>
+        <div class="silo-name">Cross-border Clearing</div>
+        <div class="silo-sys">CIPS / SWIFT<br>Multi-bank chain</div>
+      </div>
+    </div>
+    <div class="silo-arrows">
+      <span>Wallet</span><span class="no-connect">✗</span>
+      <span>Asset Registry</span><span class="no-connect">✗</span>
+      <span>Cash Account</span><span class="no-connect">✗</span>
+      <span>Regulatory Report</span><span class="no-connect">✗</span>
+      <span>Cross-border Clearing</span>
+    </div>
+    <div class="silo-barrier">None of these five systems are automatically connected. Every transaction requires manual coordination between them.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 1: An Everyday Analogy
+═══════════════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-label">Chapter One</div>
+  <h2>Understanding "Fragmentation" Through a Real-Life Story</h2>
+  <p class="chapter-intro">Imagine buying a flat in Shanghai while living in Hong Kong, paying in RMB. That's what this fragmentation feels like.</p>
+
+  <div class="callout red">
+    <div class="callout-label">🏚 The Traditional Nightmare (Property Purchase Analogy)</div>
+    <p>You wire the money from Hong Kong to Shanghai (<strong>cash account</strong> moves). But the title deed at the Land Bureau is still in the previous owner's name (<strong>asset registry</strong> hasn't changed). Your Hong Kong bank has no idea the Shanghai Land Bureau exists, and vice versa. If you're a foreign buyer, you need to file separate reports with each country's authorities (<strong>regulatory reports</strong> done in parallel, independently).</p>
+    <p>The result: you need a solicitor, a notary, the bank's wire transfer desk, the Land Bureau, and the tax office — at least five departments — <strong>all coordinated manually by phone and paper</strong>.</p>
+  </div>
+
+  <div class="callout blue">
+    <div class="callout-label">📄 Digital Bonds Have the Same Problem</div>
+    <p>Buying an RMB digital bond is no different. <strong>Funds</strong> must travel via CIPS. <strong>Bond ownership</strong> must be updated at CMU or EuroClear. <strong>On-chain tokens</strong> must be transferred to your wallet. The money may pass through three banks via <strong>multi-bank clearing</strong>. And finally the whole transaction must be <strong>reported to regulators</strong>. Today, all five of these happen independently and are reconciled by hand.</p>
+  </div>
+
+  <div class="analogy">
+    <div class="analogy-side before">
+      <div class="analogy-label">❌ Without Chain Fusion</div>
+      <div class="analogy-text">Like five departments each sending their own letter — one by courier, one by registered mail, one by fax. Who arrives first? Did all of them arrive? You have to phone each department individually to check. If one step is delayed, the whole transaction is left hanging in mid-air.</div>
+    </div>
+    <div class="analogy-side after">
+      <div class="analogy-label">✅ With Chain Fusion</div>
+      <div class="analogy-text">Like having a unified dispatch centre. It takes one package, replicates it into five copies, repackages each in the format that department understands, labels it in their language, delivers all five simultaneously, and only declares "transaction complete" once every single recipient has confirmed delivery.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 2: Meet the Players
+═══════════════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-label">Chapter Two</div>
+  <h2>The Cast: Seven Worlds, Seven Languages</h2>
+  <p class="chapter-intro">In a single RMB digital bond transaction, these seven parties each play a distinct role — and they cannot understand one another.</p>
+
+  <div class="player-grid">
+    <div class="player bank">
+      <div class="player-icon">🏦</div>
+      <div class="player-name">Issuing / Settlement Bank</div>
+      <div class="player-sub">Guardian of the money</div>
+      <div class="player-desc">Holds the RMB accounts of the issuer and investors. Responsible for KYC (identity checks), escrow of funds, and sending clearing instructions to CIPS.</div>
+    </div>
+    <div class="player sec">
+      <div class="player-icon">📊</div>
+      <div class="player-name">Securities Firm</div>
+      <div class="player-sub">The investor's front door</div>
+      <div class="player-desc">Underwrites the bond, manages investor subscriptions, and matches buyers and sellers in the secondary market. It is the entry point connecting investors to the whole system.</div>
+    </div>
+    <div class="player cips">
+      <div class="player-icon">💱</div>
+      <div class="player-name">CIPS</div>
+      <div class="player-sub">The RMB cross-border motorway</div>
+      <div class="player-desc">The Cross-border Interbank Payment System for RMB. All cross-border RMB flows must pass through this channel, which speaks ISO 20022 XML.</div>
+    </div>
+    <div class="player cmu">
+      <div class="player-icon">🏛</div>
+      <div class="player-name">CMU (Hong Kong)</div>
+      <div class="player-sub">The "Land Registry" for bonds</div>
+      <div class="player-desc">The HKMA's Central Moneymarkets Unit. The official register of who holds which bond — equivalent to a property registry issuing title deeds for bonds.</div>
+    </div>
+    <div class="player euro">
+      <div class="player-icon">🇪🇺</div>
+      <div class="player-name">EuroClear</div>
+      <div class="player-sub">Europe's "Land Registry"</div>
+      <div class="player-desc">Europe's largest bond custody and clearing institution. Bond positions held by international investors are registered here. CMU and EuroClear must be linked.</div>
+    </div>
+    <div class="player cf">
+      <div class="player-icon">⚙️</div>
+      <div class="player-name">Chain Fusion</div>
+      <div class="player-sub">The unified coordination layer</div>
+      <div class="player-desc">The core of this system. Translates all formats, enforces compliance, triggers all steps simultaneously, and ensures all five worlds complete their actions at the same time.</div>
+    </div>
+    <div class="player chain">
+      <div class="player-icon">🔗</div>
+      <div class="player-name">Blockchain</div>
+      <div class="player-sub">The digital "safe" for tokens</div>
+      <div class="player-desc">Conflux, ETH, and others. Digital bond tokens are minted, transferred, and burned here. Smart contracts automatically execute coupon payment rules, with tamper-proof records.</div>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <div class="callout-label">🆕 What Is Multi-Bank Clearing?</div>
+    <p>When a cross-border RMB payment needs to travel from "Bank A in Hong Kong" to "Bank B in Shanghai," it may pass through: <strong>Correspondent Bank A → Clearing Bank B → Destination Bank C</strong> — three intermediate stops. Each bank records the transfer in its own ledger, while CIPS does the final settlement. Chain Fusion ensures that every confirmation along this multi-bank chain stays in real-time sync with the on-chain token status.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 3: The System Map
+═══════════════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-label">Chapter Three</div>
+  <h2>The System Map: Who Is Where, and How They Connect</h2>
+
+  <div class="bridge">
+    <pre>
+  ┌────────────────── Traditional Finance World (Off-chain) ─────────────────────┐
+  │                                                                               │
+  │  🏦 Issuing Bank          📊 Securities Firm     🏛 CMU (HK Bond Registry)   │
+  │  ├ Account management      ├ Underwriting          ├ Official ownership ledger│
+  │  ├ KYC checks              ├ Investor subscriptions└ Links to EuroClear (EU)  │
+  │  └ CIPS clearing orders    └ Secondary market                                 │
+  │                                                                               │
+  │  💱 CIPS (Cross-border RMB)          🏗 Multi-bank Clearing Chain             │
+  │  ├ ISO 20022 XML messages            ├ Correspondent Bank A                   │
+  │  ├ SM2 Chinese cryptographic signing ├ Clearing Bank B                        │
+  │  └ Interbank settlement              └ Destination Bank C                     │
+  │                                                                               │
+  └──────────────────────────────┬────────────────────────────────────────────────┘
+                                 │ Six different request formats arrive together
+                                 ▼
+  ┌────────────────────── ⚙️ Chain Fusion Gateway ──────────────────────────────┐
+  │                                                                              │
+  │  ① Receive  → Format validation + identity verification (reject any anomaly) │
+  │  ② Translate→ All formats unified into StandardMessage (internal language)   │
+  │  ③ Comply   → AML · Sanctions screening · KYC · FATF Travel Rule            │
+  │  ④ Route    → Auto-select: CIPS / mBridge / HK_RTGS / SWIFT                 │
+  │  ⑤ Execute  → Simultaneously trigger: on-chain tokens + off-chain clearing   │
+  │               + CMU registry update                                          │
+  │  ⑥ Sync     → On-chain proof ↔ push back to all stakeholder systems          │
+  │  ⑦ Report   → Auto-file to PBOC / HKMA / cross-border regulators (7 yrs)    │
+  │                                                                              │
+  └───────────┬──────────────┬──────────────┬───────────────────────────────────┘
+              │              │              │
+              ▼              ▼              ▼
+    🔗 Conflux Chain   🔗 ETH Chain   🔗 CIPS Alliance Chain
+    Digital bond tokens  Cross-chain    On-chain clearing proof
+    Smart contract exec  liquidity
+    </pre>
+    <div class="bridge-caption">Chain Fusion is the only layer connecting all the silos — no existing system needs to be rebuilt</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 4: The Full Journey
+═══════════════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-label">Chapter Four</div>
+  <h2>From Issuance to Trading: The Complete Story in Five Phases</h2>
+  <p class="chapter-intro">Scenario: A bank issues a CNY 1 billion RMB-denominated digital infrastructure bond, open to BRICS institutional investors.</p>
+
+  <!-- Phase 1 -->
+  <div class="phase-hd p1">
+    <div class="pnum">1</div>
+    <div>
+      <div class="phase-title-text">Issuance — Minting the "Digital Title Deed"</div>
+      <div class="phase-sub-text">Securities firm initiates → Gateway reviews → Blockchain mints tokens → CMU updates its register</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="story">
+      <div class="story-step">
+        <div class="step-circle sc-purple">1</div>
+        <div class="step-body">
+          <span class="step-who sw-sec">Securities Firm</span>
+          <div class="step-title">Files the issuance application</div>
+          <div class="step-text">Submits bond parameters to Chain Fusion: face value CNY 1 billion, 3-year tenor, 4.5% coupon, RMB denomination, target chain: Conflux. Think of this as filing a planning permission application.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">2</div>
+        <div class="step-body">
+          <span class="step-who sw-cf">Chain Fusion — Compliance Review</span>
+          <div class="step-title">Verifies the issuer's identity and legal eligibility</div>
+          <div class="step-text">Automated checks: Is the issuer's KYC complete? Is the source of funds legitimate? Are they on any sanctions list? Do they hold the required licences? All must pass before proceeding.</div>
+          <div class="step-note">📌 Plain-English equivalent: Like a notary confirming the seller actually owns the property and has no outstanding disputes, before a title transfer is allowed.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">3</div>
+        <div class="step-body">
+          <span class="step-who sw-chain">Conflux Blockchain</span>
+          <div class="step-title">Deploys smart contract, mints 1 billion tokens</div>
+          <div class="step-text">A "digital bond vault" (smart contract) is created on-chain. 1 billion tokens are minted, each representing CNY 1 of the bond's face value. Coupon payment rules are written into the contract and execute automatically — they cannot be altered.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-teal">4</div>
+        <div class="step-body">
+          <span class="step-who sw-cmu">CMU (Hong Kong)</span>
+          <div class="step-title">Official register updated simultaneously</div>
+          <div class="step-text">Chain Fusion notifies CMU to register the newly issued digital bonds. CMU records in the official ledger: "These 1 billion bond units are currently held by the issuer at contract address 0x…"</div>
+          <div class="step-note">📌 Plain-English equivalent: Like registering a newly built property at the Land Registry. CMU is the Land Registry for bonds.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-hd p2" style="margin-top:24px;">
+    <div class="pnum">2</div>
+    <div>
+      <div class="phase-title-text">Investor Subscription — Money and Bonds Arrive Together (DvP)</div>
+      <div class="phase-sub-text">CIPS multi-bank clearing + on-chain token transfer + CMU position update — all three happen simultaneously</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="callout green" style="margin-bottom:20px;">
+      <div class="callout-label">💡 What Is DvP?</div>
+      <p><strong>DvP = Delivery versus Payment.</strong> This is the most important safety mechanism in financial markets: the bond ("delivery") and the cash ("payment") must settle at the exact same moment — neither side moves first. One of Chain Fusion's core values is guaranteeing DvP atomicity across chains and borders — either everything succeeds, or everything rolls back.</p>
+    </div>
+    <div class="story">
+      <div class="story-step">
+        <div class="step-circle sc-purple">1</div>
+        <div class="step-body">
+          <span class="step-who sw-sec">Securities Firm</span>
+          <div class="step-title">Investor submits subscription: CNY 50 million</div>
+          <div class="step-text">A BRICS-country pension fund submits a subscription application through the securities firm for CNY 50 million.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">2</div>
+        <div class="step-body">
+          <span class="step-who sw-cf">Chain Fusion — Triggers Three Channels Simultaneously</span>
+          <div class="step-title">Three actions start at the same time — no ordering between them</div>
+        </div>
+      </div>
+
+      <table class="matrix" style="margin-left:0;">
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>What Happens</th>
+            <th>Systems Involved</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>💴 Cash Flow</strong></td>
+            <td>CNY 50M moves from investor's account to bond escrow account</td>
+            <td>Bank A → Correspondent → CIPS → Clearing Bank → Bank B (multi-bank)</td>
+            <td><span class="tag tag-amber">Awaiting confirmation</span></td>
+          </tr>
+          <tr>
+            <td><strong>🔗 Token Flow</strong></td>
+            <td>50M tokens transferred from custody wallet to investor's compliant wallet</td>
+            <td>Conflux smart contract</td>
+            <td><span class="tag tag-red">Waits for CIPS confirmation first</span></td>
+          </tr>
+          <tr>
+            <td><strong>📜 Registry Update</strong></td>
+            <td>CMU official ledger updated: investor's position +50M units</td>
+            <td>Chain Fusion → CMU system</td>
+            <td><span class="tag tag-red">Waits for token transfer confirmation</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="story-step" style="margin-top:16px;">
+        <div class="step-circle sc-amber">3</div>
+        <div class="step-body">
+          <span class="step-who sw-cips">CIPS Multi-bank Clearing</span>
+          <div class="step-title">Cross-border RMB funds travel through the multi-bank chain</div>
+          <div class="step-text">CIPS receives the clearing instruction (pacs.008 XML, signed with SM2 Chinese cryptography). Funds hop through: <strong>Correspondent Bank → Clearing Bank → Destination Bank</strong>. Each hop is confirmed in that bank's ledger. CIPS returns a settlement receipt (camt.028).</div>
+          <div class="step-note">📌 Plain-English equivalent: Like an RMB wire transfer that stops at several relay stations, each stamping a confirmation, before reaching its final destination.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">4</div>
+        <div class="step-body">
+          <span class="step-who sw-cf">Chain Fusion</span>
+          <div class="step-title">CIPS confirmation received → Token transfer unlocked</div>
+          <div class="step-text">Only after Chain Fusion validates the CIPS settlement receipt as genuine does it trigger the on-chain smart contract to execute the token transfer. This is the core DvP guarantee: <strong>no money, no bond movement.</strong></div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-teal">5</div>
+        <div class="step-body">
+          <span class="step-who sw-cmu">CMU</span>&nbsp;
+          <span class="step-who sw-chain">Blockchain</span>
+          <div class="step-title">CMU registry updated + on-chain proof recorded</div>
+          <div class="step-text">Once tokens arrive, CMU's official ledger is updated with the investor's new position. The full transaction hash is recorded on-chain (tamper-proof). Chain Fusion auto-files reports to PBOC and HKMA.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-green">6</div>
+        <div class="step-body">
+          <span class="step-who sw-bank">Bank</span>&nbsp;
+          <span class="step-who sw-sec">Securities Firm</span>
+          <div class="step-title">Investor receives triple confirmation</div>
+          <div class="step-text">Bank account: CNY 50M debit confirmed<br>On-chain wallet: 50M tokens received confirmed<br>CMU: Official position registry updated confirmed<br>All three arrive simultaneously. Transaction complete.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-hd p3" style="margin-top:24px;">
+    <div class="pnum">3</div>
+    <div>
+      <div class="phase-title-text">Automatic Coupon Payment — Smart Contract Replaces Manual Calculation</div>
+      <div class="phase-sub-text">Contract auto-calculates from position snapshot → Bank batch-generates CIPS messages → Distributed to investors across countries</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="story">
+      <div class="story-step">
+        <div class="step-circle sc-blue">1</div>
+        <div class="step-body">
+          <span class="step-who sw-chain">Smart Contract</span>
+          <div class="step-title">On the coupon date, the contract triggers automatically</div>
+          <div class="step-text">Using the on-chain position snapshot, it calculates each investor's coupon entitlement proportionally. This calculation is fully transparent — anyone can verify it. There is no risk that "the bank calculated it wrong."</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">2</div>
+        <div class="step-body">
+          <span class="step-who sw-cf">Chain Fusion — Smart Routing</span>
+          <div class="step-title">Automatically selects the right channel per investor location</div>
+          <div class="step-text">
+            Domestic investors → CIPS direct clearing<br>
+            Hong Kong investors → HK RTGS (Real-Time Gross Settlement)<br>
+            Other BRICS countries → CIPS cross-border / mBridge (multi-CBDC bridge)<br>
+            European investors (via EuroClear positions) → SWIFT + EuroClear interface
+          </div>
+          <div class="step-note">📌 This routing is fully automatic. The issuing bank does not need to manually fill out separate payment instructions for every country.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-amber">3</div>
+        <div class="step-body">
+          <span class="step-who sw-cips">CIPS</span>&nbsp;
+          <span class="step-who sw-euro">EuroClear</span>
+          <div class="step-title">Batch cross-border clearing executes simultaneously</div>
+          <div class="step-text">The bank system generates dozens or hundreds of pacs.008 messages. Chain Fusion coordinates them all, dispatching clearing instructions in parallel to CIPS (domestic) and the EuroClear channel (overseas European positions).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-hd p4" style="margin-top:24px;">
+    <div class="pnum">4</div>
+    <div>
+      <div class="phase-title-text">Secondary Market — Investor-to-Investor Transfer</div>
+      <div class="phase-sub-text">On-chain token transfer + CIPS cash settlement + CMU / EuroClear simultaneous position update</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="story">
+      <div class="story-step">
+        <div class="step-circle sc-purple">1</div>
+        <div class="step-body">
+          <span class="step-who sw-sec">Securities Firm</span>
+          <div class="step-title">Investor A wants to sell 10 million units to Investor B</div>
+          <div class="step-text">A is in Hong Kong (CMU position). B is in Germany (EuroClear position). This isn't just a token transfer — it also involves a cross-border title change between two different "land registries": CMU and EuroClear.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">2</div>
+        <div class="step-body">
+          <span class="step-who sw-cf">Chain Fusion</span>
+          <div class="step-title">Cross-border DvP: Four things complete simultaneously</div>
+          <div class="step-text">
+            ① Conflux chain: A's wallet → B's wallet, 10M tokens transferred<br>
+            ② CIPS + SWIFT: B's EUR account pays A in RMB equivalent<br>
+            ③ CMU: A's Hong Kong position −10M units<br>
+            ④ EuroClear: B's European position +10M units<br>
+            All four must complete for success. If any one fails, all are automatically rolled back.
+          </div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-green">3</div>
+        <div class="step-body">
+          <span class="step-who sw-chain">Blockchain</span>
+          <div class="step-title">Full audit trail, queryable for 7 years</div>
+          <div class="step-text">Every step of the transaction is hashed and recorded on-chain. HKMA and European regulators can query it at any time. Records are retained for 7 years — a level of transparency that paper ledgers cannot match.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase-hd p5" style="margin-top:24px;">
+    <div class="pnum">5</div>
+    <div>
+      <div class="phase-title-text">Maturity Repayment — Smart Contract Executes, Zero Human Intervention</div>
+      <div class="phase-sub-text">Contract auto-burns tokens + CIPS batch repayment + CMU / EuroClear positions cleared</div>
+    </div>
+  </div>
+  <div class="phase-body">
+    <div class="story">
+      <div class="story-step">
+        <div class="step-circle sc-teal">1</div>
+        <div class="step-body">
+          <span class="step-who sw-chain">Smart Contract</span>
+          <div class="step-title">Maturity date triggers repayment automatically</div>
+          <div class="step-text">The contract notifies all position holders automatically. It calculates the principal due to each based on the final position snapshot. Token burning (the bond has matured; tokens go to zero) is triggered simultaneously. No one needs to watch a calendar.</div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="step-circle sc-blue">2</div>
+        <div class="step-body">
+          <span class="step-who sw-cf">Chain Fusion</span>
+          <div class="step-title">Batch cross-border repayment + registry clearance</div>
+          <div class="step-text">Sends batch principal repayment instructions to CIPS and EuroClear. CMU and EuroClear simultaneously clear all position records (bond matured; official ledgers zeroed). The on-chain contract locks itself upon completion of its mission.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 5: The Systematic Answer
+═══════════════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-label">Chapter Five</div>
+  <h2>One Table: Five Silos — How Chain Fusion Connects Them</h2>
+
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th>Fragmented Entity</th>
+        <th>Traditional Approach</th>
+        <th>Chain Fusion's Solution</th>
+        <th>Module</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>💼 Wallet</strong><br><small>Whose on-chain address?</small></td>
+        <td>Manual verification, no standard mapping</td>
+        <td>Four-level identity mapping: bank account → legal identity → DID → compliant wallet, auto-bound</td>
+        <td><span class="tag tag-blue">Identity Mapping Module</span></td>
+      </tr>
+      <tr>
+        <td><strong>📜 Asset Registry</strong><br><small>CMU / EuroClear</small></td>
+        <td>After on-chain transfer, manually notify CMU to update ledger — time-lag risk</td>
+        <td>After token transfer confirmation, Chain Fusion auto-syncs CMU / EuroClear with zero lag</td>
+        <td><span class="tag tag-green">Data Sync Service</span></td>
+      </tr>
+      <tr>
+        <td><strong>💴 Cash Account</strong><br><small>CIPS multi-bank clearing</small></td>
+        <td>Each bank records separately, manual reconciliation, T+2 settlement</td>
+        <td>Tokens only unlock after CIPS clearing confirmed — DvP guaranteed, near-real-time settlement</td>
+        <td><span class="tag tag-amber">Routing + Execution Layer</span></td>
+      </tr>
+      <tr>
+        <td><strong>🏛 Regulatory Reporting</strong><br><small>PBOC / HKMA</small></td>
+        <td>Each party files independently — duplicated effort, error-prone</td>
+        <td>Chain Fusion auto-files; on-chain hash proof; 7-year queryable retention</td>
+        <td><span class="tag tag-purple">Compliance Control Layer</span></td>
+      </tr>
+      <tr>
+        <td><strong>🌐 Cross-border</strong><br><small>Multiple countries, currencies</small></td>
+        <td>Different systems per country, manual coordination, 2–5 day delays</td>
+        <td>Smart routing auto-selects CIPS / mBridge / EuroClear; end-to-end latency ≤ 3.5 seconds</td>
+        <td><span class="tag tag-blue">Smart Routing Engine</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     INSIGHT
+═══════════════════════════════════════════════════════════ -->
+<div class="insight">
+  <h3>📖 The Plain-English Summary</h3>
+  <p>A traditional bond transaction is like needing to visit five different government offices in five different cities simultaneously — each speaks a different language, keeps different office hours, uses different forms, and expects you to personally verify that all their records match.</p>
+  <p><strong>What Chain Fusion does is build an automated underground pipeline connecting all five offices.</strong> You submit one application at the entrance. In the background, it drives all five offices to complete their respective actions simultaneously, and only tells you "it's done" once every single one has confirmed. If any step fails, it automatically reverses every completed action and returns to the starting point.</p>
+  <p>That is why it's called "Fusion" — not replacing any existing system, but connecting all the fragmented systems into one coherent whole through a single intelligent pipeline.</p>
+  <div class="insight-grid">
+    <div class="insight-item">
+      <div class="ii-icon">⏱</div>
+      <div class="ii-label">End-to-end clearing latency</div>
+      <div class="ii-val">≤ 3.5 sec</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon">💰</div>
+      <div class="ii-label">Clearing cost reduction</div>
+      <div class="ii-val">≥ 60%</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon">📋</div>
+      <div class="ii-label">Audit record retention</div>
+      <div class="ii-val">7 years</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon">🔗</div>
+      <div class="ii-label">New chain onboarding</div>
+      <div class="ii-val">≤ 2 weeks</div>
+    </div>
+    <div class="insight-item">
+      <div class="ii-icon">🛡</div>
+      <div class="ii-label">System availability</div>
+      <div class="ii-val">99.99%</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <strong>Chain Fusion · Distributed Multi-Chain Fusion Gateway</strong><br>
+  Document ID: CF-SW-DOC-2026-004 · Version: v1.0 · April 2026 · Plain English Edition<br>
+  This document is confidential internal material. Unauthorised disclosure is prohibited. © DACC 2026
+</footer>
+
+</body>
+</html>
