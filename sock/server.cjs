@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const http = require('http');
+const https = require('https');
 const path = require('path');
 
 const app = express();
@@ -34,6 +35,26 @@ function resolveAppIndexFile() {
     path.join(__dirname, 'index.html'),
     path.join(staticDir, 'index.html'),
   ]);
+}
+
+function httpsGetText(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, (resp) => {
+      let body = '';
+      resp.setEncoding('utf8');
+      resp.on('data', (chunk) => {
+        body += chunk;
+      });
+      resp.on('end', () => {
+        resolve({
+          statusCode: resp.statusCode || 500,
+          body,
+        });
+      });
+    });
+
+    req.on('error', reject);
+  });
 }
 
 function httpGetText(url) {
@@ -102,6 +123,26 @@ app.get('/api/daily', async (req, res) => {
 
     const url = `http://qa-test.qcoral.tech/stock/getStockDaily?symbol=${encodeURIComponent(symbol)}&date=${encodeURIComponent(date)}&num=${encodeURIComponent(Math.floor(num))}`;
     const resp = await httpGetText(url);
+
+    res.status(resp.statusCode);
+    res.set('Content-Type', 'application/json; charset=utf-8');
+    return res.send(resp.body);
+  } catch (error) {
+    return res.status(502).json({
+      code: '502',
+      status: false,
+      message: (error && error.message) || 'Upstream request failed',
+      data: [],
+    });
+  }
+});
+
+app.get('/api/news-index', async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+    const num = Math.min(100, Math.max(1, parseInt(String(req.query.num || '20'), 10) || 20));
+    const url = `https://ai.qcoral.tech/news/indexNew?page=${page}&num=${num}`;
+    const resp = await httpsGetText(url);
 
     res.status(resp.statusCode);
     res.set('Content-Type', 'application/json; charset=utf-8');

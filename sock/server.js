@@ -120,6 +120,28 @@ app.get('/api/daily', async (req, res) => {
   }
 });
 
+/** 轉發財經資訊列表，避免瀏覽器直連 ai.qcoral.tech 的跨域限制 */
+app.get('/api/news-index', async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+    const num = Math.min(100, Math.max(1, parseInt(String(req.query.num || '20'), 10) || 20));
+    const url = `https://ai.qcoral.tech/news/indexNew?page=${page}&num=${num}`;
+    const r = await fetch(url, { method: 'GET' });
+    const text = await r.text();
+    res.status(r.status);
+    const ct = r.headers.get('content-type');
+    res.set('Content-Type', ct && ct.includes('json') ? ct : 'application/json; charset=utf-8');
+    return res.send(text);
+  } catch (error) {
+    return res.status(502).json({
+      code: '502',
+      status: false,
+      message: (error && error.message) || 'Upstream request failed',
+      data: [],
+    });
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(resolveAppIndexFile());
 });

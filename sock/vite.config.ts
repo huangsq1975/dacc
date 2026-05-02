@@ -39,6 +39,12 @@ export default defineConfig(({mode}) => {
             });
           },
         },
+        '/api/news-index': {
+          target: 'https://ai.qcoral.tech',
+          changeOrigin: true,
+          secure: true,
+          rewrite: (p) => p.replace(/^\/api\/news-index/, '/news/indexNew'),
+        },
       },
     },
   };

@@ -40,6 +40,25 @@
     .pb{flex:0 0 auto;padding:8px 14px;font-size:13px;color:#666;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
     .pb.active{color:#e84040;border-bottom-color:#e84040}
 
+    /* ── 主區：左側資訊 + K 線 ── */
+    #main-chart-row{display:flex;align-items:stretch;width:100%}
+    #news-aside{
+      flex:0 0 260px;max-width:40vw;min-width:200px;background:#111;border-right:1px solid #1e1e1e;
+      display:flex;flex-direction:column;min-height:280px;max-height:min(78vh,580px)
+    }
+    .news-aside-hd{padding:8px 10px;font-size:13px;color:#888;border-bottom:1px solid #222;flex-shrink:0}
+    #news-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 0}
+    .news-item{display:block;padding:8px 10px;border-bottom:1px solid #1a1a1a;text-decoration:none;color:#ccc;font-size:12px;line-height:1.45}
+    .news-item:active{background:#1a1a1a}
+    .news-item-title{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .news-item-time{color:#666;font-size:10px;margin-top:4px}
+    .news-loading,.news-empty{padding:12px 10px;color:#666;font-size:12px;text-align:center}
+    #chart-col{flex:1;min-width:0;display:flex;flex-direction:column}
+    @media (max-width:640px){
+      #main-chart-row{flex-direction:column}
+      #news-aside{flex:none;max-width:none;width:100%;max-height:220px;border-right:none;border-bottom:1px solid #1e1e1e}
+    }
+
     /* ── 圖表 ── */
     #kline-chart{width:100%;height:55vw;min-height:260px;max-height:420px}
     #vol-chart{width:100%;height:20vw;min-height:90px;max-height:160px}
@@ -101,8 +120,16 @@
 </div>
 
 <div id="err"></div>
-<div id="kline-chart"></div>
-<div id="vol-chart"></div>
+<div id="main-chart-row">
+  <aside id="news-aside">
+    <div class="news-aside-hd">財經資訊</div>
+    <div id="news-list"></div>
+  </aside>
+  <div id="chart-col">
+    <div id="kline-chart"></div>
+    <div id="vol-chart"></div>
+  </div>
+</div>
 
 <script>
 'use strict';
@@ -305,6 +332,69 @@ function initCharts() {
   vChart.on('dataZoom', e => syncZoom(vChart, kChart, e));
 
   window.addEventListener('resize', () => { kChart.resize(); vChart.resize(); });
+}
+
+/* ═══════════════════════════════════════
+   財經資訊（qcoral 列表 → web-prod 打開）
+═══════════════════════════════════════ */
+const QCORAL_NEWS_PREFIX = 'http://web-prod.qcoral.tech/news?flag=2&source=dl&url=';
+
+/** 從新浪跳轉鏈中取出內層文章 URL（#/? 後的 url= 參數值，含 https://finance / k / cj 等） */
+function extractInnerArticleUrl(outerUrl) {
+  if (!outerUrl || typeof outerUrl !== 'string') return null;
+  const key = 'url=';
+  const i = outerUrl.lastIndexOf(key);
+  if (i === -1) return null;
+  let inner = outerUrl.slice(i + key.length);
+  try { inner = decodeURIComponent(inner); } catch (_) {}
+  if (!/^https?:\/\//i.test(inner)) return null;
+  return inner;
+}
+
+function buildQcoralOpenUrl(outerUrl) {
+  const inner = extractInnerArticleUrl(outerUrl);
+  if (!inner) return null;
+  return QCORAL_NEWS_PREFIX + encodeURIComponent(inner);
+}
+
+function escapeHtmlAttr(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+async function loadNews() {
+  const listEl = document.getElementById('news-list');
+  if (!listEl) return;
+  listEl.innerHTML = '<div class="news-loading">加載中…</div>';
+  try {
+    const resp = await fetch('/api/news-index?page=1&num=20', { method: 'GET' });
+    if (!resp.ok) throw new Error('資訊接口錯誤');
+    const payload = await resp.json();
+    if (!payload?.status || payload?.code !== '00000') throw new Error('資訊數據異常');
+    const arr = Array.isArray(payload.data) ? payload.data : [];
+    const parts = [];
+    for (const it of arr) {
+      if (!it || it.ad) continue;
+      const href = buildQcoralOpenUrl(it.url);
+      if (!href) continue;
+      const title = escapeHtmlAttr(it.title || '');
+      const time = escapeHtmlAttr(it.ctime || '');
+      const media = escapeHtmlAttr(it.media || '');
+      parts.push(
+        `<a class="news-item" href="${escapeHtmlAttr(href)}" target="_blank" rel="noopener noreferrer">` +
+          `<div class="news-item-title">${title}</div>` +
+          `<div class="news-item-time">${time}${media ? ' · ' + media : ''}</div>` +
+        `</a>`
+      );
+    }
+    listEl.innerHTML = parts.length ? parts.join('') : '<div class="news-empty">暫無資訊</div>';
+  } catch (_) {
+    listEl.innerHTML = '<div class="news-empty">資訊加載失敗</div>';
+  }
+  requestAnimationFrame(() => { try { kChart.resize(); vChart.resize(); } catch (_) {} });
 }
 
 /* ═══════════════════════════════════════
@@ -802,6 +892,7 @@ document.addEventListener('click', e => {
 ═══════════════════════════════════════ */
 initCharts();
 loadAll();
+loadNews();
 
 // 每 30 秒刷新行情欄
 setInterval(loadQuote, 30000);
